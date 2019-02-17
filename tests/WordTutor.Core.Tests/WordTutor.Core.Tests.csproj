@@ -18,4 +18,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WordTutor.Core\WordTutor.Core.csproj" />
+  </ItemGroup>
+
 </Project>
