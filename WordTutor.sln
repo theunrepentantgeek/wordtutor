@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTutor.Core", "src\WordTutor.Core\WordTutor.Core.csproj", "{8436FB9B-1813-4A58-AD61-40FF6B3A917D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTutor.Core.Tests", "tests\WordTutor.Core.Tests\WordTutor.Core.Tests.csproj", "{E41E681B-1ABE-44D9-8AAE-172F25551352}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8436FB9B-1813-4A58-AD61-40FF6B3A917D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8436FB9B-1813-4A58-AD61-40FF6B3A917D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8436FB9B-1813-4A58-AD61-40FF6B3A917D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8436FB9B-1813-4A58-AD61-40FF6B3A917D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6EBE7205-DCA4-4EF1-AEC5-2FD06D05CF4A}
+	EndGlobalSection
+EndGlobal
