@@ -2,7 +2,7 @@
 
 namespace WordTutor.Core
 {
-    public class VocabularyWord
+    public class VocabularyWord : IEquatable<VocabularyWord>
     {
         /// <summary>
         /// Gets the word as correctly spelt
@@ -40,10 +40,10 @@ namespace WordTutor.Core
         /// </summary>
         /// <param name="spelling">New correct spelling.</param>
         /// <returns>A new instance with modified spelling.</returns>
-        public VocabularyWord WithSpelling (string spelling)
+        public VocabularyWord WithSpelling(string spelling)
         {
             return new VocabularyWord(
-                this, 
+                this,
                 spelling: spelling ?? throw new ArgumentNullException(nameof(spelling)));
         }
 
@@ -55,7 +55,7 @@ namespace WordTutor.Core
         public VocabularyWord WithPronunciation(string pronunciation)
         {
             return new VocabularyWord(
-                this, 
+                this,
                 pronunciation: pronunciation ?? throw new ArgumentNullException(nameof(pronunciation)));
         }
 
@@ -67,9 +67,29 @@ namespace WordTutor.Core
         public VocabularyWord WithPhrase(string phrase)
         {
             return new VocabularyWord(
-                this, 
+                this,
                 phrase: phrase ?? throw new ArgumentNullException(nameof(phrase)));
         }
+
+        public bool Equals(VocabularyWord word)
+        {
+            if (word is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, word))
+            {
+                return true;
+            }
+
+            return Equals(Spelling, word.Spelling)
+                && Equals(Phrase, word.Phrase)
+                && Equals(Pronunciation, word.Pronunciation);
+        }
+
+        public override bool Equals(object obj)
+            => Equals(obj as VocabularyWord);
 
         private VocabularyWord(
             VocabularyWord original,

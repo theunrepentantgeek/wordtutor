@@ -131,5 +131,109 @@ namespace WordTutor.Core.Tests
             }
         }
 
+        public class EqualsVocabularyWord : VocabularyWordTests
+        {
+            private readonly string _spelling = "bogus";
+            private readonly string _phrase = "this is a bogus word.";
+            private readonly string _pronunciation = "boogus";
+
+            private readonly VocabularyWord _word;
+
+            public EqualsVocabularyWord()
+            {
+                _word = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+            }
+
+            [Fact]
+            public void GivenNull_ReturnsFalse()
+            {
+                VocabularyWord other = null;
+                _word.Equals(other).Should().BeFalse();
+            }
+
+            [Fact]
+            public void GivenSelf_ReturnsTrue()
+            {
+                var other = _word;
+                _word.Equals(other).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenIdentical_ReturnsTrue()
+            {
+                var other = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+                _word.Equals(other).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenDifferentSpelling_ReturnsFalse()
+            {
+                var other = _word.WithSpelling("other");
+                _word.Equals(other).Should().BeFalse();
+            }
+
+            [Fact]
+            public void GivenDifferentPhrase_ReturnsFalse()
+            {
+                var other = _word.WithPhrase("other");
+                _word.Equals(other).Should().BeFalse();
+            }
+
+            [Fact]
+            public void GivenDifferentPronunciation_ReturnsFalse()
+            {
+                var other = _word.WithPronunciation("other");
+                _word.Equals(other).Should().BeFalse();
+            }
+        }
+
+        public class EqualsObject :VocabularyWordTests
+        {
+            private readonly string _spelling = "bogus";
+            private readonly string _phrase = "this is a bogus word.";
+            private readonly string _pronunciation = "boogus";
+
+            private readonly VocabularyWord _word;
+
+            public EqualsObject()
+            {
+                _word = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+            }
+
+            [Fact]
+            public void GivenNull_ReturnsFalse()
+            {
+                object other = null;
+                _word.Equals(other).Should().BeFalse();
+            }
+
+            [Fact]
+            public void GivenSelf_ReturnsTrue()
+            {
+                object other = _word;
+                _word.Equals(other).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenIdentical_ReturnsTrue()
+            {
+                var other = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+                _word.Equals(other).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenDifferentType_ReturnsTrue()
+            {
+                _word.Equals(this).Should().BeFalse();
+            }
+        }
     }
 }
