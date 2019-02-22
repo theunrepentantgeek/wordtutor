@@ -235,5 +235,36 @@ namespace WordTutor.Core.Tests
                 _word.Equals(this).Should().BeFalse();
             }
         }
+
+        public class GetHashCode : VocabularyWordTests
+        {
+            private readonly string _spelling = "bogus";
+            private readonly string _phrase = "this is a bogus word.";
+            private readonly string _pronunciation = "boogus";
+
+            private readonly VocabularyWord _word;
+
+            public GetHashCode()
+            {
+                _word = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+            }
+
+            [Fact]
+            public void GivenSelf_ReturnsConsistentValue()
+            {
+                _word.GetHashCode().Should().Be(_word.GetHashCode());
+            }
+
+            [Fact]
+            public void GivenSame_ReturnsConsistentValue()
+            {
+                var word = new VocabularyWord(_spelling)
+                    .WithPhrase(_phrase)
+                    .WithPronunciation(_pronunciation);
+                word.GetHashCode().Should().Be(_word.GetHashCode());
+            }
+        }
     }
 }
