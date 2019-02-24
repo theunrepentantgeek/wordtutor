@@ -8,6 +8,18 @@ namespace WordTutor.Core.Tests
 {
     public class VocabularySetTests
     {
+        private VocabularySet _set;
+        private VocabularyWord _alpha = new VocabularyWord("alpha");
+        private VocabularyWord _beta = new VocabularyWord("beta");
+        private VocabularyWord _gamma = new VocabularyWord("gamma");
+
+        public VocabularySetTests()
+        {
+            _set = VocabularySet.Empty
+                .Add(_alpha)
+                .Add(_beta);
+        }
+
         public class Empty : VocabularySetTests
         {
             [Fact]
@@ -48,6 +60,33 @@ namespace WordTutor.Core.Tests
                 exception.ParamName.Should().Be("word");
                 exception.Message.Should().Contain("already exists");
 
+            }
+        }
+
+        public class Remove : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNull_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _set.Remove(null));
+            }
+
+            [Fact]
+            public void GivenWordInSet_ReturnsNewSetWithoutWord()
+            {
+                var set = _set.Remove(_alpha);
+                set.Words.Should().NotContainValue(_alpha);
+            }
+
+            [Fact]
+            public void GivenWordNotInSet_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentException>(
+                        () => _set.Remove(_gamma));
+                exception.ParamName.Should().Be("word");
             }
         }
     }
