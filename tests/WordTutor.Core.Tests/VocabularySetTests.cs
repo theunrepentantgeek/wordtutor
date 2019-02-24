@@ -12,7 +12,7 @@ namespace WordTutor.Core.Tests
         private VocabularyWord _alpha = new VocabularyWord("alpha");
         private VocabularyWord _beta = new VocabularyWord("beta");
         private VocabularyWord _gamma = new VocabularyWord("gamma");
-        private VocabularyWord _epsilon= new VocabularyWord("epsilon");
+        private VocabularyWord _epsilon = new VocabularyWord("epsilon");
 
         public VocabularySetTests()
         {
@@ -138,6 +138,71 @@ namespace WordTutor.Core.Tests
             public void WhenReplacementEqualsExisting_ReturnsExistingSet()
             {
                 var set = _set.Replace(_alpha, _alpha);
+                set.Should().BeSameAs(_set);
+            }
+        }
+
+        public class Update : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNullWord_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _set.Update(null, w => w.WithSpelling("alfa")));
+                exception.ParamName.Should().Be("word");
+            }
+
+            [Fact]
+            public void GivenNullTransform_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _set.Update("alpha", null));
+                exception.ParamName.Should().Be("transform");
+            }
+
+            [Fact]
+            public void GivenSpellingNotInSet_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentException>(
+                        () => _set.Update("golf", w => w.WithSpelling("alfa")));
+                exception.ParamName.Should().Be("word");
+            }
+
+            [Fact]
+            public void WithValidTransform_CallsTransform()
+            {
+                var called = false;
+                var set = _set.Update("alpha", Transform);
+                called.Should().BeTrue();
+
+                VocabularyWord Transform(VocabularyWord word)
+                {
+                    called = true;
+                    return word;
+                }
+            }
+
+            [Fact]
+            public void WithValidTransform_RemovesOriginalWord()
+            {
+                var set = _set.Update("alpha", w => w.WithSpelling("alfa"));
+                set.Words.Should().NotContainKey("alpha");
+            }
+
+            [Fact]
+            public void WithValidTransform_AddsModifiedWord()
+            {
+                var set = _set.Update("alpha", w => w.WithSpelling("alfa"));
+                set.Words.Should().ContainKey("alfa");
+            }
+
+            [Fact]
+            public void WhenTransformReturnsOriginalWord_ReturnsOriginalSet()
+            {
+                var set = _set.Update("alpha", w => w);
                 set.Should().BeSameAs(_set);
             }
         }

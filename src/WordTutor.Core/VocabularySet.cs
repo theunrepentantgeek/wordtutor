@@ -96,6 +96,35 @@ namespace WordTutor.Core
             return new VocabularySet(this, words: words);
         }
 
+        /// <summary>
+        /// Update a word already in this set
+        /// </summary>
+        /// <param name="word">Spelling of the word to update.</param>
+        /// <param name="transform">Tranformation to apply to the word.</param>
+        /// <returns></returns>
+        public VocabularySet Update(string word, Func<VocabularyWord, VocabularyWord> transform)
+        {
+            if (word is null)
+            {
+                throw new ArgumentNullException(nameof(word));
+            }
+
+            if (transform is null)
+            {
+                throw new ArgumentNullException(nameof(transform));
+            }
+
+            if (!Words.TryGetValue(word, out var existing))
+            {
+                throw new ArgumentException(
+                    $"A word with spelling {word} does not exist in this set.",
+                    nameof(word));
+            }
+
+            var replacement = transform(existing);
+            return Replace(existing, replacement);
+        }
+
         private VocabularySet()
         {
             Words = ImmutableDictionary<string, VocabularyWord>.Empty;
@@ -103,7 +132,7 @@ namespace WordTutor.Core
 
         private VocabularySet(
             VocabularySet original,
-            ImmutableDictionary<string,VocabularyWord> words = null)
+            ImmutableDictionary<string, VocabularyWord> words = null)
         {
             Words = words ?? original.Words;
         }
