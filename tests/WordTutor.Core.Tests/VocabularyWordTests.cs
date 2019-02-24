@@ -236,7 +236,7 @@ namespace WordTutor.Core.Tests
             }
         }
 
-        public class GetHashCode : VocabularyWordTests
+        public class GetHashCodeMethod : VocabularyWordTests
         {
             private readonly string _spelling = "bogus";
             private readonly string _phrase = "this is a bogus word.";
@@ -244,7 +244,7 @@ namespace WordTutor.Core.Tests
 
             private readonly VocabularyWord _word;
 
-            public GetHashCode()
+            public GetHashCodeMethod()
             {
                 _word = new VocabularyWord(_spelling)
                     .WithPhrase(_phrase)
