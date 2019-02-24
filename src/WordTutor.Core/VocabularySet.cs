@@ -60,6 +60,42 @@ namespace WordTutor.Core
             return new VocabularySet(this, words: words);
         }
 
+        /// <summary>
+        /// Replace one word with another
+        /// </summary>
+        /// <param name="existing">Word to be removed.</param>
+        /// <param name="replacement">Replacement word to use instead.</param>
+        /// <returns>A new vocabulary set wtih the specified replacement.</returns>
+        public VocabularySet Replace(VocabularyWord existing, VocabularyWord replacement)
+        {
+            if (existing == null)
+            {
+                throw new ArgumentNullException(nameof(existing));
+            }
+
+            if (replacement == null)
+            {
+                throw new ArgumentNullException(nameof(replacement));
+            }
+
+            if (!Words.ContainsKey(existing.Spelling))
+            {
+                throw new ArgumentException(
+                    $"A word with spelling {existing.Spelling} does not exist in this set.",
+                    nameof(existing));
+            }
+
+            if (existing.Equals(replacement))
+            {
+                return this;
+            }
+
+            var words = Words.Remove(existing.Spelling)
+                .Add(replacement.Spelling, replacement);
+
+            return new VocabularySet(this, words: words);
+        }
+
         private VocabularySet()
         {
             Words = ImmutableDictionary<string, VocabularyWord>.Empty;
@@ -72,5 +108,4 @@ namespace WordTutor.Core
             Words = words ?? original.Words;
         }
     }
-
 }

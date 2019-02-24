@@ -12,6 +12,7 @@ namespace WordTutor.Core.Tests
         private VocabularyWord _alpha = new VocabularyWord("alpha");
         private VocabularyWord _beta = new VocabularyWord("beta");
         private VocabularyWord _gamma = new VocabularyWord("gamma");
+        private VocabularyWord _epsilon= new VocabularyWord("epsilon");
 
         public VocabularySetTests()
         {
@@ -87,6 +88,57 @@ namespace WordTutor.Core.Tests
                     Assert.Throws<ArgumentException>(
                         () => _set.Remove(_gamma));
                 exception.ParamName.Should().Be("word");
+            }
+        }
+
+        public class Replace : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNullExistingWord_ThrowsException()
+            {
+                var exception =
+                   Assert.Throws<ArgumentNullException>(
+                       () => _set.Replace(null, _gamma));
+                exception.ParamName.Should().Be("existing");
+            }
+
+            [Fact]
+            public void GivenNullReplacementWord_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _set.Replace(_alpha, null));
+                exception.ParamName.Should().Be("replacement");
+            }
+
+            [Fact]
+            public void GivenExistingWordNotInSet_ThrowsException()
+            {
+                var exception =
+                   Assert.Throws<ArgumentException>(
+                       () => _set.Replace(_gamma, _epsilon));
+                exception.ParamName.Should().Be("existing");
+            }
+
+            [Fact]
+            public void WhenReplacing_ReturnsVocabularySetWithoutExistingWord()
+            {
+                var set = _set.Replace(_alpha, _gamma);
+                set.Words.Should().NotContainValue(_alpha);
+            }
+
+            [Fact]
+            public void WhenReplacing_ReturnsVocabularySetWithReplacementWord()
+            {
+                var set = _set.Replace(_alpha, _gamma);
+                set.Words.Should().ContainValue(_gamma);
+            }
+
+            [Fact]
+            public void WhenReplacementEqualsExisting_ReturnsExistingSet()
+            {
+                var set = _set.Replace(_alpha, _alpha);
+                set.Should().BeSameAs(_set);
             }
         }
     }
