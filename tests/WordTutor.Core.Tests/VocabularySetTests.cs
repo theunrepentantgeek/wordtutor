@@ -8,11 +8,11 @@ namespace WordTutor.Core.Tests
 {
     public class VocabularySetTests
     {
-        private VocabularySet _set;
-        private VocabularyWord _alpha = new VocabularyWord("alpha");
-        private VocabularyWord _beta = new VocabularyWord("beta");
-        private VocabularyWord _gamma = new VocabularyWord("gamma");
-        private VocabularyWord _epsilon = new VocabularyWord("epsilon");
+        private readonly VocabularySet _set;
+        private readonly VocabularyWord _alpha = new VocabularyWord("alpha");
+        private readonly VocabularyWord _beta = new VocabularyWord("beta");
+        private readonly VocabularyWord _gamma = new VocabularyWord("gamma");
+        private readonly VocabularyWord _epsilon = new VocabularyWord("epsilon");
 
         public VocabularySetTests()
         {
@@ -32,7 +32,7 @@ namespace WordTutor.Core.Tests
 
         public class Add : VocabularySetTests
         {
-            private VocabularySet _empty = VocabularySet.Empty;
+            private readonly VocabularySet _empty = VocabularySet.Empty;
 
             [Fact]
             public void GivenNull_ThrowsException()
@@ -60,7 +60,6 @@ namespace WordTutor.Core.Tests
                     () => set.Add(word));
                 exception.ParamName.Should().Be("word");
                 exception.Message.Should().Contain("already exists");
-
             }
         }
 

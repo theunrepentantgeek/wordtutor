@@ -8,7 +8,7 @@ namespace WordTutor.Core.Tests
     {
         public class Constructor : VocabularyWordTests
         {
-            private string _spelling = "sample";
+            private readonly string _spelling = "sample";
 
             [Fact]
             public void WithNullWord_ThrowsException()
@@ -33,7 +33,6 @@ namespace WordTutor.Core.Tests
                 word.Pronunciation.Should().BeEmpty();
             }
 
-
             [Fact]
             public void SetsPhraseToEmptyString()
             {
@@ -44,7 +43,7 @@ namespace WordTutor.Core.Tests
 
         public class WithSpelling : VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample")
+            private readonly VocabularyWord _word = new VocabularyWord("sample")
                 .WithPhrase("alpha")
                 .WithPronunciation("beta");
 
@@ -75,7 +74,7 @@ namespace WordTutor.Core.Tests
 
         public class WithPronunciation: VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample");
+            private readonly VocabularyWord _word = new VocabularyWord("sample");
 
             [Fact]
             public void WithNull_ThrowsException()
@@ -104,7 +103,7 @@ namespace WordTutor.Core.Tests
 
         public class WithPhrase : VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample");
+            private readonly VocabularyWord _word = new VocabularyWord("sample");
 
             [Fact]
             public void WithNull_ThrowsException()
