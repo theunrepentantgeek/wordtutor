@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace WordTutor.Core.Tests
@@ -9,6 +7,7 @@ namespace WordTutor.Core.Tests
     public class VocabularySetTests
     {
         private readonly VocabularySet _set;
+        private readonly string _name = "Sample Word Set";
         private readonly VocabularyWord _alpha = new VocabularyWord("alpha");
         private readonly VocabularyWord _beta = new VocabularyWord("beta");
         private readonly VocabularyWord _gamma = new VocabularyWord("gamma");
@@ -17,6 +16,7 @@ namespace WordTutor.Core.Tests
         public VocabularySetTests()
         {
             _set = VocabularySet.Empty
+                .WithName(_name)
                 .Add(_alpha)
                 .Add(_beta);
         }
@@ -24,15 +24,54 @@ namespace WordTutor.Core.Tests
         public class Empty : VocabularySetTests
         {
             [Fact]
+            public void ReturnsSetWithNoName()
+            {
+                VocabularySet.Empty.Name.Should().BeEmpty();
+            }
+
+            [Fact]
             public void ReturnsSetWithNoWords()
             {
                 VocabularySet.Empty.Words.Should().BeEmpty();
             }
         }
 
+        public class WithName : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNull_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                    () => _set.WithName(null));
+                exception.ParamName.Should().Be("name");
+            }
+
+            [Fact]
+            public void GivenName_ReturnsSetWithNewName()
+            {
+                var newName = "Not the same";
+                var set = _set.WithName(newName);
+                set.Name.Should().Be(newName);
+            }
+
+            [Fact]
+            public void GivenExistingName_ReturnsExistingSet()
+            {
+                var set = _set.WithName(_name);
+                set.Should().BeSameAs(_set);
+            }
+        }
+
         public class Add : VocabularySetTests
         {
-            private readonly VocabularySet _empty = VocabularySet.Empty;
+            private readonly VocabularySet _empty;
+
+            public Add()
+            {
+                _empty = VocabularySet.Empty
+                    .WithName(_name);
+            }
 
             [Fact]
             public void GivenNull_ThrowsException()

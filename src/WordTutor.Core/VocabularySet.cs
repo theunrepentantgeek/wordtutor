@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 
 namespace WordTutor.Core
 {
@@ -10,9 +8,37 @@ namespace WordTutor.Core
     /// </summary>
     public class VocabularySet
     {
-        public static VocabularySet Empty = new VocabularySet();
+        /// <summary>
+        /// Creates an empty vocabulary set
+        /// </summary>
+        public static VocabularySet Empty { get; } = new VocabularySet();
 
+        /// <summary>
+        /// Gets a descriptive name for this set of words
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets all the words contained by this set
+        /// </summary>
         public ImmutableDictionary<string, VocabularyWord> Words { get; }
+
+        /// <summary>
+        /// Change the name of the <see cref="VocabularySet"/>
+        /// </summary>
+        /// <param name="name">New descriptive name for the set.</param>
+        /// <returns>A new vocabulary set with the requested name</returns>
+        public VocabularySet WithName(string name)
+        {
+            if (string.Equals(name, Name))
+            {
+                return this;
+            }
+
+            return new VocabularySet(
+                           this,
+                           name: name ?? throw new ArgumentNullException(nameof(name)));
+        }
 
         /// <summary>
         /// Add a new word into this set
@@ -127,13 +153,16 @@ namespace WordTutor.Core
 
         private VocabularySet()
         {
+            Name = string.Empty;
             Words = ImmutableDictionary<string, VocabularyWord>.Empty;
         }
 
         private VocabularySet(
             VocabularySet original,
+            string name = null,
             ImmutableDictionary<string, VocabularyWord> words = null)
         {
+            Name = name ?? original.Name;
             Words = words ?? original.Words;
         }
     }
