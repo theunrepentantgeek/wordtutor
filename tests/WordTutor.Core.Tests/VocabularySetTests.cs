@@ -91,12 +91,20 @@ namespace WordTutor.Core.Tests
             }
 
             [Fact]
-            public void GivenExistingWord_ThrowsException()
+            public void GivenExistingWord_ReturnsExistingSet()
             {
-                var word = new VocabularyWord("bumble");
-                var set = _empty.Add(word);
+                var set = _set.Add(_alpha);
+                set.Should().BeSameAs(_set);
+            }
+
+            [Fact]
+            public void GivenConflictingWord_ThrowsException()
+            {
+                var first = new VocabularyWord("bumble");
+                var second = new VocabularyWord("bumble").WithPronunciation("boomble");
+                var set = _empty.Add(first);
                 var exception = Assert.Throws<ArgumentException>(
-                    () => set.Add(word));
+                    () => set.Add(second));
                 exception.ParamName.Should().Be("word");
                 exception.Message.Should().Contain("already exists");
             }

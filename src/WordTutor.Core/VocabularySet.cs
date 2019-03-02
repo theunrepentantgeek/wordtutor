@@ -55,6 +55,11 @@ namespace WordTutor.Core
                 throw new ArgumentNullException(nameof(word));
             }
 
+            if (_words.Contains(word))
+            {
+                return this;
+            }
+
             if (_words.Any(w => w.HasSpelling(word.Spelling)))
             {
                 throw new ArgumentException(
