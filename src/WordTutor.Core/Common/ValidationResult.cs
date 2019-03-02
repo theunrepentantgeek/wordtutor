@@ -8,20 +8,40 @@ namespace WordTutor.Core.Common
     /// </summary>
     public abstract class ValidationResult : IEquatable<ValidationResult>
     {
-        protected static readonly IEnumerable<ErrorResult> _emptyErrors = new List<ErrorResult>();
+        // an empty sequence of errors, cached to reduce allocations
+        protected static readonly IEnumerable<ErrorResult> _emptyErrors 
+            = new List<ErrorResult>();
 
-        protected static readonly IEnumerable<WarningResult> _emptyWarnings = new List<WarningResult>();
+        // an empty sequence of warnings, cached to reduce allocations
+        protected static readonly IEnumerable<WarningResult> _emptyWarnings 
+            = new List<WarningResult>();
 
+        // Standardise string comparisons
         protected static readonly StringComparer _comparer = StringComparer.OrdinalIgnoreCase;
 
+        /// <summary>
+        /// Gets a (possibly empty) sequence of errors
+        /// </summary>
         public abstract IEnumerable<ErrorResult> Errors();
 
+        /// <summary>
+        /// Gets a (possibly empty) sequence of warnings
+        /// </summary>
         public abstract IEnumerable<WarningResult> Warnings();
 
+        /// <summary>
+        /// Gets a value indicating whether this result includes any errors
+        /// </summary>
         public abstract bool HasErrors { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this results includes any warnings
+        /// </summary>
         public abstract bool HasWarnings { get; }
 
+        /// <summary>
+        /// Combine two validation results into one
+        /// </summary>
         public static ValidationResult operator +(ValidationResult left, ValidationResult right)
         {
             if (left == null)
@@ -32,6 +52,9 @@ namespace WordTutor.Core.Common
             return left.Add(right ?? throw new ArgumentNullException(nameof(right)));
         }
 
+        /// <summary>
+        /// Combine two validation results into one
+        /// </summary>
         public static ValidationResult operator &(ValidationResult left, ValidationResult right)
         {
             if (left == null)
@@ -43,7 +66,7 @@ namespace WordTutor.Core.Common
         }
 
         public static bool operator true(ValidationResult result)
-            => !result.HasErrors;
+           => !result.HasErrors;
 
         public static bool operator false(ValidationResult result)
             => result.HasErrors;
