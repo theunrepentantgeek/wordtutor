@@ -252,5 +252,99 @@ namespace WordTutor.Core.Tests
                 set.Should().BeSameAs(_set);
             }
         }
+
+        public class EqualsVocabularySet : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNull_ReturnsFalse()
+            {
+                VocabularySet other = null;
+                _set.Equals(other).Should().BeFalse();
+            }
+
+            [Fact]
+            public void GivenSelf_ReturnsTrue()
+            {
+                _set.Equals(_set).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenSimilar_ReturnsTrue()
+            {
+                var set = VocabularySet.Empty
+                    .WithName(_name)
+                    .Add(_alpha)
+                    .Add(_beta);
+                set.Equals(_set).Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenNameIsDifferent_ReturnsFalse()
+            {
+                var set = _set.WithName("other");
+                set.Equals(_set).Should().BeFalse();
+            }
+
+            [Fact]
+            public void WhenWordAdded_ReturnsFalse()
+            {
+                var set = _set.Add(_gamma);
+                set.Equals(_set).Should().BeFalse();
+            }
+
+            [Fact]
+            public void WhenWordRemoved_ReturnsFalse()
+            {
+                var set = _set.Remove(_beta);
+                set.Equals(_set).Should().BeFalse();
+            }
+        }
+
+        public class EqualsObject : VocabularySetTests
+        {
+            [Fact]
+            public void GivenNull_ReturnsFalse()
+            {
+                object other = _set;
+                _set.Equals(other).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenSelf_ReturnsTrue()
+            {
+                object other = _set;
+                _set.Equals(_set).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenDifferentType_ReturnsFalse()
+            {
+                _set.Equals(this).Should().BeFalse();
+            }
+        }
+
+        public class GetHashCodeMethod : VocabularySetTests
+        {
+            [Fact]
+            public void WhenNameIsDifferent_ReturnsFalse()
+            {
+                var set = _set.WithName("other");
+                set.GetHashCode().Should().NotBe(_set.GetHashCode());
+            }
+
+            [Fact]
+            public void WhenWordAdded_ReturnsFalse()
+            {
+                var set = _set.Add(_gamma);
+                set.GetHashCode().Should().NotBe(_set.GetHashCode());
+            }
+
+            [Fact]
+            public void WhenWordRemoved_ReturnsFalse()
+            {
+                var set = _set.Remove(_beta);
+                set.GetHashCode().Should().NotBe(_set.GetHashCode());
+            }
+        }
     }
 }

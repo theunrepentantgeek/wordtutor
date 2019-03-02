@@ -1,14 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 
 namespace WordTutor.Core
 {
     /// <summary>
     /// A set of words that make up a vocabulary for spelling drills
     /// </summary>
-    public class VocabularySet //: IEquatable<VocabularySet>
+    public class VocabularySet : IEquatable<VocabularySet>
     {
+        private static readonly StringComparer _nameComparer = StringComparer.CurrentCulture;
+
+        private readonly Lazy<int> _hashCode;
+
         private readonly ImmutableHashSet<VocabularyWord> _words;
 
         /// <summary>
@@ -33,7 +39,7 @@ namespace WordTutor.Core
         /// <returns>A new vocabulary set with the requested name</returns>
         public VocabularySet WithName(string name)
         {
-            if (string.Equals(name, Name))
+            if (_nameComparer.Equals(Name, name))
             {
                 return this;
             }
@@ -160,10 +166,46 @@ namespace WordTutor.Core
             return Replace(original, replacement);
         }
 
+        public bool Equals(VocabularySet other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return _nameComparer.Equals(Name, other.Name)
+                && _words.SetEquals(other._words);
+        }
+
+        public override bool Equals(object obj) => Equals(obj as VocabularySet);
+
+        public override int GetHashCode() => _hashCode.Value;
+
+        private int GetHashCodeCore()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Name.GetHashCode();
+                foreach (var w in _words.OrderBy(w => w.Spelling))
+                {
+                    hash = hash * 23 + w.GetHashCode();
+                }
+
+                return hash;
+            }
+        }
+
         private VocabularySet()
         {
             Name = string.Empty;
             _words = ImmutableHashSet<VocabularyWord>.Empty;
+            _hashCode = new Lazy<int>(GetHashCodeCore, LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         private VocabularySet(
@@ -173,6 +215,7 @@ namespace WordTutor.Core
         {
             Name = name ?? original.Name;
             _words = words ?? original._words;
+            _hashCode = new Lazy<int>(GetHashCodeCore, LazyThreadSafetyMode.ExecutionAndPublication);
         }
     }
 }
