@@ -87,7 +87,9 @@ formatTaskName {
     }
 
     $divider = "=" * $width
-    return "`r`n$divider`r`n  $taskName`r`n$divider`r`n"
+    $now = get-date -format "HH:mm:ss"
+    $spacer = " " * ( $width - $taskName.Length - 14 )
+    return "`r`n$divider`r`n  $taskName $spacer $now`r`n$divider`r`n"
 } 
 
 function Write-SubtaskName($subtaskName) {
