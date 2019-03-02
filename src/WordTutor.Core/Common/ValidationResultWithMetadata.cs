@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Niche.Common
+namespace WordTutor.Core.Common
 {
     /// <summary>
     /// Base class for a single validation result

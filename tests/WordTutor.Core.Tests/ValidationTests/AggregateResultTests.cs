@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
+
 using FluentAssertions;
 using Xunit;
 
-namespace Niche.Common.Tests
+namespace WordTutor.Core.Common.Tests
 {
     public class AggregateResultTests
     {

@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Niche.Common
+namespace WordTutor.Core.Common
 {
     /// <summary>
     /// A single validation error
     /// </summary>
-public sealed class ErrorResult : ValidationResultWithMetadata, IEquatable<ErrorResult>
-{
-    public string Message { get; }
-
-    public ErrorResult(string message, IEnumerable<ValidationMetadata> metadata)
-        : base(metadata)
+    public sealed class ErrorResult : ValidationResultWithMetadata, IEquatable<ErrorResult>
     {
-        Message = message ?? throw new ArgumentNullException(nameof(message));
-    }
+        public string Message { get; }
 
-    public override IEnumerable<ErrorResult> Errors()
-    {
-        yield return this;
-    }
+        public ErrorResult(string message, IEnumerable<ValidationMetadata> metadata)
+            : base(metadata)
+        {
+            Message = message ?? throw new ArgumentNullException(nameof(message));
+        }
+
+        public override IEnumerable<ErrorResult> Errors()
+        {
+            yield return this;
+        }
 
         public override IEnumerable<WarningResult> Warnings() => _emptyWarnings;
 

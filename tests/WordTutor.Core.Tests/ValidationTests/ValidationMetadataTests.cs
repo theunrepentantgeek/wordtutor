@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using FluentAssertions;
 using Xunit;
 
-namespace Niche.Common.Tests
+namespace WordTutor.Core.Common.Tests
 {
     public class ValidationMetadataTests
     {

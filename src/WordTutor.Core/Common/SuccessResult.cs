@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Niche.Common
+namespace WordTutor.Core.Common
 {
     /// <summary>
     /// Successful validation

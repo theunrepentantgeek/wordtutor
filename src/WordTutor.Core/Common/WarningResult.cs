@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Niche.Common
+namespace WordTutor.Core.Common
 {
     public sealed class WarningResult : ValidationResultWithMetadata, IEquatable<WarningResult>
     {

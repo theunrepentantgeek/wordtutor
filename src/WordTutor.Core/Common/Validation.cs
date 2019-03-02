@@ -1,4 +1,4 @@
-﻿namespace Niche.Common
+﻿namespace WordTutor.Core.Common
 {
     public static class Validation
     {

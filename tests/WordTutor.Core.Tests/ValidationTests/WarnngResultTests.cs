@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 
-namespace Niche.Common.Tests
+namespace WordTutor.Core.Common.Tests
 {
     public class WarningResultTests
     {
