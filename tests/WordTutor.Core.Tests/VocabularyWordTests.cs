@@ -6,6 +6,10 @@ namespace WordTutor.Core.Tests
 {
     public class VocabularyWordTests
     {
+        private readonly VocabularyWord _word = new VocabularyWord("sample")
+            .WithPhrase("alpha")
+            .WithPronunciation("beta");
+
         public class Constructor : VocabularyWordTests
         {
             private readonly string _spelling = "sample";
@@ -43,10 +47,6 @@ namespace WordTutor.Core.Tests
 
         public class WithSpelling : VocabularyWordTests
         {
-            private readonly VocabularyWord _word = new VocabularyWord("sample")
-                .WithPhrase("alpha")
-                .WithPronunciation("beta");
-
             [Fact]
             public void WithNull_ThrowsException()
             {
@@ -69,6 +69,36 @@ namespace WordTutor.Core.Tests
                 var newWord = _word.WithSpelling("bogus");
                 newWord.Phrase.Should().Be(_word.Phrase);
                 newWord.Pronunciation.Should().Be(_word.Pronunciation);
+            }
+        }
+
+        public class HasSpelling : VocabularyWordTests
+        {
+            [Fact]
+            public void GivenNull_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                    () => _word.HasSpelling(null));
+                exception.ParamName.Should().Be("spelling");
+            }
+
+            [Fact]
+            public void GivenSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenLowercaseSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling.ToLower()).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenUppercaseSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling.ToUpper()).Should().BeTrue();
             }
         }
 
