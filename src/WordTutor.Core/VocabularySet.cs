@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace WordTutor.Core
 {
     /// <summary>
     /// A set of words that make up a vocabulary for spelling drills
     /// </summary>
-    public class VocabularySet
+    public class VocabularySet //: IEquatable<VocabularySet>
     {
+        private readonly ImmutableHashSet<VocabularyWord> _words;
+
         /// <summary>
         /// Creates an empty vocabulary set
         /// </summary>
@@ -21,7 +24,7 @@ namespace WordTutor.Core
         /// <summary>
         /// Gets all the words contained by this set
         /// </summary>
-        public ImmutableDictionary<string, VocabularyWord> Words { get; }
+        public IImmutableSet<VocabularyWord> Words => _words;
 
         /// <summary>
         /// Change the name of the <see cref="VocabularySet"/>
@@ -36,8 +39,8 @@ namespace WordTutor.Core
             }
 
             return new VocabularySet(
-                           this,
-                           name: name ?? throw new ArgumentNullException(nameof(name)));
+                            this,
+                            name: name ?? throw new ArgumentNullException(nameof(name)));
         }
 
         /// <summary>
@@ -52,14 +55,14 @@ namespace WordTutor.Core
                 throw new ArgumentNullException(nameof(word));
             }
 
-            if (Words.ContainsKey(word.Spelling))
+            if (_words.Any(w => w.HasSpelling(word.Spelling)))
             {
                 throw new ArgumentException(
                     $"A word with spelling {word.Spelling} already exists in this set.",
                     nameof(word));
             }
 
-            var words = Words.Add(word.Spelling, word);
+            var words = _words.Add(word);
             return new VocabularySet(this, words: words);
         }
 
@@ -75,14 +78,14 @@ namespace WordTutor.Core
                 throw new ArgumentNullException(nameof(word));
             }
 
-            if (!Words.ContainsKey(word.Spelling))
+            if (!Words.Contains(word))
             {
                 throw new ArgumentException(
-                    $"A word with spelling {word.Spelling} does not exist in this set.",
+                    $"The word with spelling {word.Spelling} does not exist in this set.",
                     nameof(word));
             }
 
-            var words = Words.Remove(word.Spelling);
+            var words = _words.Remove(word);
             return new VocabularySet(this, words: words);
         }
 
@@ -91,7 +94,7 @@ namespace WordTutor.Core
         /// </summary>
         /// <param name="existing">Word to be removed.</param>
         /// <param name="replacement">Replacement word to use instead.</param>
-        /// <returns>A new vocabulary set wtih the specified replacement.</returns>
+        /// <returns>A new vocabulary set with the specified replacement.</returns>
         public VocabularySet Replace(VocabularyWord existing, VocabularyWord replacement)
         {
             if (existing == null)
@@ -104,7 +107,7 @@ namespace WordTutor.Core
                 throw new ArgumentNullException(nameof(replacement));
             }
 
-            if (!Words.ContainsKey(existing.Spelling))
+            if (!Words.Contains(existing))
             {
                 throw new ArgumentException(
                     $"A word with spelling {existing.Spelling} does not exist in this set.",
@@ -116,8 +119,8 @@ namespace WordTutor.Core
                 return this;
             }
 
-            var words = Words.Remove(existing.Spelling)
-                .Add(replacement.Spelling, replacement);
+            var words = _words.Remove(existing)
+                .Add(replacement);
 
             return new VocabularySet(this, words: words);
         }
@@ -126,7 +129,7 @@ namespace WordTutor.Core
         /// Update a word already in this set
         /// </summary>
         /// <param name="word">Spelling of the word to update.</param>
-        /// <param name="transform">Tranformation to apply to the word.</param>
+        /// <param name="transform">Transformation to apply to the word.</param>
         /// <returns></returns>
         public VocabularySet Update(string word, Func<VocabularyWord, VocabularyWord> transform)
         {
@@ -140,30 +143,31 @@ namespace WordTutor.Core
                 throw new ArgumentNullException(nameof(transform));
             }
 
-            if (!Words.TryGetValue(word, out var existing))
+            var original = Words.FirstOrDefault(w => w.HasSpelling(word));
+            if (original is null)
             {
                 throw new ArgumentException(
                     $"A word with spelling {word} does not exist in this set.",
                     nameof(word));
             }
 
-            var replacement = transform(existing);
-            return Replace(existing, replacement);
+            var replacement = transform(original);
+            return Replace(original, replacement);
         }
 
         private VocabularySet()
         {
             Name = string.Empty;
-            Words = ImmutableDictionary<string, VocabularyWord>.Empty;
+            _words = ImmutableHashSet<VocabularyWord>.Empty;
         }
 
         private VocabularySet(
             VocabularySet original,
             string name = null,
-            ImmutableDictionary<string, VocabularyWord> words = null)
+            ImmutableHashSet<VocabularyWord> words = null)
         {
             Name = name ?? original.Name;
-            Words = words ?? original.Words;
+            _words = words ?? original._words;
         }
     }
 }

@@ -87,7 +87,7 @@ namespace WordTutor.Core.Tests
             {
                 var word = new VocabularyWord("bumble");
                 var set = _empty.Add(word);
-                set.Words.Should().ContainValue(word);
+                set.Words.Should().Contain(word);
             }
 
             [Fact]
@@ -116,7 +116,7 @@ namespace WordTutor.Core.Tests
             public void GivenWordInSet_ReturnsNewSetWithoutWord()
             {
                 var set = _set.Remove(_alpha);
-                set.Words.Should().NotContainValue(_alpha);
+                set.Words.Should().NotContain(_alpha);
             }
 
             [Fact]
@@ -162,14 +162,14 @@ namespace WordTutor.Core.Tests
             public void WhenReplacing_ReturnsVocabularySetWithoutExistingWord()
             {
                 var set = _set.Replace(_alpha, _gamma);
-                set.Words.Should().NotContainValue(_alpha);
+                set.Words.Should().NotContain(_alpha);
             }
 
             [Fact]
             public void WhenReplacing_ReturnsVocabularySetWithReplacementWord()
             {
                 var set = _set.Replace(_alpha, _gamma);
-                set.Words.Should().ContainValue(_gamma);
+                set.Words.Should().Contain(_gamma);
             }
 
             [Fact]
@@ -227,14 +227,14 @@ namespace WordTutor.Core.Tests
             public void WithValidTransform_RemovesOriginalWord()
             {
                 var set = _set.Update("alpha", w => w.WithSpelling("alfa"));
-                set.Words.Should().NotContainKey("alpha");
+                set.Words.Should().NotContain(w => w.HasSpelling("alpha"));
             }
 
             [Fact]
             public void WithValidTransform_AddsModifiedWord()
             {
                 var set = _set.Update("alpha", w => w.WithSpelling("alfa"));
-                set.Words.Should().ContainKey("alfa");
+                set.Words.Should().Contain(w => w.HasSpelling("alfa"));
             }
 
             [Fact]
