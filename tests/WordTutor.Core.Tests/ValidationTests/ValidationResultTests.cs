@@ -85,29 +85,36 @@ namespace WordTutor.Core.Common.Tests
             {
                 var success = Validation.Success();
                 var warning = Validation.Warning("warning");
+                var otherWarning = Validation.Warning("other warning");
                 var error = Validation.Error("error");
+                var otherError = Validation.Error("other error");
 
-                var aggregate = new AggregateResult(warning, error);
+                var aggregateWE = new AggregateResult(warning, error);
+                var aggregateWW = new AggregateResult(warning, otherWarning);
+                var aggregateEE = new AggregateResult(error, otherError);
 
-                yield return new object[] {success, success, success};
+                yield return new object[] { success, success, success };
 
-                yield return new object[] {success, warning, warning};
-                yield return new object[] {warning, success, warning};
+                yield return new object[] { success, warning, warning };
+                yield return new object[] { warning, success, warning };
 
-                yield return new object[] {success, error, error};
-                yield return new object[] {error, success, error};
+                yield return new object[] { success, error, error };
+                yield return new object[] { error, success, error };
 
-                yield return new object[] { success, aggregate, aggregate };
-                yield return new object[] { aggregate, success, aggregate };
+                yield return new object[] { warning, error, aggregateWE };
+                yield return new object[] { error, warning, aggregateWE };
 
-                yield return new object[] {warning, error, aggregate};
-                yield return new object[] {error, warning, aggregate};
+                yield return new object[] { success, aggregateWE, aggregateWE };
+                yield return new object[] { aggregateWE, success, aggregateWE };
 
-                yield return new object[] { warning, aggregate, aggregate };
-                yield return new object[] { aggregate, warning, aggregate };
+                yield return new object[] { aggregateWE, warning, aggregateWE };
+                yield return new object[] { warning, aggregateWE, aggregateWE };
 
-                yield return new object[] { error, aggregate, aggregate };
-                yield return new object[] { error, warning, aggregate };
+                yield return new object[] { aggregateWE, error, aggregateWE };
+                yield return new object[] { error, aggregateWE, aggregateWE };
+
+                yield return new object[] { warning, otherWarning, aggregateWW };
+                yield return new object[] { error, otherError, aggregateEE };
             }
 
             public static IEnumerable<object[]> LazyTestCases()
@@ -139,6 +146,5 @@ namespace WordTutor.Core.Common.Tests
                 yield return new object[] { error, warning, error };
             }
         }
-
     }
 }

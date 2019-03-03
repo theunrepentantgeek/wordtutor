@@ -117,6 +117,45 @@ namespace WordTutor.Core.Common.Tests
             }
         }
 
+        public class AdditionOperator : AggregateResultTests
+        {
+            private readonly AggregateResult _emptyAggregate = new AggregateResult();
+            private readonly ValidationResult _passwordError = Validation.Error("No password");
+            private readonly ValidationResult _passwordWarning = Validation.Warning("Password insecure (too short)");
+
+            [Fact]
+            public void WithError_HasErrors()
+            {
+                var vr = _emptyAggregate + _passwordError;
+                vr.HasErrors.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WithWarning_HasWarnings()
+            {
+                var vr = _emptyAggregate + _passwordWarning;
+                vr.HasWarnings.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WithAggregate_HasCombinedErrors()
+            {
+                var ag = new AggregateResult(_passwordError, _passwordWarning)
+                    + _aggregate;
+                ag.Errors.Should().Contain(ag.Errors);
+                ag.Errors.Should().Contain(_aggregate.Errors);
+            }
+
+            [Fact]
+            public void WithAggregate_HasCombinedWarnings()
+            {
+                var ag = new AggregateResult(_passwordError, _passwordWarning)
+                    + _aggregate;
+                ag.Warnings.Should().Contain(ag.Warnings);
+                ag.Warnings.Should().Contain(_aggregate.Warnings);
+            }
+        }
+
         public class EqualsObject : AggregateResultTests
         {
             [Fact]
@@ -205,6 +244,30 @@ namespace WordTutor.Core.Common.Tests
                     .Add(_warning);
                 AggregateResult other = new AggregateResult(results);
                 _aggregate.Equals(other).Should().BeTrue();
+            }
+        }
+
+        public class GetHashCodeMethod : AggregateResultTests
+        {
+            [Fact]
+            public void ReturnsConsistentValue()
+            {
+                _aggregate.GetHashCode().Should().Be(_aggregate.GetHashCode());
+            }
+
+            [Fact]
+            public void ForSameResults_ReturnsConsistentValue()
+            {
+                // Add in reverse order to _aggregate
+                var ag = new AggregateResult(_warning, _error);
+                ag.GetHashCode().Should().Be(_aggregate.GetHashCode());
+            }
+
+            [Fact]
+            public void ForDifferentResults_ReturnsDifferentValue()
+            {
+                var ag = new AggregateResult(_warning);
+                ag.GetHashCode().Should().NotBe(_aggregate.GetHashCode());
             }
         }
     }

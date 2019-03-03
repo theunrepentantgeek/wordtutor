@@ -13,20 +13,30 @@ namespace WordTutor.Core.Common.Tests
             private readonly IEnumerable<ValidationMetadata> _emptyData
                 = new List<ValidationMetadata>();
 
+            private readonly string _message = "Expected error message";
+
             [Fact]
             public void GivenMessage_InitializesProperty()
             {
-                var message = "Expected error message";
-                var error = new ErrorResult(message, _emptyData);
-                error.Message.Should().Be(message);
+                var error = new ErrorResult(_message, _emptyData);
+                error.Message.Should().Be(_message);
             }
 
             [Fact]
             public void GivenEmptyData_InitializesProperty()
             {
-                var message = "Expected error message";
-                var error = new ErrorResult(message, _emptyData);
+                var error = new ErrorResult(_message, _emptyData);
                 error.Metadata.Should().Equal(_emptyData);
+            }
+
+            [Fact]
+            public void GivenData_InitializesProperty()
+            {
+                var answer = new ValidationMetadata("answer", 42);
+                var metadata = new List<ValidationMetadata> { answer };
+                var error = new ErrorResult(_message, metadata);
+                error.Metadata.Should().Contain(
+                    kvp => kvp.Key == answer.Name && kvp.Value == answer.Value);
             }
 
             [Fact]
