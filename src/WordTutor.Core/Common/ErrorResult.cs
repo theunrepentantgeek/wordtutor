@@ -17,12 +17,9 @@ namespace WordTutor.Core.Common
             Message = message ?? throw new ArgumentNullException(nameof(message));
         }
 
-        public override IEnumerable<ErrorResult> Errors()
-        {
-            yield return this;
-        }
+        public override IEnumerable<ErrorResult> Errors => new List<ErrorResult> { this };
 
-        public override IEnumerable<WarningResult> Warnings() => _emptyWarnings;
+        public override IEnumerable<WarningResult> Warnings => _emptyWarnings;
 
         public override bool HasErrors => true;
 

@@ -97,23 +97,23 @@ namespace WordTutor.Core.Common.Tests
             public void GivenSingleError_HasSingleError()
             {
                 var aggregate = new AggregateResult(_error);
-                aggregate.Errors().Should().HaveCount(1);
-                aggregate.Errors().Single().Should().Be(_error);
+                aggregate.Errors.Should().HaveCount(1);
+                aggregate.Errors.Single().Should().Be(_error);
             }
 
             [Fact]
             public void GivenSameErrorMultipleTimes_HasSingleError()
             {
                 var aggregate = new AggregateResult(_error, _error, _error);
-                aggregate.Errors().Should().HaveCount(1);
-                aggregate.Errors().Single().Should().Be(_error);
+                aggregate.Errors.Should().HaveCount(1);
+                aggregate.Errors.Single().Should().Be(_error);
             }
 
             [Fact]
             public void GivenEquivilentErrors_HasSingleError()
             {
                 var aggregate = new AggregateResult(_error, _sameError, _error);
-                aggregate.Errors().Should().HaveCount(1);
+                aggregate.Errors.Should().HaveCount(1);
             }
         }
 

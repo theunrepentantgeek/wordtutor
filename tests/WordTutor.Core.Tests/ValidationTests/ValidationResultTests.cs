@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using FluentAssertions;
 using Xunit;
@@ -54,13 +54,13 @@ namespace WordTutor.Core.Common.Tests
             [Fact]
             public void GivenError_ReturnsExpectedCount()
             {
-                Validation.Error("Sample error").Errors().Should().HaveCount(1);
+                Validation.Error("Sample error").Errors.Should().HaveCount(1);
             }
 
             [Fact]
             public void GivenSuccess_ReturnsExpectedCount()
             {
-                Validation.Success().Errors().Should().BeEmpty();
+                Validation.Success().Errors.Should().BeEmpty();
             }
         }
 
@@ -109,6 +109,7 @@ namespace WordTutor.Core.Common.Tests
                 yield return new object[] { error, aggregate, aggregate };
                 yield return new object[] { error, warning, aggregate };
             }
+
             public static IEnumerable<object[]> LazyTestCases()
             {
                 var success = Validation.Success();

@@ -8,9 +8,9 @@ namespace WordTutor.Core.Common
     /// </summary>
     public sealed class SuccessResult : ValidationResult, IEquatable<SuccessResult>
     {
-        public override IEnumerable<ErrorResult> Errors() => _emptyErrors;
+        public override IEnumerable<ErrorResult> Errors => _emptyErrors;
 
-        public override IEnumerable<WarningResult> Warnings() => _emptyWarnings;
+        public override IEnumerable<WarningResult> Warnings => _emptyWarnings;
 
         public override bool HasErrors => false;
 

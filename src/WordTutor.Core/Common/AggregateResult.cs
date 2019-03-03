@@ -18,19 +18,15 @@ namespace WordTutor.Core.Common
             : this(results.ToImmutableHashSet())
         { }
 
-        public override IEnumerable<ErrorResult> Errors()
-        {
-            return Results.OfType<ErrorResult>();
-        }
+        public override IEnumerable<ErrorResult> Errors
+            => Results.OfType<ErrorResult>();
 
-        public override IEnumerable<WarningResult> Warnings()
-        {
-            return Results.OfType<WarningResult>();
-        }
+        public override IEnumerable<WarningResult> Warnings
+            => Results.OfType<WarningResult>();
 
-        public override bool HasErrors => Errors().Any();
+        public override bool HasErrors => Errors.Any();
 
-        public override bool HasWarnings => Warnings().Any();
+        public override bool HasWarnings => Warnings.Any();
 
         public bool Equals(AggregateResult other)
             => other?.Results.SetEquals(Results) ?? false;

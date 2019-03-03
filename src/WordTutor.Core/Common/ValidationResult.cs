@@ -9,11 +9,11 @@ namespace WordTutor.Core.Common
     public abstract class ValidationResult : IEquatable<ValidationResult>
     {
         // an empty sequence of errors, cached to reduce allocations
-        protected static readonly IEnumerable<ErrorResult> _emptyErrors 
+        protected static readonly IEnumerable<ErrorResult> _emptyErrors
             = new List<ErrorResult>();
 
         // an empty sequence of warnings, cached to reduce allocations
-        protected static readonly IEnumerable<WarningResult> _emptyWarnings 
+        protected static readonly IEnumerable<WarningResult> _emptyWarnings
             = new List<WarningResult>();
 
         // Standardise string comparisons
@@ -22,12 +22,12 @@ namespace WordTutor.Core.Common
         /// <summary>
         /// Gets a (possibly empty) sequence of errors
         /// </summary>
-        public abstract IEnumerable<ErrorResult> Errors();
+        public abstract IEnumerable<ErrorResult> Errors { get; }
 
         /// <summary>
         /// Gets a (possibly empty) sequence of warnings
         /// </summary>
-        public abstract IEnumerable<WarningResult> Warnings();
+        public abstract IEnumerable<WarningResult> Warnings { get; }
 
         /// <summary>
         /// Gets a value indicating whether this result includes any errors
