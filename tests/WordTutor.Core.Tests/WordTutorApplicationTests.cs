@@ -37,5 +37,25 @@ namespace WordTutor.Core.Tests
                 app.CurrentScreen.Should().BeSameAs(screen);
             }
         }
+
+        public class OpenScreen : WordTutorApplicationTests
+        {
+            [Fact]
+            public void GivenNullScreen_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _app.OpenScreen(null));
+                exception.ParamName.Should().Be("screen");
+            }
+
+            [Fact]
+            public void GivenScreen_MakesScreenCurrent()
+            {
+                var screen = new FakeScreen();
+                var app = _app.OpenScreen(screen);
+                app.CurrentScreen.Should().BeSameAs(screen);
+            }
+        }
     }
 }

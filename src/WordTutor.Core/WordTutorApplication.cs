@@ -31,5 +31,25 @@ namespace WordTutor.Core
             _screens = ImmutableStack<Screen>.Empty
                 .Push(initialScreen ?? throw new ArgumentNullException(nameof(initialScreen)));
         }
+
+        /// <summary>
+        /// Open a new screen, adding it to our stack
+        /// </summary>
+        /// <param name="screen">New screen to open.</param>
+        public WordTutorApplication OpenScreen(Screen screen)
+        {
+            var screens = _screens.Push(
+                screen ?? throw new ArgumentNullException(nameof(screen)));
+            return new WordTutorApplication(this, screens: screens);
+        }
+
+        private WordTutorApplication(
+            WordTutorApplication original,
+            VocabularySet vocabularySet = null,
+            ImmutableStack<Screen> screens = null)
+        {
+            VocabularySet = vocabularySet ?? original.VocabularySet;
+            _screens = screens ?? original._screens;
+        }
     }
 }
