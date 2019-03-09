@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -88,7 +88,7 @@ namespace WordTutor.Core
             }
 
             return new WordTutorApplication(
-                this, 
+                this,
                 currentScreen: screen);
         }
 
@@ -106,6 +106,30 @@ namespace WordTutor.Core
             return new WordTutorApplication(
                 this,
                 vocabularySet: vocabularySet ?? throw new ArgumentNullException(nameof(vocabularySet)));
+        }
+
+        /// <summary>
+        /// Apply a transformation to the vocabulary set that we already have
+        /// </summary>
+        /// <param name="transformation">The transformation to apply to the <see cref="VocabularySet"/>.</param>
+        public WordTutorApplication UpdateVocabularySet(
+            Func<VocabularySet, VocabularySet> transformation)
+        {
+            if (transformation is null)
+            {
+                throw new ArgumentNullException(nameof(transformation));
+            }
+
+            var set = transformation(VocabularySet);
+
+            if (ReferenceEquals(set, VocabularySet))
+            {
+                return this;
+            }
+
+            return new WordTutorApplication(
+                this,
+                vocabularySet: set);
         }
 
         private WordTutorApplication(
