@@ -142,6 +142,30 @@ namespace WordTutor.Core
                 vocabularySet: set);
         }
 
+        /// <summary>
+        /// Modifies the current screen
+        /// </summary>
+        /// <remarks>
+        /// If the screen is not changed, the existing instance will be returned
+        /// </remarks>
+        /// <param name="transformation">Transformation to apply to the screen</param>
+        public WordTutorApplication UpdateScreen(Func<Screen,Screen> transformation)
+        {
+            if (transformation is null)
+            {
+                throw new ArgumentNullException(nameof(transformation));
+            }
+
+            var screen = transformation(CurrentScreen);
+            if (ReferenceEquals(screen, CurrentScreen))
+            {
+                return this;
+            }
+
+            var screens = _screens.Pop().Push(screen);
+            return new WordTutorApplication(this, screens: screens);
+        }
+
         private WordTutorApplication(
             WordTutorApplication original,
             VocabularySet? vocabularySet = null,

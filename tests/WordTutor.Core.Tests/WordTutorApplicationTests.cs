@@ -97,7 +97,7 @@ namespace WordTutor.Core.Tests
             }
 
             [Fact]
-            public void WhenTransformationReturnsCurrentScreen_ReturnsExistingApplication()
+            public void WhenTransformationReturnsCurrentScreen_ReturnsSameInstance()
             {
                 var app = _app.UpdateScreen((FakeScreen s) => s);
                 app.Should().BeSameAs(_app);
