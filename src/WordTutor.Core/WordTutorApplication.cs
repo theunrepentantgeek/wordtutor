@@ -92,6 +92,22 @@ namespace WordTutor.Core
                 currentScreen: screen);
         }
 
+        /// <summary>
+        /// Use a different vocabulary set
+        /// </summary>
+        /// <param name="vocabularySet">New <see cref="VocabularySet"/> to use.</param>
+        public WordTutorApplication WithVocabularySet(VocabularySet vocabularySet)
+        {
+            if (ReferenceEquals(VocabularySet, vocabularySet))
+            {
+                return this;
+            }
+
+            return new WordTutorApplication(
+                this,
+                vocabularySet: vocabularySet ?? throw new ArgumentNullException(nameof(vocabularySet)));
+        }
+
         private WordTutorApplication(
             WordTutorApplication original,
             VocabularySet vocabularySet = null,

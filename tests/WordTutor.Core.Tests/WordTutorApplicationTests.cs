@@ -97,7 +97,7 @@ namespace WordTutor.Core.Tests
             }
 
             [Fact]
-            public void WhenTransformationReturnsCurrentScreen_ReturnsSameInstance()
+            public void WhenTransformationReturnsCurrentScreen_ReturnsExistingApplication()
             {
                 var app = _app.UpdateScreen(s => s);
                 app.Should().BeSameAs(_app);
@@ -115,5 +115,43 @@ namespace WordTutor.Core.Tests
                 app.CurrentScreen.Should().Be(current);
             }
         }
+
+        public class WithVocabularySet : WordTutorApplicationTests
+        {
+            private readonly VocabularySet _set;
+
+            public WithVocabularySet()
+            {
+                var alpha = new VocabularyWord("alpha");
+                var beta = new VocabularyWord("beta");
+                _set = VocabularySet.Empty
+                    .Add(alpha)
+                    .Add(beta);
+            }
+
+            [Fact]
+            public void GivenNullVocabularySet_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _app.WithVocabularySet(null));
+                exception.ParamName.Should().Be("vocabularySet");
+            }
+
+            [Fact]
+            public void GivenVocabularySet_UpdatesProperty()
+            {
+                var app = _app.WithVocabularySet(_set);
+                app.VocabularySet.Should().BeSameAs(_set);
+            }
+
+            [Fact]
+            public void GivenExistingVocabularySet_ReturnsExistingApplication()
+            {
+                var app = _app.WithVocabularySet(_app.VocabularySet);
+                app.Should().BeSameAs(_app);
+            }
+        }
+
     }
 }
