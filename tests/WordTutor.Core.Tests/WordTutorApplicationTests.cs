@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,6 +55,25 @@ namespace WordTutor.Core.Tests
                 var screen = new FakeScreen();
                 var app = _app.OpenScreen(screen);
                 app.CurrentScreen.Should().BeSameAs(screen);
+            }
+        }
+
+        public class CloseScreen : WordTutorApplicationTests
+        {
+            [Fact]
+            public void WhenCalled_RevealsPriorScreen()
+            {
+                var screen = new FakeScreen();
+                var current = _app.CurrentScreen;
+                var app = _app.OpenScreen(screen).CloseScreen();
+                app.CurrentScreen.Should().Be(current);
+            }
+
+            [Fact]
+            public void WhenCurrentScreenIsInitialScreen_ReturnsSameApplication()
+            {
+                var app = _app.CloseScreen();
+                app.Should().BeSameAs(_app);
             }
         }
     }

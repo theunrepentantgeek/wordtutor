@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -40,6 +40,24 @@ namespace WordTutor.Core
         {
             var screens = _screens.Push(
                 screen ?? throw new ArgumentNullException(nameof(screen)));
+            return new WordTutorApplication(this, screens: screens);
+        }
+
+        /// <summary>
+        /// Closes the top screen on our stack, revealing the screen underneath
+        /// </summary>
+        /// <remarks>
+        /// Won't close the top screen.
+        /// </remarks>
+        public WordTutorApplication CloseScreen()
+        {
+            if (_screens.Pop().IsEmpty)
+            {
+                // Don't ever want to close the last screen
+                return this;
+            }
+
+            var screens = _screens.Pop();
             return new WordTutorApplication(this, screens: screens);
         }
 
