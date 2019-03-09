@@ -8,8 +8,8 @@ namespace WordTutor.Core
 {
     public class WordTutorApplication
     {
-        // a stack of active screens, with the topmost one visible to the user
-        private readonly ImmutableStack<Screen> _screens;
+        // a stack of previously active screens
+        private readonly ImmutableStack<Screen> _priorScreens;
 
         /// <summary>
         /// Gets the current vocabulary being edited
@@ -19,7 +19,7 @@ namespace WordTutor.Core
         /// <summary>
         /// Gets the current screen available for user interaction
         /// </summary>
-        public Screen CurrentScreen => _screens.Peek();
+        public Screen CurrentScreen { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WordtutorApplication"/> class
@@ -27,9 +27,10 @@ namespace WordTutor.Core
         /// <param name="initialScreen"></param>
         public WordTutorApplication(Screen initialScreen)
         {
+            _priorScreens = ImmutableStack<Screen>.Empty;
             VocabularySet = VocabularySet.Empty;
-            _screens = ImmutableStack<Screen>.Empty
-                .Push(initialScreen ?? throw new ArgumentNullException(nameof(initialScreen)));
+
+            CurrentScreen = initialScreen ?? throw new ArgumentNullException(nameof(initialScreen));
         }
 
         /// <summary>
@@ -38,9 +39,12 @@ namespace WordTutor.Core
         /// <param name="screen">New screen to open.</param>
         public WordTutorApplication OpenScreen(Screen screen)
         {
-            var screens = _screens.Push(
-                screen ?? throw new ArgumentNullException(nameof(screen)));
-            return new WordTutorApplication(this, screens: screens);
+            var screens = _priorScreens.Push(CurrentScreen);
+
+            return new WordTutorApplication(
+                this,
+                currentScreen: screen ?? throw new ArgumentNullException(nameof(screen)),
+            priorScreens: screens);
         }
 
         /// <summary>
@@ -51,14 +55,16 @@ namespace WordTutor.Core
         /// </remarks>
         public WordTutorApplication CloseScreen()
         {
-            if (_screens.Pop().IsEmpty)
+            if (_priorScreens.IsEmpty)
             {
                 // Don't ever want to close the last screen
                 return this;
             }
 
-            var screens = _screens.Pop();
-            return new WordTutorApplication(this, screens: screens);
+            return new WordTutorApplication(
+                this,
+                currentScreen: _priorScreens.Peek(),
+                priorScreens: _priorScreens.Pop());
         }
 
         /// <summary>
@@ -81,17 +87,20 @@ namespace WordTutor.Core
                 return this;
             }
 
-            var screens = _screens.Pop().Push(screen);
-            return new WordTutorApplication(this, screens: screens);
+            return new WordTutorApplication(
+                this, 
+                currentScreen: screen);
         }
 
         private WordTutorApplication(
             WordTutorApplication original,
             VocabularySet vocabularySet = null,
-            ImmutableStack<Screen> screens = null)
+            Screen currentScreen = null,
+            ImmutableStack<Screen> priorScreens = null)
         {
+            _priorScreens = priorScreens ?? original._priorScreens;
+            CurrentScreen = currentScreen ?? original.CurrentScreen;
             VocabularySet = vocabularySet ?? original.VocabularySet;
-            _screens = screens ?? original._screens;
         }
     }
 }
