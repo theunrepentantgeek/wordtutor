@@ -118,12 +118,8 @@ namespace WordTutor.Core
                 vocabularySet: vocabularySet ?? throw new ArgumentNullException(nameof(vocabularySet)));
         }
 
-        /// <summary>
-        /// Apply a transformation to the vocabulary set that we already have
-        /// </summary>
-        /// <param name="transformation">The transformation to apply to the <see cref="VocabularySet"/>.</param>
         public WordTutorApplication UpdateVocabularySet(
-            Func<VocabularySet, VocabularySet> transformation)
+            Func<VocabularySet,VocabularySet> transformation)
         {
             if (transformation is null)
             {
@@ -140,30 +136,6 @@ namespace WordTutor.Core
             return new WordTutorApplication(
                 this,
                 vocabularySet: set);
-        }
-
-        /// <summary>
-        /// Modifies the current screen
-        /// </summary>
-        /// <remarks>
-        /// If the screen is not changed, the existing instance will be returned
-        /// </remarks>
-        /// <param name="transformation">Transformation to apply to the screen</param>
-        public WordTutorApplication UpdateScreen(Func<Screen,Screen> transformation)
-        {
-            if (transformation is null)
-            {
-                throw new ArgumentNullException(nameof(transformation));
-            }
-
-            var screen = transformation(CurrentScreen);
-            if (ReferenceEquals(screen, CurrentScreen))
-            {
-                return this;
-            }
-
-            var screens = _screens.Pop().Push(screen);
-            return new WordTutorApplication(this, screens: screens);
         }
 
         private WordTutorApplication(
