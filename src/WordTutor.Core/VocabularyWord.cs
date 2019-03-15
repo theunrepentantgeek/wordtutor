@@ -48,6 +48,17 @@ namespace WordTutor.Core
         }
 
         /// <summary>
+        /// Check to see if this word has the specified spelling
+        /// </summary>
+        /// <param name="spelling">Spelling we're interested in finding.</param>
+        /// <returns>True if the spelling matches (case insensitive), false otherwise.</returns>
+        public bool HasSpelling(string spelling)
+            => string.Equals(
+                spelling ?? throw new ArgumentNullException(nameof(spelling)),
+                Spelling,
+                StringComparison.CurrentCultureIgnoreCase);
+
+        /// <summary>
         /// Specify a new pronunciation for this word
         /// </summary>
         /// <param name="pronunciation">New pronunciation.</param>

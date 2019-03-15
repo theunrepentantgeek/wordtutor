@@ -6,9 +6,13 @@ namespace WordTutor.Core.Tests
 {
     public class VocabularyWordTests
     {
+        private readonly VocabularyWord _word = new VocabularyWord("sample")
+            .WithPhrase("alpha")
+            .WithPronunciation("beta");
+
         public class Constructor : VocabularyWordTests
         {
-            private string _spelling = "sample";
+            private readonly string _spelling = "sample";
 
             [Fact]
             public void WithNullWord_ThrowsException()
@@ -33,7 +37,6 @@ namespace WordTutor.Core.Tests
                 word.Pronunciation.Should().BeEmpty();
             }
 
-
             [Fact]
             public void SetsPhraseToEmptyString()
             {
@@ -44,10 +47,6 @@ namespace WordTutor.Core.Tests
 
         public class WithSpelling : VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample")
-                .WithPhrase("alpha")
-                .WithPronunciation("beta");
-
             [Fact]
             public void WithNull_ThrowsException()
             {
@@ -73,9 +72,39 @@ namespace WordTutor.Core.Tests
             }
         }
 
+        public class HasSpelling : VocabularyWordTests
+        {
+            [Fact]
+            public void GivenNull_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                    () => _word.HasSpelling(null));
+                exception.ParamName.Should().Be("spelling");
+            }
+
+            [Fact]
+            public void GivenSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenLowercaseSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling.ToLower()).Should().BeTrue();
+            }
+
+            [Fact]
+            public void GivenUppercaseSpelling_ReturnsTrue()
+            {
+                _word.HasSpelling(_word.Spelling.ToUpper()).Should().BeTrue();
+            }
+        }
+
         public class WithPronunciation: VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample");
+            private readonly VocabularyWord _word = new VocabularyWord("sample");
 
             [Fact]
             public void WithNull_ThrowsException()
@@ -104,7 +133,7 @@ namespace WordTutor.Core.Tests
 
         public class WithPhrase : VocabularyWordTests
         {
-            private VocabularyWord _word = new VocabularyWord("sample");
+            private readonly VocabularyWord _word = new VocabularyWord("sample");
 
             [Fact]
             public void WithNull_ThrowsException()
