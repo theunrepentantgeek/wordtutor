@@ -66,10 +66,10 @@ Task Compile -Depends Requires.DotNetExe {
 Task Unit.Tests -Depends Requires.DotNetExe, Compile {
 
     foreach ($project in (resolve-path $testsDir\*\*.csproj)) {
-        $projectName = split-path $project -Leaf
+        $projectName = (get-item $project).BaseName
         Write-SubtaskName $projectName
         exec {
-            & $dotnetExe test $project --no-build
+            & $dotnetExe test $project /p:CollectCoverage=true /p:Exclude="[xunit*]*%2c[*.Tests]*"
         }
     }
 }
