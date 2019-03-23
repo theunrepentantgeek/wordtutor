@@ -97,6 +97,24 @@ namespace WordTutor.Core.Tests.ReduxTests
                     return newState;
                 }
             }
+
+            [Fact]
+            public void RecursiveCall_ThrowsException()
+            {
+                var newState = "updated";
+                _reducer.Reduce = RecursiveDispatch;
+
+                var exception =
+                    Assert.Throws<InvalidOperationException>(
+                        () => _store.Dispatch(_message));
+                exception.Message.Should().Contain("Dispatch");
+
+                string RecursiveDispatch(IReduxMessage message, string state)
+                {
+                    _store.Dispatch(_message);
+                    return newState;
+                }
+            }
         }
     }
 }
