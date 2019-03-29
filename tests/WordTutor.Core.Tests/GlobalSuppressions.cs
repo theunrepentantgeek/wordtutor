@@ -7,12 +7,12 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage(
-    "Design", 
-    "CA1034:Nested types should not be visible", 
+    "Design",
+    "CA1034:Nested types should not be visible",
     Justification = "This project uses nested types to structure unit tests and share fixture setup.")]
 
 [assembly: SuppressMessage(
     "Naming",
-    "CA1707:Identifiers should not contain underscores", 
+    "CA1707:Identifiers should not contain underscores",
     Justification = "This project uses underscores to separate clauses of test names")]
 
