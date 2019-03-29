@@ -6,14 +6,21 @@ namespace WordTutor.Core.Tests
 {
     public class VocabularyWordTests
     {
-        private readonly VocabularyWord _word = new VocabularyWord("sample")
-            .WithPhrase("alpha")
-            .WithPronunciation("beta");
+        private readonly string _spelling = "bogus";
+        private readonly string _phrase = "this is a bogus word.";
+        private readonly string _pronunciation = "boogus";
+
+        private readonly VocabularyWord _word;
+
+        public VocabularyWordTests()
+        {
+            _word = new VocabularyWord(_spelling)
+                .WithPhrase(_phrase)
+                .WithPronunciation(_pronunciation);
+        }
 
         public class Constructor : VocabularyWordTests
         {
-            private readonly string _spelling = "sample";
-
             [Fact]
             public void WithNullWord_ThrowsException()
             {
@@ -104,8 +111,6 @@ namespace WordTutor.Core.Tests
 
         public class WithPronunciation: VocabularyWordTests
         {
-            private readonly VocabularyWord _word = new VocabularyWord("sample");
-
             [Fact]
             public void WithNull_ThrowsException()
             {
@@ -133,8 +138,6 @@ namespace WordTutor.Core.Tests
 
         public class WithPhrase : VocabularyWordTests
         {
-            private readonly VocabularyWord _word = new VocabularyWord("sample");
-
             [Fact]
             public void WithNull_ThrowsException()
             {
@@ -162,19 +165,6 @@ namespace WordTutor.Core.Tests
 
         public class EqualsVocabularyWord : VocabularyWordTests
         {
-            private readonly string _spelling = "bogus";
-            private readonly string _phrase = "this is a bogus word.";
-            private readonly string _pronunciation = "boogus";
-
-            private readonly VocabularyWord _word;
-
-            public EqualsVocabularyWord()
-            {
-                _word = new VocabularyWord(_spelling)
-                    .WithPhrase(_phrase)
-                    .WithPronunciation(_pronunciation);
-            }
-
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
@@ -222,19 +212,6 @@ namespace WordTutor.Core.Tests
 
         public class EqualsObject :VocabularyWordTests
         {
-            private readonly string _spelling = "bogus";
-            private readonly string _phrase = "this is a bogus word.";
-            private readonly string _pronunciation = "boogus";
-
-            private readonly VocabularyWord _word;
-
-            public EqualsObject()
-            {
-                _word = new VocabularyWord(_spelling)
-                    .WithPhrase(_phrase)
-                    .WithPronunciation(_pronunciation);
-            }
-
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
@@ -267,19 +244,6 @@ namespace WordTutor.Core.Tests
 
         public class GetHashCodeMethod : VocabularyWordTests
         {
-            private readonly string _spelling = "bogus";
-            private readonly string _phrase = "this is a bogus word.";
-            private readonly string _pronunciation = "boogus";
-
-            private readonly VocabularyWord _word;
-
-            public GetHashCodeMethod()
-            {
-                _word = new VocabularyWord(_spelling)
-                    .WithPhrase(_phrase)
-                    .WithPronunciation(_pronunciation);
-            }
-
             [Fact]
             public void GivenSelf_ReturnsConsistentValue()
             {
