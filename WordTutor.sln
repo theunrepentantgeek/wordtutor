@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTutor.Core", "src\WordTutor.Core\WordTutor.Core.csproj", "{8436FB9B-1813-4A58-AD61-40FF6B3A917D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Core", "src\WordTutor.Core\WordTutor.Core.csproj", "{8436FB9B-1813-4A58-AD61-40FF6B3A917D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTutor.Core.Tests", "tests\WordTutor.Core.Tests\WordTutor.Core.Tests.csproj", "{E41E681B-1ABE-44D9-8AAE-172F25551352}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Core.Tests", "tests\WordTutor.Core.Tests\WordTutor.Core.Tests.csproj", "{E41E681B-1ABE-44D9-8AAE-172F25551352}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Desktop", "src\WordTutor.Desktop\WordTutor.Desktop.csproj", "{ACD08BB9-F5C7-45F6-B63C-29A72D060790}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Desktop.Tests", "tests\WordTutor.Desktop.Tests\WordTutor.Desktop.Tests.csproj", "{A79E83C4-56F8-4579-8129-05B031302943}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E41E681B-1ABE-44D9-8AAE-172F25551352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACD08BB9-F5C7-45F6-B63C-29A72D060790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACD08BB9-F5C7-45F6-B63C-29A72D060790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACD08BB9-F5C7-45F6-B63C-29A72D060790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACD08BB9-F5C7-45F6-B63C-29A72D060790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79E83C4-56F8-4579-8129-05B031302943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79E83C4-56F8-4579-8129-05B031302943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79E83C4-56F8-4579-8129-05B031302943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79E83C4-56F8-4579-8129-05B031302943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
