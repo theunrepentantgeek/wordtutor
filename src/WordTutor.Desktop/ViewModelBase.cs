@@ -80,6 +80,20 @@ namespace WordTutor.Desktop
             OnPropertyChanged(property);
         }
 
+        protected void UpdateProperty(
+            ref TimeSpan member,
+            TimeSpan newValue,
+            [CallerMemberName] string property = null)
+        {
+            if (Equals(member, newValue))
+            {
+                return;
+            }
+
+            member = newValue;
+            OnPropertyChanged(property);
+        }
+
         private void OnPropertyChanged(string property)
         {
             if (SynchronizationContext.Current == _synchronizationContext

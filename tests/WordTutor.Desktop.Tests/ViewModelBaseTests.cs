@@ -176,6 +176,64 @@ namespace WordTutor.Desktop.Tests
             }
         }
 
+        public class TimeSpanPropertyTests : ViewModelBaseTests
+        {
+            private readonly TimeSpanViewModel _timeSpanViewModel =
+                new TimeSpanViewModel(TimeSpan.FromHours(7));
+
+            private readonly TimeSpan _duration = TimeSpan.FromDays(4);
+
+            [Fact]
+            public void WhenPropertyChanged_NewValueIsStored()
+            {
+                _timeSpanViewModel.Duration = _duration;
+                _timeSpanViewModel.Duration.Should().Be(_duration);
+            }
+
+            [Fact]
+            public void WhenPropertyChangedWithSubscriber_SubscriberIsNotified()
+            {
+                bool notified = false;
+                _timeSpanViewModel.PropertyChanged += (s, a) => notified = true;
+                _timeSpanViewModel.Duration = _duration;
+                notified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyChangedWithSubscriber_SubscriberIsNotifiedNameOfProperty()
+            {
+                var property = "";
+                _timeSpanViewModel.PropertyChanged += (s, a) => property = a.PropertyName;
+                _timeSpanViewModel.Duration = _duration;
+                property.Should().Be("Duration");
+            }
+
+            [Fact]
+            public void WhenPropertyNotChangedWithSubscriber_SubscriberIsNotNotified()
+            {
+                bool notified = false;
+                _timeSpanViewModel.PropertyChanged += (s, a) => notified = true;
+                _timeSpanViewModel.Duration = _timeSpanViewModel.Duration; // Same value
+                notified.Should().BeFalse();
+            }
+
+            public class TimeSpanViewModel : ViewModelBase
+            {
+                private TimeSpan _duration;
+
+                public TimeSpanViewModel(TimeSpan duration)
+                {
+                    _duration = duration;
+                }
+
+                public TimeSpan Duration
+                {
+                    get => _duration;
+                    set => UpdateProperty(ref _duration, value);
+                }
+            }
+        }
+
         public class EnumPropertyTests : ViewModelBaseTests
         {
             private readonly ColorViewModel _colorModel = new ColorViewModel(Color.Blue);
