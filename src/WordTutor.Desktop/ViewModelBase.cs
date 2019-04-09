@@ -23,21 +23,23 @@ namespace WordTutor.Desktop
             _synchronizationContext = SynchronizationContext.Current;
         }
 
-        protected void UpdateProperty(
+        protected bool UpdateProperty(
             ref int member,
             int newValue,
             [CallerMemberName] string property = null)
         {
             if (member == newValue)
             {
-                return;
+                return false;
             }
 
             member = newValue;
             OnPropertyChanged(property);
+
+            return true;
         }
 
-        protected void UpdateProperty<E>(
+        protected bool UpdateProperty<E>(
             ref E member,
             E newValue,
             [CallerMemberName] string property = null)
@@ -45,53 +47,61 @@ namespace WordTutor.Desktop
         {
             if (Equals(member, newValue))
             {
-                return;
+                return false;
             }
 
             member = newValue;
             OnPropertyChanged(property);
+
+            return true;
         }
 
-        protected void UpdateProperty(
+        protected bool UpdateProperty(
             ref string member,
             string newValue,
             [CallerMemberName] string property = null)
         {
             if (member == newValue)
             {
-                return;
+                return false;
             }
 
             member = newValue;
             OnPropertyChanged(property);
+
+            return true;
         }
 
-        protected void UpdateProperty(
+        protected bool UpdateProperty(
             ref DateTimeOffset member,
             DateTimeOffset newValue,
             [CallerMemberName] string property = null)
         {
             if (member == newValue)
             {
-                return;
+                return false;
             }
 
             member = newValue;
             OnPropertyChanged(property);
+
+            return true;
         }
 
-        protected void UpdateProperty(
+        protected bool UpdateProperty(
             ref TimeSpan member,
             TimeSpan newValue,
             [CallerMemberName] string property = null)
         {
             if (Equals(member, newValue))
             {
-                return;
+                return false;
             }
 
             member = newValue;
             OnPropertyChanged(property);
+
+            return true;
         }
 
         private void OnPropertyChanged(string property)
@@ -104,8 +114,8 @@ namespace WordTutor.Desktop
             else
             {
                 _synchronizationContext.Send(
-                      _ => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property)),
-                      state: null);
+                    _ => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property)),
+                    state: null);
             }
         }
     }

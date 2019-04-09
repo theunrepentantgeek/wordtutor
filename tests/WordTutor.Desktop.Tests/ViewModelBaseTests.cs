@@ -19,6 +19,20 @@ namespace WordTutor.Desktop.Tests
             }
 
             [Fact]
+            public void WhenPropertyChanged_ModelIsModified()
+            {
+                _intModel.Count = 100;
+                _intModel.Modified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyNotChanged_ModelIsNotModified()
+            {
+                _intModel.Count = 42;
+                _intModel.Modified.Should().BeFalse();
+            }
+
+            [Fact]
             public void WhenPropertyChangedWithSubscriber_SubscriberIsNotified()
             {
                 bool notified = false;
@@ -57,8 +71,10 @@ namespace WordTutor.Desktop.Tests
                 public int Count
                 {
                     get => _count;
-                    set => UpdateProperty(ref _count, value);
+                    set => Modified = UpdateProperty(ref _count, value);
                 }
+
+                public bool Modified { get; set; }
             }
         }
 
@@ -71,6 +87,20 @@ namespace WordTutor.Desktop.Tests
             {
                 _stringModel.Name = "bar";
                 _stringModel.Name.Should().Be("bar");
+            }
+
+            [Fact]
+            public void WhenPropertyChanged_ModelIsModified()
+            {
+                _stringModel.Name = "bar";
+                _stringModel.Modified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyNotChanged_ModelIsNotModified()
+            {
+                _stringModel.Name = "foo";
+                _stringModel.Modified.Should().BeFalse();
             }
 
             [Fact]
@@ -112,24 +142,44 @@ namespace WordTutor.Desktop.Tests
                 public string Name
                 {
                     get => _name;
-                    set => UpdateProperty(ref _name, value);
+                    set => Modified = UpdateProperty(ref _name, value);
                 }
+
+                public bool Modified { get; set; }
             }
         }
 
         public class DateTimeOffsetPropertyTests : ViewModelBaseTests
         {
-            private readonly DateTimeOffsetViewModel _dateTimeOffsetModel =
-                new DateTimeOffsetViewModel(
-                    new DateTimeOffset(2012, 02, 28, 14, 35, 10, TimeSpan.FromHours(0)));
+            private readonly DateTimeOffset _reference = new DateTimeOffset(2012, 02, 28, 14, 35, 10, TimeSpan.FromHours(0));
+            private readonly DateTimeOffsetViewModel _dateTimeOffsetModel;
 
             private readonly DateTimeOffset _now = DateTimeOffset.Now;
+
+            public DateTimeOffsetPropertyTests()
+            {
+                _dateTimeOffsetModel = new DateTimeOffsetViewModel(_reference);
+            }
 
             [Fact]
             public void WhenPropertyChanged_NewValueIsStored()
             {
                 _dateTimeOffsetModel.Start = _now;
                 _dateTimeOffsetModel.Start.Should().Be(_now);
+            }
+
+            [Fact]
+            public void WhenPropertyChanged_ModelIsModified()
+            {
+                _dateTimeOffsetModel.Start = _now;
+                _dateTimeOffsetModel.Modified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyNotChanged_ModelIsNotModified()
+            {
+                _dateTimeOffsetModel.Start = _reference;
+                _dateTimeOffsetModel.Modified.Should().BeFalse();
             }
 
             [Fact]
@@ -171,20 +221,42 @@ namespace WordTutor.Desktop.Tests
                 public DateTimeOffset Start
                 {
                     get => _start;
-                    set => UpdateProperty(ref _start, value);
+                    set => Modified = UpdateProperty(ref _start, value);
                 }
+
+                public bool Modified { get; set; }
             }
         }
 
         public class TimeSpanPropertyTests : ViewModelBaseTests
         {
-            private readonly TimeSpanViewModel _timeSpanViewModel =
-                new TimeSpanViewModel(TimeSpan.FromHours(7));
+            private readonly TimeSpan _reference = TimeSpan.FromHours(7);
+
+            private readonly TimeSpanViewModel _timeSpanViewModel;
 
             private readonly TimeSpan _duration = TimeSpan.FromDays(4);
 
+            public TimeSpanPropertyTests()
+            {
+                _timeSpanViewModel = new TimeSpanViewModel(_reference);
+            }
+
             [Fact]
             public void WhenPropertyChanged_NewValueIsStored()
+            {
+                _timeSpanViewModel.Duration = _duration;
+                _timeSpanViewModel.Duration.Should().Be(_duration);
+            }
+
+            [Fact]
+            public void WhenPropertyChanged_ModelIsModified()
+            {
+                _timeSpanViewModel.Duration = _duration;
+                _timeSpanViewModel.Modified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyNotChanged_ModelIsNotModified()
             {
                 _timeSpanViewModel.Duration = _duration;
                 _timeSpanViewModel.Duration.Should().Be(_duration);
@@ -229,8 +301,10 @@ namespace WordTutor.Desktop.Tests
                 public TimeSpan Duration
                 {
                     get => _duration;
-                    set => UpdateProperty(ref _duration, value);
+                    set => Modified = UpdateProperty(ref _duration, value);
                 }
+
+                public bool Modified { get; set; }
             }
         }
 
@@ -243,6 +317,20 @@ namespace WordTutor.Desktop.Tests
             {
                 _colorModel.Color = Color.Red;
                 _colorModel.Color.Should().Be(Color.Red);
+            }
+
+            [Fact]
+            public void WhenPropertyChanged_ModelIsModified()
+            {
+                _colorModel.Color = Color.Red;
+                _colorModel.Modified.Should().BeTrue();
+            }
+
+            [Fact]
+            public void WhenPropertyChanged_ModelIsNotModified()
+            {
+                _colorModel.Color = Color.Blue;
+                _colorModel.Modified.Should().BeFalse();
             }
 
             [Fact]
@@ -293,8 +381,10 @@ namespace WordTutor.Desktop.Tests
                 public Color Color
                 {
                     get => _color;
-                    set => UpdateProperty(ref _color, value);
+                    set => Modified = UpdateProperty(ref _color, value);
                 }
+
+                public bool Modified { get; set; }
             }
         }
 
