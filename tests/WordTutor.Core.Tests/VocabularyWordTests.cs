@@ -1,5 +1,7 @@
 using FluentAssertions;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Xunit;
 
 namespace WordTutor.Core.Tests
@@ -97,19 +99,25 @@ namespace WordTutor.Core.Tests
             }
 
             [Fact]
+            [SuppressMessage(
+                "Globalization",
+                "CA1308:Normalize strings to uppercase",
+                Justification = "No round trip happening here, just a test")]
             public void GivenLowercaseSpelling_ReturnsTrue()
             {
-                _word.HasSpelling(_word.Spelling.ToLower()).Should().BeTrue();
+                var spelling = _word.Spelling.ToLower(CultureInfo.InvariantCulture);
+                _word.HasSpelling(spelling).Should().BeTrue();
             }
 
             [Fact]
             public void GivenUppercaseSpelling_ReturnsTrue()
             {
-                _word.HasSpelling(_word.Spelling.ToUpper()).Should().BeTrue();
+                var spelling = _word.Spelling.ToUpper(CultureInfo.InvariantCulture);
+                _word.HasSpelling(spelling).Should().BeTrue();
             }
         }
 
-        public class WithPronunciation: VocabularyWordTests
+        public class WithPronunciation : VocabularyWordTests
         {
             [Fact]
             public void WithNull_ThrowsException()
@@ -210,7 +218,7 @@ namespace WordTutor.Core.Tests
             }
         }
 
-        public class EqualsObject :VocabularyWordTests
+        public class EqualsObject : VocabularyWordTests
         {
             [Fact]
             public void GivenNull_ReturnsFalse()
