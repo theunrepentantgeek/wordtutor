@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using WordTutor.Core;
 using WordTutor.Desktop.Tests.Fakes;
+using WordTutor.Desktop.Tests.Probes;
 using Xunit;
 
 namespace WordTutor.Desktop.Tests
@@ -12,6 +13,7 @@ namespace WordTutor.Desktop.Tests
         private readonly FakeApplicationStore _store;
         private readonly AddVocabularyWordScreen _screen;
         private readonly AddVocabularyWordViewModel _model;
+        private readonly NotifyPropertyChangedProbe _notifyPropertyChanged;
 
         public AddVocabularyWordViewModelTests()
         {
@@ -22,50 +24,7 @@ namespace WordTutor.Desktop.Tests
             var application = new WordTutorApplication(_screen);
             _store = new FakeApplicationStore(application);
             _model = new AddVocabularyWordViewModel(_store);
-        }
-
-        private void Assert_AssigningValue_ChangesProperty<T>(
-            T model, string propertyName, string value)
-            where T : INotifyPropertyChanged
-        {
-            var propertyInfo = typeof(T).GetProperty(propertyName);
-            propertyInfo.Should().NotBeNull("can only test known public properties.");
-
-            propertyInfo.SetValue(model, value);
-            var propertyValue = propertyInfo.GetValue(model);
-
-            propertyValue.Should().Be(value);
-        }
-
-        private void Assert_AssigningExistingValue_DoesNotSendEvent<T>(
-            T model, string propertyName)
-            where T : INotifyPropertyChanged
-        {
-            PropertyChangedEventArgs args = null;
-            var propertyInfo = typeof(T).GetProperty(propertyName);
-            propertyInfo.Should().NotBeNull("can only test known public properties.");
-            var existingValue = propertyInfo.GetValue(model);
-            model.PropertyChanged += (s, a) => args = a;
-
-            propertyInfo.SetValue(model, existingValue);
-
-            args.Should().BeNull();
-        }
-
-        private void Assert_AssigningDifferentValue_SendsExpectedEvent<T>(
-            T model, string propertyName, string newValue)
-            where T : INotifyPropertyChanged
-        {
-            PropertyChangedEventArgs args = null;
-            var propertyInfo = typeof(T).GetProperty(propertyName);
-            propertyInfo.Should().NotBeNull("can only test known public properties.");
-            var existingValue = propertyInfo.GetValue(model);
-            model.PropertyChanged += (s, a) => args = a;
-
-            propertyInfo.SetValue(model, newValue);
-
-            args.Should().NotBeNull();
-            args.PropertyName.Should().Be(propertyName);
+            _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
         }
 
         public class Constructor : AddVocabularyWordViewModelTests
@@ -110,23 +69,30 @@ namespace WordTutor.Desktop.Tests
 
         public class SpellingProperty : AddVocabularyWordViewModelTests
         {
-            private readonly string _spellingProperty = 
+            private readonly string _spellingProperty =
                 nameof(AddVocabularyWordViewModel.Spelling);
 
             [Fact]
             public void AssigningValue_ChangesProperty()
-                => Assert_AssigningValue_ChangesProperty(
-                    _model, _spellingProperty, "new");
+            {
+                const string value = "new";
+                _model.Spelling = value;
+                _model.Spelling.Should().Be(value);
+            }
 
             [Fact]
             public void AssigningExistingValue_DoesNotSendEvent()
-                => Assert_AssigningExistingValue_DoesNotSendEvent(
-                    _model, _spellingProperty);
+            {
+                _model.Spelling = _model.Spelling;
+                _notifyPropertyChanged.AssertNotFired();
+            }
 
             [Fact]
             public void AssigningDifferentValue_SendsExpectedEvent()
-                => Assert_AssigningDifferentValue_SendsExpectedEvent(
-                    _model, _spellingProperty, "word");
+            {
+                _model.Spelling = "word";
+                _notifyPropertyChanged.AssertFired(nameof(_model.Spelling));
+            }
         }
 
         public class PhraseProperty : AddVocabularyWordViewModelTests
@@ -136,18 +102,25 @@ namespace WordTutor.Desktop.Tests
 
             [Fact]
             public void AssigningValue_ChangesProperty()
-                => Assert_AssigningValue_ChangesProperty(
-                    _model, _phraseProperty, "new");
+            {
+                const string value = "new";
+                _model.Phrase = value;
+                _model.Phrase.Should().Be(value);
+            }
 
             [Fact]
             public void AssigningExistingValue_DoesNotSendEvent()
-                => Assert_AssigningExistingValue_DoesNotSendEvent(
-                    _model, _phraseProperty);
+            {
+                _model.Phrase = _model.Phrase;
+                _notifyPropertyChanged.AssertNotFired();
+            }
 
             [Fact]
             public void AssigningDifferentValue_SendsExpectedEvent()
-                => Assert_AssigningDifferentValue_SendsExpectedEvent(
-                    _model, _phraseProperty, "word");
+            {
+                _model.Phrase = "new";
+                _notifyPropertyChanged.AssertFired(nameof(_model.Phrase));
+            }
         }
 
         public class PronunciationProperty : AddVocabularyWordViewModelTests
@@ -157,18 +130,25 @@ namespace WordTutor.Desktop.Tests
 
             [Fact]
             public void AssigningValue_ChangesProperty()
-                => Assert_AssigningValue_ChangesProperty(
-                    _model, _pronunciationProperty, "new");
+            {
+                const string value = "new";
+                _model.Pronunciation = value;
+                _model.Pronunciation.Should().Be(value);
+            }
 
             [Fact]
             public void AssigningExistingValue_DoesNotSendEvent()
-                => Assert_AssigningExistingValue_DoesNotSendEvent(
-                    _model, _pronunciationProperty);
+            {
+                _model.Pronunciation = _model.Pronunciation;
+                _notifyPropertyChanged.AssertNotFired();
+            }
 
             [Fact]
             public void AssigningDifferentValue_SendsExpectedEvent()
-                => Assert_AssigningDifferentValue_SendsExpectedEvent(
-                    _model, _pronunciationProperty, "word");
+            {
+                _model.Pronunciation = "new";
+                _notifyPropertyChanged.AssertFired(nameof(_model.Pronunciation));
+            }
         }
     }
 }
