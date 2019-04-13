@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -39,6 +40,10 @@ namespace WordTutor.Desktop
             return true;
         }
 
+        [SuppressMessage(
+            "Naming",
+            "CA1715:Identifiers should have correct prefix", 
+            Justification = "E is a good name for a generic enumeration")]
         protected bool UpdateProperty<E>(
             ref E member,
             E newValue,

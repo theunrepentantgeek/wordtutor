@@ -3,11 +3,11 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Core.Tests.Fakes
 {
-    public class FakeReducer<T> : IReduxReducer<T>
+    public sealed class FakeReducer<T> : IReduxReducer<T>
     {
-        public Func<IReduxMessage, T, T> Reduce { get; set; } = (m, s) => s;
+        public Func<IReduxMessage, T, T> Reduce { get; set; } = (_, s) => s;
 
-        T IReduxReducer<T>.Reduce(IReduxMessage message, T currentState) 
+        T IReduxReducer<T>.Reduce(IReduxMessage message, T currentState)
             => Reduce(message, currentState);
     }
 }
