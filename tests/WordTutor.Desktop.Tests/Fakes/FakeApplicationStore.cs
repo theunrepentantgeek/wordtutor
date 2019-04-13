@@ -31,11 +31,23 @@ namespace WordTutor.Desktop.Tests.Fakes
         public M AssertReceived<M>()
             where M : IReduxMessage
         {
+            // Look for the latest received message of the expected type
             var result = _messages.OfType<M>()
-                .FirstOrDefault();
+                .LastOrDefault();
             result.Should().NotBeNull(
                 $"expect to have received a message of type '{typeof(M).Name}'");
             return result;
+        }
+
+        /// <summary>
+        /// Clear our list of captured messages
+        /// </summary>
+        /// <remarks>
+        /// Use this after arranging everything in the test, to discard any messages sent during test setup.
+        /// </remarks>
+        public void ClearMessages()
+        {
+            _messages.Clear();
         }
 
         [SuppressMessage(

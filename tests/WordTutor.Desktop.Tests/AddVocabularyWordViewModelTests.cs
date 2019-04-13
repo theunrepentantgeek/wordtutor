@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using System;
-using System.ComponentModel;
 using WordTutor.Core;
+using WordTutor.Core.Actions;
 using WordTutor.Desktop.Tests.Fakes;
 using WordTutor.Desktop.Tests.Probes;
 using Xunit;
@@ -25,6 +25,7 @@ namespace WordTutor.Desktop.Tests
             _store = new FakeApplicationStore(application);
             _model = new AddVocabularyWordViewModel(_store);
             _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
+            _store.ClearMessages();
         }
 
         public class Constructor : AddVocabularyWordViewModelTests
@@ -69,9 +70,6 @@ namespace WordTutor.Desktop.Tests
 
         public class SpellingProperty : AddVocabularyWordViewModelTests
         {
-            private readonly string _spellingProperty =
-                nameof(AddVocabularyWordViewModel.Spelling);
-
             [Fact]
             public void AssigningValue_ChangesProperty()
             {
@@ -93,13 +91,18 @@ namespace WordTutor.Desktop.Tests
                 _model.Spelling = "word";
                 _notifyPropertyChanged.AssertFired(nameof(_model.Spelling));
             }
+
+            [Fact]
+            public void AssigningDifferentValue_SendExpectedMessage()
+            {
+                _model.Spelling = "word";
+                var message = _store.AssertReceived<ModifySpellingMessage>();
+                message.Spelling.Should().Be(_model.Spelling);
+            }
         }
 
         public class PhraseProperty : AddVocabularyWordViewModelTests
         {
-            private readonly string _phraseProperty =
-                nameof(AddVocabularyWordViewModel.Phrase);
-
             [Fact]
             public void AssigningValue_ChangesProperty()
             {
@@ -121,13 +124,18 @@ namespace WordTutor.Desktop.Tests
                 _model.Phrase = "new";
                 _notifyPropertyChanged.AssertFired(nameof(_model.Phrase));
             }
+
+            [Fact]
+            public void AssigningDifferentValue_SendExpectedMessage()
+            {
+                _model.Phrase = "this is a word";
+                var message = _store.AssertReceived<ModifyPhraseMessage>();
+                message.Phrase.Should().Be(_model.Phrase);
+            }
         }
 
         public class PronunciationProperty : AddVocabularyWordViewModelTests
         {
-            private readonly string _pronunciationProperty =
-                nameof(AddVocabularyWordViewModel.Pronunciation);
-
             [Fact]
             public void AssigningValue_ChangesProperty()
             {
@@ -148,6 +156,14 @@ namespace WordTutor.Desktop.Tests
             {
                 _model.Pronunciation = "new";
                 _notifyPropertyChanged.AssertFired(nameof(_model.Pronunciation));
+            }
+
+            [Fact]
+            public void AssigningDifferentValue_SendExpectedMessage()
+            {
+                _model.Pronunciation= "this is a word";
+                var message = _store.AssertReceived<ModifyPronunciationMessage>();
+                message.Pronunciation.Should().Be(_model.Pronunciation);
             }
         }
     }
