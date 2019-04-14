@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
@@ -40,30 +40,12 @@ namespace WordTutor.Desktop.Tests
             }
 
             [Fact]
-            public void GivenStore_InitializesModelProperty()
+            public void GivenStore_InitializesPropertiesFromModel()
             {
                 var viewModel = new AddVocabularyWordViewModel(_store);
                 viewModel.Model.Should().Be(_store.State.CurrentScreen);
-            }
-
-            [Fact]
-            public void GivenStore_InitializesSpellingProperty()
-            {
-                var viewModel = new AddVocabularyWordViewModel(_store);
                 viewModel.Spelling.Should().Be(_screen.Spelling);
-            }
-
-            [Fact]
-            public void GivenStore_InitializesPhraseProperty()
-            {
-                var viewModel = new AddVocabularyWordViewModel(_store);
                 viewModel.Phrase.Should().Be(_screen.Phrase);
-            }
-
-            [Fact]
-            public void GivenStore_InitializesPronunciationProperty()
-            {
-                var viewModel = new AddVocabularyWordViewModel(_store);
                 viewModel.Pronunciation.Should().Be(_screen.Pronunciation);
             }
         }
@@ -161,7 +143,7 @@ namespace WordTutor.Desktop.Tests
             [Fact]
             public void AssigningDifferentValue_SendExpectedMessage()
             {
-                _model.Pronunciation= "this is a word";
+                _model.Pronunciation = "this is a word";
                 var message = _store.AssertReceived<ModifyPronunciationMessage>();
                 message.Pronunciation.Should().Be(_model.Pronunciation);
             }
