@@ -10,5 +10,8 @@ namespace WordTutor.Core.Actions
         {
             Phrase = phrase;
         }
+
+        public override string ToString() 
+            => $"Modify Phrase to '{Phrase}'";
     }
 }
