@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AddVocabularyWordView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WordTutor.Core\WordTutor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AddVocabularyWordView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>
