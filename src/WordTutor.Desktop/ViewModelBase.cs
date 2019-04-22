@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -62,6 +65,37 @@ namespace WordTutor.Desktop
             OnPropertyChanged(property);
 
             whenChanged?.Invoke(newValue);
+        }
+
+        public void UpdateCollection<T>(
+            ObservableCollection<T> member,
+            IEnumerable<T> newList,
+            [CallerMemberName]string property = null            )
+        {
+            if (member is null)
+            {
+                throw new ArgumentException(
+                    "Member collection should never be null",
+                    nameof(member));
+            }
+
+            if (newList is null)
+            {
+                throw new ArgumentNullException(nameof(newList));
+            }
+
+            if (Enumerable.SequenceEqual(member, newList))
+            {
+                return;
+            }
+
+            member.Clear();
+            foreach(var item in newList)
+            {
+                member.Add(item);
+            }
+
+            OnPropertyChanged(property);
         }
 
         private void OnPropertyChanged(string property)
