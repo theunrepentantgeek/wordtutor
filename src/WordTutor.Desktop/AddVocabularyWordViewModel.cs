@@ -22,37 +22,28 @@ namespace WordTutor.Desktop
         public string Spelling
         {
             get => _spelling;
-            set
-            {
-                if (UpdateProperty(ref _spelling, value))
-                {
-                    _store.Dispatch(new ModifySpellingMessage(_spelling));
-                }
-            }
+            set => UpdateProperty(
+                ref _spelling,
+                value,
+                sp => _store.Dispatch(new ModifySpellingMessage(sp)));
         }
 
         public string Phrase
         {
             get => _phrase;
-            set
-            {
-                if (UpdateProperty(ref _phrase, value))
-                {
-                    _store.Dispatch(new ModifyPhraseMessage(_phrase));
-                }
-            }
+            set => UpdateProperty(
+                ref _phrase,
+                value,
+                ph => _store.Dispatch(new ModifyPhraseMessage(ph)));
         }
 
         public string Pronunciation
         {
             get => _pronunciation;
-            set
-            {
-                if (UpdateProperty(ref _pronunciation, value))
-                {
-                    _store.Dispatch(new ModifyPronunciationMessage(_pronunciation));
-                }
-            }
+            set => UpdateProperty(
+                ref _pronunciation,
+                value,
+                pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
         protected override void ModelUpdated(AddVocabularyWordScreen model)

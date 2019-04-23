@@ -71,7 +71,7 @@ namespace WordTutor.Desktop.Tests
                 public int Count
                 {
                     get => _count;
-                    set => Modified = UpdateProperty(ref _count, value);
+                    set => UpdateProperty(ref _count, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -142,7 +142,7 @@ namespace WordTutor.Desktop.Tests
                 public string Name
                 {
                     get => _name;
-                    set => Modified = UpdateProperty(ref _name, value);
+                    set => UpdateProperty(ref _name, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -221,7 +221,7 @@ namespace WordTutor.Desktop.Tests
                 public DateTimeOffset Start
                 {
                     get => _start;
-                    set => Modified = UpdateProperty(ref _start, value);
+                    set => UpdateProperty(ref _start, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -301,7 +301,7 @@ namespace WordTutor.Desktop.Tests
                 public TimeSpan Duration
                 {
                     get => _duration;
-                    set => Modified = UpdateProperty(ref _duration, value);
+                    set => UpdateProperty(ref _duration, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -381,7 +381,7 @@ namespace WordTutor.Desktop.Tests
                 public Color Color
                 {
                     get => _color;
-                    set => Modified = UpdateProperty(ref _color, value);
+                    set => UpdateEnumProperty(ref _color, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
