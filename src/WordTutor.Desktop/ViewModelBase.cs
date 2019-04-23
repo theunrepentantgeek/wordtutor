@@ -24,89 +24,44 @@ namespace WordTutor.Desktop
             _synchronizationContext = SynchronizationContext.Current;
         }
 
-        protected bool UpdateProperty(
-            ref int member,
-            int newValue,
+        protected void UpdateProperty<T>(
+            ref T member,
+            T newValue,
+            Action<T> whenChanged = null,
             [CallerMemberName] string property = null)
+            where T : IEquatable<T>
         {
-            if (member == newValue)
+            if (member?.Equals(newValue) == true)
             {
-                return false;
+                return;
             }
 
             member = newValue;
             OnPropertyChanged(property);
 
-            return true;
+            whenChanged?.Invoke(newValue);
         }
 
         [SuppressMessage(
             "Naming",
-            "CA1715:Identifiers should have correct prefix", 
+            "CA1715:Identifiers should have correct prefix",
             Justification = "E is a good name for a generic enumeration")]
-        protected bool UpdateProperty<E>(
+        protected void UpdateEnumProperty<E>(
             ref E member,
             E newValue,
+            Action<E> whenChanged = null,
             [CallerMemberName] string property = null)
             where E : Enum
         {
-            if (Equals(member, newValue))
+            if (member?.Equals(newValue) == true)
             {
-                return false;
+                return;
             }
 
             member = newValue;
             OnPropertyChanged(property);
 
-            return true;
-        }
-
-        protected bool UpdateProperty(
-            ref string member,
-            string newValue,
-            [CallerMemberName] string property = null)
-        {
-            if (member == newValue)
-            {
-                return false;
-            }
-
-            member = newValue;
-            OnPropertyChanged(property);
-
-            return true;
-        }
-
-        protected bool UpdateProperty(
-            ref DateTimeOffset member,
-            DateTimeOffset newValue,
-            [CallerMemberName] string property = null)
-        {
-            if (member == newValue)
-            {
-                return false;
-            }
-
-            member = newValue;
-            OnPropertyChanged(property);
-
-            return true;
-        }
-
-        protected bool UpdateProperty(
-            ref TimeSpan member,
-            TimeSpan newValue,
-            [CallerMemberName] string property = null)
-        {
-            if (Equals(member, newValue))
-            {
-                return false;
-            }
-
-            member = newValue;
-            OnPropertyChanged(property);
-
-            return true;
+            whenChanged?.Invoke(newValue);
         }
 
         private void OnPropertyChanged(string property)
