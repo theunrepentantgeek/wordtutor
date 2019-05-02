@@ -5,7 +5,7 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
 {
-    public class AddVocabularyWordViewModel : ViewModelBase<AddVocabularyWordScreen>
+    public class AddVocabularyWordViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
 
@@ -16,7 +16,7 @@ namespace WordTutor.Desktop
         public AddVocabularyWordViewModel(IReduxStore<WordTutorApplication> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
-            Model = store.State.CurrentScreen as AddVocabularyWordScreen;
+            UpdateFromStore();
         }
 
         public string Spelling
@@ -46,11 +46,16 @@ namespace WordTutor.Desktop
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
-        protected override void ModelUpdated(AddVocabularyWordScreen model)
+        private void UpdateFromStore()
         {
-            Spelling = model?.Spelling ?? string.Empty;
-            Phrase = model?.Phrase ?? string.Empty;
-            Pronunciation = model?.Pronunciation ?? string.Empty;
+            var model = _store.State.CurrentScreen as AddVocabularyWordScreen;
+
+            if (!(model is null))
+            {
+                Spelling = model?.Spelling ?? string.Empty;
+                Phrase = model?.Phrase ?? string.Empty;
+                Pronunciation = model?.Pronunciation ?? string.Empty;
+            }
         }
     }
 }

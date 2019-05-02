@@ -79,29 +79,4 @@ namespace WordTutor.Desktop
             }
         }
     }
-
-    public abstract class ViewModelBase<T> : ViewModelBase, IViewModel<T>
-    {
-        // Reference to our current model
-        private T _model;
-
-        /// <summary>
-        /// Gets or sets a reference to the current model held by this ViewModel
-        /// </summary>
-        public T Model
-        {
-            get => _model;
-            set
-            {
-                _model = value;
-                ModelUpdated(value);
-            }
-        }
-
-        /// <summary>
-        /// Update properties when the Model is changed
-        /// </summary>
-        /// <param name="model"></param>
-        protected abstract void ModelUpdated(T model);
-    }
 }

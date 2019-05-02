@@ -43,7 +43,6 @@ namespace WordTutor.Desktop.Tests
             public void GivenStore_InitializesPropertiesFromModel()
             {
                 var viewModel = new AddVocabularyWordViewModel(_store);
-                viewModel.Model.Should().Be(_store.State.CurrentScreen);
                 viewModel.Spelling.Should().Be(_screen.Spelling);
                 viewModel.Phrase.Should().Be(_screen.Phrase);
                 viewModel.Pronunciation.Should().Be(_screen.Pronunciation);
