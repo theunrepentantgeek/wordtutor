@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\WordTutor.Core\WordTutor.Core.csproj" />
     <ProjectReference Include="..\..\src\WordTutor.Desktop\WordTutor.Desktop.csproj" />
   </ItemGroup>
 

@@ -42,7 +42,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenSpelling_UpdatesProperty()
             {
-                var s = "Bar";
+                const string s = "Bar";
                 _screen.WithSpelling(s).Spelling.Should().Be(s);
             }
 
@@ -86,7 +86,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenPhrase_UpdatesProperty()
             {
-                var s = "Do the Bar";
+                const string s = "Do the Bar";
                 _screen.WithPhrase(s).Phrase.Should().Be(s);
             }
 
@@ -130,7 +130,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenPronunciation_UpdatesProperty()
             {
-                var s = "Bu";
+                const string s = "Bu";
                 _screen.WithPronunciation(s).Pronunciation.Should().Be(s);
             }
 

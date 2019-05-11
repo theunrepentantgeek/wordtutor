@@ -9,7 +9,7 @@ namespace WordTutor.Core.Tests
 {
     public class ScreenReducerTests
     {
-        protected readonly ScreenReducer _screenReducer = new ScreenReducer();
+        private readonly ScreenReducer _screenReducer = new ScreenReducer();
 
         public class ScreenIsAddVocabularyWord : ScreenReducerTests
         {

@@ -20,8 +20,3 @@ using System.Diagnostics.CodeAnalysis;
     "Naming",
     "CA1707:Identifiers should not contain underscores",
     Justification = "This project uses underscores to separate clauses of test names")]
-
-[assembly: SuppressMessage(
-    "Design",
-    "RCS1102:Make class static.",
-    Justification = "This project uses nested types to structure uni tests; some of these have no members.")]

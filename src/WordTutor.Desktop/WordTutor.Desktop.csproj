@@ -7,4 +7,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WordTutor.Core\WordTutor.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
@@ -8,6 +9,10 @@ namespace WordTutor.Core
 {
     public class ScreenReducer : IReduxReducer<Screen>
     {
+        [SuppressMessage(
+            "Maintainability",
+            "RCS1168:Parameter name differs from base name.",
+            Justification = "This reducer works with Screens, so 'screen' is a better name.")]
         public Screen Reduce(IReduxMessage message, Screen screen)
         {
             switch (screen)

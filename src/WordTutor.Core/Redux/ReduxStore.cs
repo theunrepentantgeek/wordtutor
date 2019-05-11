@@ -5,7 +5,7 @@ namespace WordTutor.Core.Redux
     /// <summary>
     /// Central store for the state of the application
     /// </summary>
-    public class ReduxStore<T>
+    public class ReduxStore<T> : IReduxStore<T>
     {
         // Reference to our state reducer
         private readonly IReduxReducer<T> _reducer;
