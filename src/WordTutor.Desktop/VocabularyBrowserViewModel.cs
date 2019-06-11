@@ -10,10 +10,10 @@ namespace WordTutor.Desktop
     public class VocabularyBrowserViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
+        private readonly ObservableCollection<VocabularyWord> _words;
 
         private VocabularyWord _selection;
         private bool _modified;
-        private ObservableCollection<VocabularyWord> _words;
 
         public VocabularyBrowserViewModel(IReduxStore<WordTutorApplication> store)
         {
@@ -54,8 +54,8 @@ namespace WordTutor.Desktop
             if (!(application.VocabularySet is null))
             {
                 var words = application.VocabularySet.Words
-                  .OrderBy(w => w.Spelling)
-                  .ToList();
+                    .OrderBy(w => w.Spelling)
+                    .ToList();
                 UpdateCollection(_words, words);
             }
         }

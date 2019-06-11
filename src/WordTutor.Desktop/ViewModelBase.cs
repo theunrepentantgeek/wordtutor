@@ -70,7 +70,7 @@ namespace WordTutor.Desktop
         public void UpdateCollection<T>(
             ObservableCollection<T> member,
             IEnumerable<T> newList,
-            [CallerMemberName]string property = null            )
+            [CallerMemberName]string property = null)
         {
             if (member is null)
             {
@@ -90,7 +90,7 @@ namespace WordTutor.Desktop
             }
 
             member.Clear();
-            foreach(var item in newList)
+            foreach (var item in newList)
             {
                 member.Add(item);
             }

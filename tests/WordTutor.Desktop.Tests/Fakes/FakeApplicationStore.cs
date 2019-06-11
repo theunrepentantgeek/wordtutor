@@ -1,9 +1,10 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+
+using FluentAssertions;
 using WordTutor.Core;
 using WordTutor.Core.Redux;
 
@@ -45,7 +46,7 @@ namespace WordTutor.Desktop.Tests.Fakes
         /// <remarks>
         /// Use this after arranging everything in the test, to discard any messages sent during test setup.
         /// </remarks>
-        public void ClearMessages()
+        public void ClearCapturedMessages()
         {
             _messages.Clear();
         }

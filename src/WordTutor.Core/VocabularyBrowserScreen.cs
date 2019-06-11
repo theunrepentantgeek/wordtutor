@@ -24,6 +24,7 @@ namespace WordTutor.Core
             {
                 return this;
             }
+
             return new VocabularyBrowserScreen(
                 this,
                 selection: word);

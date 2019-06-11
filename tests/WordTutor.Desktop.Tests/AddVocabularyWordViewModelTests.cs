@@ -1,5 +1,6 @@
-using FluentAssertions;
 using System;
+
+using FluentAssertions;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
 using WordTutor.Desktop.Tests.Fakes;
@@ -25,7 +26,7 @@ namespace WordTutor.Desktop.Tests
             _store = new FakeApplicationStore(application);
             _model = new AddVocabularyWordViewModel(_store);
             _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
-            _store.ClearMessages();
+            _store.ClearCapturedMessages();
         }
 
         public class Constructor : AddVocabularyWordViewModelTests
