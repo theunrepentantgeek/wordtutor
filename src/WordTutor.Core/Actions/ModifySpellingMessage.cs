@@ -10,5 +10,8 @@ namespace WordTutor.Core.Actions
         {
             Spelling = spelling;
         }
+
+        public override string ToString()
+            => $"Modify Spelling to '{Spelling}'";
     }
 }

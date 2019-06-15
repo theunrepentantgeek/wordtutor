@@ -10,5 +10,8 @@ namespace WordTutor.Core.Actions
         {
             Pronunciation = pronunciation;
         }
+
+        public override string ToString()
+            => $"Modify Pronunciation to '{Pronunciation}'";
     }
 }
