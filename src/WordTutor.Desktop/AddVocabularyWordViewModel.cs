@@ -5,7 +5,7 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
 {
-    public class AddVocabularyWordViewModel : ViewModelBase<AddVocabularyWordScreen>
+    public class AddVocabularyWordViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
 
@@ -16,50 +16,46 @@ namespace WordTutor.Desktop
         public AddVocabularyWordViewModel(IReduxStore<WordTutorApplication> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
-            Model = store.State.CurrentScreen as AddVocabularyWordScreen;
+            UpdateFromStore();
         }
 
         public string Spelling
         {
             get => _spelling;
-            set
-            {
-                if (UpdateProperty(ref _spelling, value))
-                {
-                    _store.Dispatch(new ModifySpellingMessage(_spelling));
-                }
-            }
+            set => UpdateProperty(
+                ref _spelling,
+                value,
+                sp => _store.Dispatch(new ModifySpellingMessage(sp)));
         }
 
         public string Phrase
         {
             get => _phrase;
-            set
-            {
-                if (UpdateProperty(ref _phrase, value))
-                {
-                    _store.Dispatch(new ModifyPhraseMessage(_phrase));
-                }
-            }
+            set => UpdateProperty(
+                ref _phrase,
+                value,
+                ph => _store.Dispatch(new ModifyPhraseMessage(ph)));
         }
 
         public string Pronunciation
         {
             get => _pronunciation;
-            set
-            {
-                if (UpdateProperty(ref _pronunciation, value))
-                {
-                    _store.Dispatch(new ModifyPronunciationMessage(_pronunciation));
-                }
-            }
+            set => UpdateProperty(
+                ref _pronunciation,
+                value,
+                pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
-        protected override void ModelUpdated(AddVocabularyWordScreen model)
+        private void UpdateFromStore()
         {
-            Spelling = model?.Spelling ?? string.Empty;
-            Phrase = model?.Phrase ?? string.Empty;
-            Pronunciation = model?.Pronunciation ?? string.Empty;
+            var model = _store.State.CurrentScreen as AddVocabularyWordScreen;
+
+            if (!(model is null))
+            {
+                Spelling = model?.Spelling ?? string.Empty;
+                Phrase = model?.Phrase ?? string.Empty;
+                Pronunciation = model?.Pronunciation ?? string.Empty;
+            }
         }
     }
 }
