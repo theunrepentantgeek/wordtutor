@@ -73,23 +73,32 @@ namespace WordTutor.Core
         /// <remarks>
         /// If the screen is not changed, the existing instance will be returned
         /// </remarks>
+        /// <typeparam name="C">Expected type of <see cref="CurrentScreen"/></typeparam>
+        /// <typeparam name="N">New type of screen</typeparam>
         /// <param name="transformation">Transformation to apply to the screen</param>
-        public WordTutorApplication UpdateScreen(Func<Screen, Screen> transformation)
+        public WordTutorApplication UpdateScreen<C, N>(Func<C, N> transformation)
+            where C : Screen
+            where N: Screen
         {
             if (transformation is null)
             {
                 throw new ArgumentNullException(nameof(transformation));
             }
 
-            var screen = transformation(CurrentScreen);
-            if (ReferenceEquals(screen, CurrentScreen))
+            if (CurrentScreen is C s)
             {
-                return this;
+                var screen = transformation(s);
+                if (ReferenceEquals(screen, CurrentScreen))
+                {
+                    return this;
+                }
+
+                return new WordTutorApplication(
+                    this,
+                    currentScreen: screen);
             }
 
-            return new WordTutorApplication(
-                this,
-                currentScreen: screen);
+            return this;
         }
 
         /// <summary>

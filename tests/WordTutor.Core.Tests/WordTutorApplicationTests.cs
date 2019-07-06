@@ -84,7 +84,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.UpdateScreen(null));
+                        () => _app.UpdateScreen<FakeScreen, FakeScreen>(null));
                 exception.ParamName.Should().Be("transformation");
             }
 
@@ -92,14 +92,14 @@ namespace WordTutor.Core.Tests
             public void WhenTransformationReturnsScreen_UpdatesScreen()
             {
                 var screen = new FakeScreen();
-                var app = _app.UpdateScreen(s => screen);
+                var app = _app.UpdateScreen((FakeScreen s) => screen);
                 app.CurrentScreen.Should().Be(screen);
             }
 
             [Fact]
             public void WhenTransformationReturnsCurrentScreen_ReturnsExistingApplication()
             {
-                var app = _app.UpdateScreen(s => s);
+                var app = _app.UpdateScreen((FakeScreen s) => s);
                 app.Should().BeSameAs(_app);
             }
 
@@ -110,7 +110,7 @@ namespace WordTutor.Core.Tests
                 var beta = new FakeScreen();
                 var current = _app.CurrentScreen;
                 var app = _app.OpenScreen(alpha)
-                    .UpdateScreen(s => beta)
+                    .UpdateScreen((FakeScreen s) => beta)
                     .CloseScreen();
                 app.CurrentScreen.Should().Be(current);
             }
