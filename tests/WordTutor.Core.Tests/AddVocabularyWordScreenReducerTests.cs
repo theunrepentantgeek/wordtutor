@@ -66,7 +66,7 @@ namespace WordTutor.Core.Tests
             public void GivenMessage_ReturnsAddVocabularyWordScreen()
             {
                 var message = new ModifyPronunciationMessage("Bar");
-                var state= _reducer.Reduce(message, _initialState);
+                var state = _reducer.Reduce(message, _initialState);
                 var screen = state.CurrentScreen;
                 screen.Should().BeOfType<AddVocabularyWordScreen>();
             }
