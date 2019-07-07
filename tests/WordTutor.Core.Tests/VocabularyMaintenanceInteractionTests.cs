@@ -12,5 +12,13 @@ namespace WordTutor.Core.Tests
             .And(CurrentScreenIs, VocabularyBrowserScreen)
             .When(TheActionIs, OpenNewWordScreen())
             .Then(AssertTheCurrentScreenIs<AddVocabularyWordScreen>);
+
+        [Fact]
+        public void WhenNewVocabularyWordAdded_VocabularyBrowserScreenRestored()
+            => Given(ApplicationStateWithVocabulary, MusicPace)
+                .And(CurrentScreenIs, VocabularyBrowserScreen)
+                .When(TheActionIs, OpenNewWordScreen())
+                .And(TheActionIs, SaveNewVocabularyWord(Prestissimo))
+                .Then(AssertTheCurrentScreenIs<VocabularyBrowserScreen>);
     }
 }

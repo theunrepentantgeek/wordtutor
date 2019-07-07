@@ -55,12 +55,17 @@ namespace WordTutor.Core.Tests
         public static WordTutorApplication CurrentScreenIs(WordTutorApplication application, Screen screen)
             => application.UpdateScreen<Screen, Screen>(_ => screen);
 
+        public static AddVocabularyWordScreen AddVocabularyWordScreen { get; } = new AddVocabularyWordScreen();
+
         public static VocabularyBrowserScreen VocabularyBrowserScreen { get; } = new VocabularyBrowserScreen();
 
         public WordTutorApplication TheActionIs(WordTutorApplication application, IReduxMessage message)
             => Reducer.Reduce(message, application);
 
         public static OpenNewWordScreenMessage OpenNewWordScreen() => new OpenNewWordScreenMessage();
+
+        public static SaveNewVocabularyWordMessage SaveNewVocabularyWord(VocabularyWord word) 
+            => new SaveNewVocabularyWordMessage(word);
 
         public static void AssertTheCurrentScreenIs<S>(WordTutorApplication application)
             where S : Screen

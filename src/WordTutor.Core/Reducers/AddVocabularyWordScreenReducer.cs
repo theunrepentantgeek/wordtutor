@@ -25,6 +25,9 @@ namespace WordTutor.Core.Reducers
                 case ModifyPronunciationMessage m:
                     return currentState.UpdateScreen(
                         (AddVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation));
+
+                case SaveNewVocabularyWordMessage m:
+                    return currentState.CloseScreen();
             }
 
             return currentState;
