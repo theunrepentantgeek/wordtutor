@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="WordTutor.Desktop.VocabularyBrowserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             xmlns:local="clr-namespace:WordTutor.Desktop"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="64"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="64"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Browse Words"
+               FontSize="36"
+               HorizontalAlignment="Center"
+               Grid.Row="1"
+               Grid.Column="1"/>
+
+        <ListBox
+            Grid.Row="3"
+            Grid.Column="1"
+            ItemsSource="{Binding Words, diag:PresentationTraceSources.TraceLevel=High}"
+            SelectedItem="{Binding Selection}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Spelling}"
+                                   FontSize="24"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Content="Add"
+                HorizontalAlignment="Center"
+                Width="120"
+                Grid.Row="5"
+                Grid.Column="1"/>
+
+    </Grid>
+</UserControl>

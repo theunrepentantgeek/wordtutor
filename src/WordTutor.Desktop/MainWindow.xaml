@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ContentControl x:Name="Shell" Grid.Column="0"/>
-        
+        <ContentControl x:Name="Shell" />
+
     </Grid>
 </Window>

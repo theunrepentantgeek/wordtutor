@@ -13,8 +13,8 @@ static class Program
 
         var application = CreateApplicationModel();
         var store = CreateStore(application);
-        var model = new AddVocabularyWordViewModel(store);
-        var view = new AddVocabularyWordView
+        var model = new VocabularyBrowserViewModel(store);
+        var view = new VocabularyBrowserView
         {
             DataContext = model
         };
@@ -35,12 +35,34 @@ static class Program
 
     private static WordTutorApplication CreateApplicationModel()
     {
-        var screen = new AddVocabularyWordScreen()
-            .WithSpelling("Demo")
-            .WithPhrase("This is a demo phrase")
-            .WithPronunciation("Deemoe");
+        var alpha = new VocabularyWord("alpha")
+            .WithPhrase("The alpha dog")
+            .WithPronunciation("alfa");
 
-        var application = new WordTutorApplication(screen);
+        var beta = new VocabularyWord("beta")
+            .WithPhrase("A beta release")
+            .WithPronunciation("beta");
+
+        var gamma = new VocabularyWord("gamma")
+            .WithPhrase("Gamma radiation")
+            .WithPronunciation("gamma");
+
+        var delta = new VocabularyWord("delta")
+            .WithPhrase("Change is often called delta.")
+            .WithPronunciation("delta");
+
+        var vocabulary = VocabularySet.Empty
+            .Add(alpha)
+            .Add(beta)
+            .Add(gamma)
+            .Add(delta);
+
+        var screen = new VocabularyBrowserScreen()
+            .WithSelection(gamma);
+
+        var application = new WordTutorApplication(screen)
+            .WithVocabularySet(vocabulary);
+
         return application;
     }
 }

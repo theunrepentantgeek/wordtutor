@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" MaxHeight="32"/>
             <RowDefinition Height="Auto"/>
@@ -32,7 +32,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" MaxHeight="32"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
 
         <Label Content="Add Word"
