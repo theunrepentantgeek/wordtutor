@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using WordTutor.Core;
+using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
 using WordTutor.Desktop;
 
@@ -27,9 +28,14 @@ static class Program
 
     private static IReduxStore<WordTutorApplication> CreateStore(WordTutorApplication application)
     {
-        var screenReducer = new ScreenReducer();
-        var appReducer = new WordTutorAppicationReducer(screenReducer);
-        var store = new ReduxStore<WordTutorApplication>(appReducer, application);
+        var reducer = new CompositeReduxReducer<WordTutorApplication>(
+            new IReduxReducer<WordTutorApplication>[]
+            {
+                new AddVocabularyWordScreenReducer(),
+                new VocabularyBrowserScreenReducer()
+            });
+
+        var store = new ReduxStore<WordTutorApplication>(reducer, application);
         return new LoggingReduxStore<WordTutorApplication>(store);
     }
 

@@ -3,7 +3,7 @@
     public interface IReduxReducer<T>
     {
         /// <summary>
-        /// Apply a mesage to the current state and generate a new state
+        /// Apply a message to the current state and generate a new state
         /// </summary>
         /// <param name="message">Message representing the requested change to the state.</param>
         /// <param name="currentState">Current state, before transformation.</param>
