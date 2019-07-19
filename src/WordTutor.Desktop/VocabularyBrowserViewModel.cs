@@ -7,7 +7,7 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
 {
-    public class VocabularyBrowserViewModel : ViewModelBase
+    public sealed class VocabularyBrowserViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly ObservableCollection<VocabularyWord> _words;
