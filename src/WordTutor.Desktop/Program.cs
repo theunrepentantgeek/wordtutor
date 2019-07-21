@@ -8,7 +8,7 @@ using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
 using WordTutor.Desktop;
 
-static partial class Program
+public static class Program
 {
     [STAThread]
     static void Main()
@@ -31,10 +31,11 @@ static partial class Program
         app.Run(mainWindow);
     }
 
-    private static Container CreateContainer()
+    public static Container CreateContainer()
     {
         var container = new Container();
         var coreAssembly = typeof(WordTutorApplication).Assembly;
+        var desktopAssembly = typeof(MainWindow).Assembly;
 
         // Register Redux Store
         container.RegisterSingleton<
@@ -46,7 +47,7 @@ static partial class Program
 
         // Register Reducers
         container.RegisterSingleton<
-            IReduxReducer<WordTutorApplication>, 
+            IReduxReducer<WordTutorApplication>,
             CompositeReduxReducer<WordTutorApplication>>();
         foreach (var type in container.GetTypesToRegister<IReduxReducer<WordTutorApplication>>(coreAssembly))
         {
@@ -55,6 +56,9 @@ static partial class Program
                 type,
                 Lifestyle.Singleton);
         }
+
+        // Register ViewModels
+        container.Collection.Register<ViewModelBase>(desktopAssembly);
 
         container.Verify();
 
