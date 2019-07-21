@@ -22,11 +22,13 @@ namespace WordTutor.Core.Redux
         /// Initializes a new instance of the <see cref="ReduxStore{T}" class/>
         /// </summary>
         /// <param name="reducer">Reducer to use for state transformations.</param>
-        /// <param name="initialState">Initial state for the application.</param>
-        public ReduxStore(IReduxReducer<T> reducer, T initialState)
+        /// <param name="initialStateFactory">Factory used to create the initial state of the application.</param>
+        public ReduxStore(
+            IReduxReducer<T> reducer, 
+            IReduxStateFactory<T> initialStateFactory)
         {
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
-            State = initialState;
+            State = initialStateFactory.Create();
         }
 
         /// <summary>
