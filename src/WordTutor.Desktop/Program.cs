@@ -1,5 +1,8 @@
-﻿using System;
+﻿using SimpleInjector;
+using System;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using WordTutor.Core;
 using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
@@ -10,10 +13,12 @@ static class Program
     [STAThread]
     static void Main()
     {
-        var app = new App();
-
         var application = CreateApplicationModel();
         var store = CreateStore(application);
+        var container = CreateContainer(store);
+
+        var app = new App();
+
         var model = new VocabularyBrowserViewModel(store);
         var view = new VocabularyBrowserView
         {
@@ -70,5 +75,19 @@ static class Program
             .WithVocabularySet(vocabulary);
 
         return application;
+    }
+
+    private static Container CreateContainer()
+    {
+        var container = new Container();
+
+        // Register Redux 
+        container.RegisterSingleton<
+            IReduxStore<WordTutorApplication>,
+            ReduxStore<WordTutorApplication>>();
+
+        container.Verify();
+
+        return container;
     }
 }
