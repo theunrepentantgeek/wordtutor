@@ -17,7 +17,7 @@ static partial class Program
 
         var app = new App();
 
-        var store = container.GetInstance<ReduxStore<WordTutorApplication>>();
+        var store = container.GetInstance<IReduxStore<WordTutorApplication>>();
 
         var model = new VocabularyBrowserViewModel(store);
         var view = new VocabularyBrowserView
@@ -35,15 +35,26 @@ static partial class Program
     {
         var container = new Container();
         var coreAssembly = typeof(WordTutorApplication).Assembly;
-        var desktopAssembly = Assembly.GetExecutingAssembly();
 
-        // Register Redux 
+        // Register Redux Store
         container.RegisterSingleton<
             IReduxStore<WordTutorApplication>,
             ReduxStore<WordTutorApplication>>();
         container.RegisterSingleton<
             IReduxStateFactory<WordTutorApplication>,
             WordTutorApplicationStateFactory>();
+
+        // Register Reducers
+        container.RegisterSingleton<
+            IReduxReducer<WordTutorApplication>, 
+            CompositeReduxReducer<WordTutorApplication>>();
+        foreach (var type in container.GetTypesToRegister<IReduxReducer<WordTutorApplication>>(coreAssembly))
+        {
+            container.Collection.Append(
+                typeof(IReduxReducer<WordTutorApplication>),
+                type,
+                Lifestyle.Singleton);
+        }
 
         container.Verify();
 
