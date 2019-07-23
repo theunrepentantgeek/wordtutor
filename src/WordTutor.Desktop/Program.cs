@@ -1,4 +1,4 @@
-using SimpleInjector;
+﻿using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
@@ -60,6 +60,10 @@ public static class Program
 
         // Register ViewModels
         container.Collection.Register<ViewModelBase>(desktopAssembly);
+
+        // Register Views
+        container.Collection.Register(typeof(UserControl), desktopAssembly);
+        container.Collection.Register(typeof(Window), desktopAssembly);
 
         container.Verify();
 
