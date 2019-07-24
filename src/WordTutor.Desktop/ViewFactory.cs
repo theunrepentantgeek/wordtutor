@@ -34,7 +34,7 @@ namespace WordTutor.Desktop
             _container = container;
         }
 
-        public UserControl Create(ViewModelBase viewModel)
+        public ContentControl Create(ViewModelBase viewModel)
         {
             if (viewModel is null)
             {
@@ -54,7 +54,10 @@ namespace WordTutor.Desktop
                     $"Failed to find ViewModel class for model type '{viewModelType.Name}'.");
             }
 
-            return (UserControl)_container.GetInstance(viewType);
+            var result = (ContentControl)_container.GetInstance(viewType);
+            result.DataContext = viewModel;
+
+            return result;
         }
 
         public static Type FindViewType(Type viewModelType)
