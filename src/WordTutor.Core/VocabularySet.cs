@@ -218,4 +218,12 @@ namespace WordTutor.Core
             _hashCode = new Lazy<int>(GetHashCodeCore, LazyThreadSafetyMode.ExecutionAndPublication);
         }
     }
+
+    public static class VocabularySetExtensions
+    {
+        public static VocabularySet Add(this VocabularySet vocabulary, params VocabularyWord[] words)
+            => words.Aggregate(
+                vocabulary ?? throw new ArgumentNullException(nameof(vocabulary)), 
+                (s, w) => s.Add(w));
+    }
 }
