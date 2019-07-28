@@ -17,26 +17,18 @@ public static class Program
 
         var app = new App();
 
-        var model = container.GetInstance<VocabularyBrowserViewModel>();
-        var view = new VocabularyBrowserView
-        {
-            DataContext = model
-        };
+        var factory = container.GetInstance<ViewFactory>();
+        var wordTutorModel = container.GetInstance<WordTutorViewModel>();
+        var wordTutorWindow = (Window)factory.Create(wordTutorModel);
 
-        var mainModel = container.GetInstance<WordTutorViewModel>();
-        var mainWindow = new MainWindow();
-        mainWindow.DataContext = mainModel;
-
-        mainWindow.Shell.Content = view;
-
-        app.Run(mainWindow);
+        app.Run(wordTutorWindow);
     }
 
     public static Container CreateContainer()
     {
         var container = new Container();
         var coreAssembly = typeof(WordTutorApplication).Assembly;
-        var desktopAssembly = typeof(MainWindow).Assembly;
+        var desktopAssembly = typeof(WordTutorWindow).Assembly;
 
         // Register Redux Store
         container.RegisterSingleton<
