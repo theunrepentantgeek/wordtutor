@@ -17,15 +17,16 @@ public static class Program
 
         var app = new App();
 
-        var store = container.GetInstance<IReduxStore<WordTutorApplication>>();
-
-        var model = new VocabularyBrowserViewModel(store);
+        var model = container.GetInstance<VocabularyBrowserViewModel>();
         var view = new VocabularyBrowserView
         {
             DataContext = model
         };
 
+        var mainModel = container.GetInstance<WordTutorViewModel>();
         var mainWindow = new MainWindow();
+        mainWindow.DataContext = mainModel;
+
         mainWindow.Shell.Content = view;
 
         app.Run(mainWindow);
