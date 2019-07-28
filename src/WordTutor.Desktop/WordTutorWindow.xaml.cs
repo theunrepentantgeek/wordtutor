@@ -18,10 +18,12 @@ namespace WordTutor.Desktop
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WordTutorWindow : Window
     {
-        public MainWindow()
+        public WordTutorWindow(ViewModelToViewValueConverter converter)
         {
+            Resources.Add("ViewModelToViewValueConverter", converter);
+
             InitializeComponent();
         }
 

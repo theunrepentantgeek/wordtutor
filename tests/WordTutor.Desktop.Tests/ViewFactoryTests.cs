@@ -35,7 +35,7 @@ namespace WordTutor.Desktop.Tests
         }
 
         public static IEnumerable<object[]> FindViewModelTypes()
-            => from type in typeof(MainWindow).Assembly.GetExportedTypes()
+            => from type in typeof(WordTutorWindow).Assembly.GetExportedTypes()
                where type.IsClass && !type.IsAbstract
                where type.Name.EndsWith("ViewModel", StringComparison.Ordinal)
                select new object[] { type };
