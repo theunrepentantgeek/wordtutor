@@ -98,7 +98,7 @@ namespace WordTutor.Desktop
             OnPropertyChanged(property);
         }
 
-        private void OnPropertyChanged(string property)
+        protected void OnPropertyChanged(string property)
         {
             if (SynchronizationContext.Current == _synchronizationContext
                 || _synchronizationContext == null)
