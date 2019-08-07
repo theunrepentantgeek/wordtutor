@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace WordTutor.Core.Redux
 {
@@ -18,5 +19,9 @@ namespace WordTutor.Core.Redux
             Debug.WriteLine($"Dispatching {message}");
             _store.Dispatch(message);
         }
+
+        public IDisposable Subscribe<V>(Func<T, V> reader, Action<V> whenChanged)
+            where V : IEquatable<V> 
+            => _store.Subscribe(reader, whenChanged);
     }
 }

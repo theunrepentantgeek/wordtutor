@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 using FluentAssertions;
 using WordTutor.Core;
@@ -52,8 +51,8 @@ namespace WordTutor.Desktop.Tests.Fakes
         }
 
         [SuppressMessage(
-            "Naming", 
-            "CA1715:Identifiers should have correct prefix", 
+            "Naming",
+            "CA1715:Identifiers should have correct prefix",
             Justification = "Prefer to use 'M' instead of 'T' since our type represents a message")]
         public void AssertDidNotReceive<M>()
             where M : IReduxMessage
@@ -62,6 +61,12 @@ namespace WordTutor.Desktop.Tests.Fakes
                 .FirstOrDefault();
             result.Should().BeNull(
                 $"did not expect to have received a message of type '{typeof(M).Name}'");
+        }
+
+        public IDisposable Subscribe<V>(Func<WordTutorApplication, V> reader, Action<V> whenChanged)
+            where V : IEquatable<V>
+        {
+            return new FakeSubscription();
         }
     }
 }

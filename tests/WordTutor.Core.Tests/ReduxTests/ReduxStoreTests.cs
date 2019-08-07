@@ -117,6 +117,97 @@ namespace WordTutor.Core.Tests.ReduxTests
             }
         }
 
+        public class Subscribe : ReduxStoreTests
+        {
+            private string _handledValue;
+
+            public Subscribe()
+            {
+                _reducer.Reduce = (m, s)
+                    => m is FakeMessage f
+                    ? f.Id
+                    : s;
+            }
+
+            [Fact]
+            public void GivenNullReader_ThrowsExpectedException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => _store.Subscribe<string>(null, HandleUpdate));
+                exception.ParamName.Should().Be("reader");
+            }
+
+            [Fact]
+            public void GivenNullAction_ThrowsExpectedException()
+            {
+                var exception =
+                   Assert.Throws<ArgumentNullException>(
+                       () => _store.Subscribe<string>(ReadValue, null));
+                exception.ParamName.Should().Be("whenChanged");
+            }
+
+            [Fact]
+            public void GivenValidParameters_ReturnsSubscription()
+            {
+                _store.Subscribe(ReadValue, HandleUpdate).Should().NotBeNull();
+            }
+
+            [Fact]
+            public void WhenSubscribed_ReceivesNotificationForChangesOfState()
+            {
+                var message = new FakeMessage("foo");
+                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                {
+                    _store.Dispatch(message);
+                    _handledValue.Should().Be(message.Id);
+                }
+            }
+
+            [Fact]
+            public void WhenSubscribed_DoesNotReceiveNotificationIfValueUnchanged()
+            {
+                var message = new FakeMessage(_store.State);
+                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                {
+                }
+
+                _store.Dispatch(message);
+                _handledValue.Should().BeNull();
+            }
+
+            [Fact]
+            public void AfterSubscriptionReleased_SubscriptionCountIsReduced()
+            {
+                int subscriptionCount;
+                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                {
+                    subscriptionCount = _store.SubscriptionCount;
+                }
+
+                _store.SubscriptionCount.Should().BeLessThan(subscriptionCount);
+            }
+
+            [Fact]
+            public void AfterSubscriptionReleased_DoesNotReceiveNotification()
+            {
+                var message = new FakeMessage("foo");
+                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                {
+                }
+
+                _store.Dispatch(message);
+                _handledValue.Should().BeNull();
+            }
+
+            private void HandleUpdate(string value)
+            {
+                _handledValue = value;
+            }
+
+            private string ReadValue(string value) => value;
+        }
+
         private class StringStateFactory : IReduxStateFactory<string>
         {
             public StringStateFactory(string state) => State = state;
