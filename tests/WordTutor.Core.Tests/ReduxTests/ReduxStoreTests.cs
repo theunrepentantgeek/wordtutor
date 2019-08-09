@@ -8,14 +8,14 @@ namespace WordTutor.Core.Tests.ReduxTests
 {
     public class ReduxStoreTests
     {
-        private readonly string _initialState = "alpha";
+        private readonly StringStateFactory _initialStateFactory = new StringStateFactory("alpha");
         private readonly FakeReducer<string> _reducer = new FakeReducer<string>();
         private readonly ReduxStore<string> _store;
         private readonly FakeMessage _message = new FakeMessage("message");
 
         public ReduxStoreTests()
         {
-            _store = new ReduxStore<string>(_reducer, _initialState);
+            _store = new ReduxStore<string>(_reducer, _initialStateFactory);
         }
 
         public class Constructor : ReduxStoreTests
@@ -25,7 +25,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ReduxStore<string>(null, _initialState));
+                        () => new ReduxStore<string>(null, _initialStateFactory));
                 exception.ParamName.Should().Be("reducer");
             }
 
@@ -34,8 +34,8 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
 
                 var reducer = new FakeReducer<string>();
-                var store = new ReduxStore<string>(reducer, _initialState);
-                store.State.Should().Be(_initialState);
+                var store = new ReduxStore<string>(reducer, _initialStateFactory);
+                store.State.Should().Be(_initialStateFactory.State);
             }
         }
 
@@ -115,6 +115,15 @@ namespace WordTutor.Core.Tests.ReduxTests
                     return newState;
                 }
             }
+        }
+
+        private class StringStateFactory : IReduxStateFactory<string>
+        {
+            public StringStateFactory(string state) => State = state;
+
+            public string State { get; }
+
+            public string Create() => State;
         }
     }
 }

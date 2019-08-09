@@ -1,19 +1,24 @@
-﻿using System;
+using SimpleInjector;
+using System;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using WordTutor.Core;
 using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
 using WordTutor.Desktop;
 
-static class Program
+static partial class Program
 {
     [STAThread]
     static void Main()
     {
+        var container = CreateContainer();
+
         var app = new App();
 
-        var application = CreateApplicationModel();
-        var store = CreateStore(application);
+        var store = container.GetInstance<IReduxStore<WordTutorApplication>>();
+
         var model = new VocabularyBrowserViewModel(store);
         var view = new VocabularyBrowserView
         {
@@ -26,49 +31,33 @@ static class Program
         app.Run(mainWindow);
     }
 
-    private static IReduxStore<WordTutorApplication> CreateStore(WordTutorApplication application)
+    private static Container CreateContainer()
     {
-        var reducer = new CompositeReduxReducer<WordTutorApplication>(
-            new IReduxReducer<WordTutorApplication>[]
-            {
-                new AddVocabularyWordScreenReducer(),
-                new VocabularyBrowserScreenReducer()
-            });
+        var container = new Container();
+        var coreAssembly = typeof(WordTutorApplication).Assembly;
 
-        var store = new ReduxStore<WordTutorApplication>(reducer, application);
-        return new LoggingReduxStore<WordTutorApplication>(store);
-    }
+        // Register Redux Store
+        container.RegisterSingleton<
+            IReduxStore<WordTutorApplication>,
+            ReduxStore<WordTutorApplication>>();
+        container.RegisterSingleton<
+            IReduxStateFactory<WordTutorApplication>,
+            WordTutorApplicationStateFactory>();
 
-    private static WordTutorApplication CreateApplicationModel()
-    {
-        var alpha = new VocabularyWord("alpha")
-            .WithPhrase("The alpha dog")
-            .WithPronunciation("alfa");
+        // Register Reducers
+        container.RegisterSingleton<
+            IReduxReducer<WordTutorApplication>, 
+            CompositeReduxReducer<WordTutorApplication>>();
+        foreach (var type in container.GetTypesToRegister<IReduxReducer<WordTutorApplication>>(coreAssembly))
+        {
+            container.Collection.Append(
+                typeof(IReduxReducer<WordTutorApplication>),
+                type,
+                Lifestyle.Singleton);
+        }
 
-        var beta = new VocabularyWord("beta")
-            .WithPhrase("A beta release")
-            .WithPronunciation("beta");
+        container.Verify();
 
-        var gamma = new VocabularyWord("gamma")
-            .WithPhrase("Gamma radiation")
-            .WithPronunciation("gamma");
-
-        var delta = new VocabularyWord("delta")
-            .WithPhrase("Change is often called delta.")
-            .WithPronunciation("delta");
-
-        var vocabulary = VocabularySet.Empty
-            .Add(alpha)
-            .Add(beta)
-            .Add(gamma)
-            .Add(delta);
-
-        var screen = new VocabularyBrowserScreen()
-            .WithSelection(gamma);
-
-        var application = new WordTutorApplication(screen)
-            .WithVocabularySet(vocabulary);
-
-        return application;
+        return container;
     }
 }
