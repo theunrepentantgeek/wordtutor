@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
@@ -8,6 +8,7 @@ namespace WordTutor.Desktop
     public class AddVocabularyWordViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
+        private readonly IDisposable _screenSubscription;
 
         private string _spelling;
         private string _phrase;
@@ -16,7 +17,15 @@ namespace WordTutor.Desktop
         public AddVocabularyWordViewModel(IReduxStore<WordTutorApplication> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
-            UpdateFromStore();
+
+            var screen = _store.State.CurrentScreen as AddVocabularyWordScreen;
+            _spelling = screen?.Spelling ?? string.Empty;
+            _phrase = screen?.Phrase ?? string.Empty;
+            _pronunciation = screen?.Pronunciation ?? string.Empty;
+
+            _screenSubscription = _store.Subscribe(
+                app => app.CurrentScreen as AddVocabularyWordScreen,
+                RefreshFromScreen);
         }
 
         public string Spelling
@@ -46,16 +55,17 @@ namespace WordTutor.Desktop
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
-        private void UpdateFromStore()
+        private void RefreshFromScreen(AddVocabularyWordScreen screen)
         {
-            var model = _store.State.CurrentScreen as AddVocabularyWordScreen;
-
-            if (!(model is null))
+            if (screen is null)
             {
-                Spelling = model?.Spelling ?? string.Empty;
-                Phrase = model?.Phrase ?? string.Empty;
-                Pronunciation = model?.Pronunciation ?? string.Empty;
+                _screenSubscription.Dispose();
+                return;
             }
+
+            Spelling = screen.Spelling ?? string.Empty;
+            Phrase = screen.Phrase ?? string.Empty;
+            Pronunciation = screen.Pronunciation ?? string.Empty;
         }
     }
 }
