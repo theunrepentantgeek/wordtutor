@@ -56,6 +56,8 @@ namespace WordTutor.Core
 
         public override bool Equals(object obj) => Equals(obj as VocabularyBrowserScreen);
 
+        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+
         public bool Equals(VocabularyBrowserScreen other)
         {
             if (other is null)

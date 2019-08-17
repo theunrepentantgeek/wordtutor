@@ -65,8 +65,9 @@ namespace WordTutor.Core
             Phrase = phrase ?? original.Phrase;
         }
 
-        public override bool Equals(object other) 
-            => Equals(other as AddVocabularyWordScreen);
+        public override bool Equals(object other) => Equals(other as AddVocabularyWordScreen);
+
+        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
 
         public override int GetHashCode()
         {
