@@ -44,7 +44,7 @@ namespace WordTutor.Desktop
             set => UpdateProperty(
                 ref _selection,
                 value,
-                sel => _store.Dispatch(new SelectWordMessage(sel)));
+                sel => _store.Dispatch(CreateSelectionMessage(sel)));
         }
 
         public bool Modified
@@ -77,6 +77,16 @@ namespace WordTutor.Desktop
                 .OrderBy(w => w.Spelling)
                 .ToList();
             UpdateCollection(_words, words);
+        }
+
+        private static IReduxMessage CreateSelectionMessage(VocabularyWord selection)
+        {
+            if (selection is null)
+            {
+                return new ClearSelectedWordMessage();
+            }
+
+            return new SelectWordMessage(selection);
         }
     }
 }
