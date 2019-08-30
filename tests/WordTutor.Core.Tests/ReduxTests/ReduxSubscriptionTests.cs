@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using WordTutor.Core.Redux;
 using Xunit;
 
@@ -16,7 +17,7 @@ namespace WordTutor.Core.Tests.ReduxTests
 
         protected void WhenChanged(int value)
         {
-            _lastCallbackValue = value;
+            _lastWhenCalledValue = value;
             _whenCalledCount++;
         }
 
@@ -72,7 +73,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 var state = "sample";
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
-                _lastCallbackValue.Should().Be(6);
+                _lastWhenCalledValue.Should().Be(6);
             }
 
             [Fact]
@@ -82,7 +83,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 _subscription.Publish(state);
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
-                _lastCallbackValue.Should().Be(6);
+                _lastWhenCalledValue.Should().Be(6);
             }
 
             [Fact]
@@ -91,7 +92,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 _subscription.Publish("sample");
                 _subscription.Publish("demo");
                 _whenCalledCount.Should().Be(2);
-                _lastCallbackValue.Should().Be(4);
+                _lastWhenCalledValue.Should().Be(4);
             }
 
             // Check that update loops will terminate/converge if the values are unchanged
