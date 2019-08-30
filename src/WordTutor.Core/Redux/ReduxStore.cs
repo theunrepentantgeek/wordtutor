@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WordTutor.Core.Redux
 {
@@ -12,6 +13,9 @@ namespace WordTutor.Core.Redux
 
         // Flag used to prevent recursive dispatching
         private bool _dispatching;
+
+        // Set of all our current subscriptions
+        private HashSet<ReduxSubscription<T>> _subscriptions = new HashSet<ReduxSubscription<T>>();
 
         /// <summary>
         /// Gets the current state of the application
@@ -56,6 +60,40 @@ namespace WordTutor.Core.Redux
             {
                 _dispatching = false;
             }
+
+            foreach (var subscription in _subscriptions)
+            {
+                subscription.Publish(State);
+            }
+        }
+
+        /// <summary>
+        /// Create a subscription to be notified of changes to our state
+        /// </summary>
+        /// <typeparam name="V">Type of value being monitored</typeparam>
+        /// <param name="reader">Reader used to access a value from the store.</param>
+        /// <param name="whenChanged">Action to invoke when the value changes.</param>
+        /// <returns>Subscription object; disposal release the subscription.</returns>
+        public IDisposable Subscribe<V>(
+            Func<T, V> reader,
+            Action<V> whenChanged)
+            where V: IEquatable<V>
+        {
+            var subscription = new ReduxSubscription<T, V>(
+                reader ?? throw new ArgumentNullException(nameof(reader)),
+                whenChanged ?? throw new ArgumentNullException(nameof(whenChanged)),
+                ReleaseSubscription);
+
+            _subscriptions.Add(subscription);
+
+            return subscription;
+        }
+
+        public int SubscriptionCount => _subscriptions.Count;
+
+        private void ReleaseSubscription(ReduxSubscription<T> subscription)
+        {
+            _subscriptions.Remove(subscription);
         }
     }
 }
