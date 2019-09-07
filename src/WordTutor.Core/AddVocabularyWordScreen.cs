@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordTutor.Core
 {
-    public class AddVocabularyWordScreen : Screen
+    public class AddVocabularyWordScreen : Screen, IEquatable<AddVocabularyWordScreen>
     {
         /// <summary>
         /// Gets the spelling currently shown on screen
@@ -63,6 +63,37 @@ namespace WordTutor.Core
             Spelling = spelling ?? original.Spelling;
             Pronunciation = pronunciation ?? original.Pronunciation;
             Phrase = phrase ?? original.Phrase;
+        }
+
+        public override bool Equals(object other) => Equals(other as AddVocabularyWordScreen);
+
+        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Spelling.GetHashCode() * 23
+                    + Pronunciation.GetHashCode() * 41
+                    + Phrase.GetHashCode() * 71;
+            }
+        }
+
+        public bool Equals(AddVocabularyWordScreen other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return string.Equals(Spelling, other.Spelling, StringComparison.Ordinal)
+                && string.Equals(Pronunciation, other.Pronunciation, StringComparison.Ordinal)
+                && string.Equals(Phrase, other.Phrase, StringComparison.Ordinal);
         }
     }
 }

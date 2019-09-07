@@ -1,4 +1,5 @@
-﻿using WordTutor.Core;
+﻿using System;
+using WordTutor.Core;
 using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
@@ -7,6 +8,7 @@ namespace WordTutor.Desktop
     {
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly ViewModelFactory _factory;
+        private readonly IDisposable _screenSubscription;
 
         private ViewModelBase _currentScreen;
 
@@ -16,8 +18,11 @@ namespace WordTutor.Desktop
         {
             _store = store;
             _factory = factory;
+            _currentScreen = _factory.Create(_store.State.CurrentScreen);
 
-            UpdateFromStore();
+            _screenSubscription = _store.Subscribe(
+                app => app.CurrentScreen,
+                RefreshFromScreen);
         }
 
         public ViewModelBase CurrentScreen
@@ -33,9 +38,17 @@ namespace WordTutor.Desktop
             }
         }
 
-        private void UpdateFromStore()
+        private void RefreshFromScreen(Screen screen)
         {
-            CurrentScreen = _factory.Create(_store.State.CurrentScreen);
+            // Only need a new instance if the screen type changes
+            // As long as the type of screen is unchanged, 
+            // the exiting ViewModel will update
+
+            var neededType = ViewModelFactory.FindViewModelType(screen.GetType());
+            if (CurrentScreen?.GetType() != neededType)
+            {
+                CurrentScreen = _factory.Create(screen);
+            }
         }
     }
 }

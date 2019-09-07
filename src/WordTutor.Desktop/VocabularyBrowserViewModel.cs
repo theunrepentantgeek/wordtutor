@@ -11,6 +11,8 @@ namespace WordTutor.Desktop
     {
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly ObservableCollection<VocabularyWord> _words;
+        private readonly IDisposable _screenSubscription;
+        private readonly IDisposable _vocabularySubscription;
 
         private VocabularyWord _selection;
         private bool _modified;
@@ -18,8 +20,22 @@ namespace WordTutor.Desktop
         public VocabularyBrowserViewModel(IReduxStore<WordTutorApplication> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
-            _words = new ObservableCollection<VocabularyWord>();
-            RefreshFromApplication(_store.State);
+
+            var screen = (VocabularyBrowserScreen)_store.State.CurrentScreen;
+            var vocab = _store.State.VocabularySet.Words;
+
+            _selection = screen.Selection;
+            _modified = screen.Modified;
+            _words = new ObservableCollection<VocabularyWord>(
+                vocab.OrderBy(w => w.Spelling));
+
+            _screenSubscription = _store.Subscribe(
+                app => app.CurrentScreen as VocabularyBrowserScreen,
+                RefreshFromScreen);
+
+            _vocabularySubscription = _store.Subscribe(
+                app => app.VocabularySet,
+                RefreshFromVocabularySet);
         }
 
         public VocabularyWord Selection
@@ -42,22 +58,25 @@ namespace WordTutor.Desktop
             get => _words;
         }
 
-        private void RefreshFromApplication(WordTutorApplication application)
+        private void RefreshFromScreen(VocabularyBrowserScreen screen)
         {
-            var screen = application.CurrentScreen as VocabularyBrowserScreen;
-            if (!(screen is null))
+            if (screen == null)
             {
-                Selection = screen.Selection;
-                Modified = screen.Modified;
+                _screenSubscription.Dispose();
+                _vocabularySubscription.Dispose();
+                return;
             }
 
-            if (!(application.VocabularySet is null))
-            {
-                var words = application.VocabularySet.Words
-                    .OrderBy(w => w.Spelling)
-                    .ToList();
-                UpdateCollection(_words, words);
-            }
+            Selection = screen.Selection;
+            Modified = screen.Modified;
+        }
+
+        private void RefreshFromVocabularySet(VocabularySet vocabularySet)
+        {
+            var words = vocabularySet.Words
+                .OrderBy(w => w.Spelling)
+                .ToList();
+            UpdateCollection(_words, words);
         }
     }
 }

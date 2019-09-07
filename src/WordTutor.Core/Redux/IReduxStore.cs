@@ -23,8 +23,8 @@ namespace WordTutor.Core.Redux
         /// <param name="whenChanged">Action to invoke when the value changes.</param>
         /// <returns>Subscription object; disposal release the subscription.</returns>
         IDisposable Subscribe<V>(
-            Func<T, V> reader, 
-            Action<V> whenChanged) 
-            where V : System.IEquatable<V>;
+            Func<T, V> reader,
+            Action<V> whenChanged)
+            where V : IEquatable<V>;
     }
 }

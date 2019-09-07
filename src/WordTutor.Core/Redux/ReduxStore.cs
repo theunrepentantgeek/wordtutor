@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WordTutor.Core.Redux
 {
@@ -28,7 +29,7 @@ namespace WordTutor.Core.Redux
         /// <param name="reducer">Reducer to use for state transformations.</param>
         /// <param name="initialStateFactory">Factory used to create the initial state of the application.</param>
         public ReduxStore(
-            IReduxReducer<T> reducer, 
+            IReduxReducer<T> reducer,
             IReduxStateFactory<T> initialStateFactory)
         {
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
@@ -61,7 +62,7 @@ namespace WordTutor.Core.Redux
                 _dispatching = false;
             }
 
-            foreach (var subscription in _subscriptions)
+            foreach (var subscription in _subscriptions.ToList())
             {
                 subscription.Publish(State);
             }
@@ -77,7 +78,7 @@ namespace WordTutor.Core.Redux
         public IDisposable Subscribe<V>(
             Func<T, V> reader,
             Action<V> whenChanged)
-            where V: IEquatable<V>
+            where V : IEquatable<V>
         {
             var subscription = new ReduxSubscription<T, V>(
                 reader ?? throw new ArgumentNullException(nameof(reader)),

@@ -2,7 +2,7 @@
 
 namespace WordTutor.Core
 {
-    public class VocabularyBrowserScreen : Screen
+    public class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
     {
         /// <summary>
         /// Gets the currently selected word
@@ -52,6 +52,35 @@ namespace WordTutor.Core
             return new VocabularyBrowserScreen(
                 this,
                 modified: false);
+        }
+
+        public override bool Equals(object obj) => Equals(obj as VocabularyBrowserScreen);
+
+        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+
+        public bool Equals(VocabularyBrowserScreen other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Selection.Equals(other.Selection)
+                && Modified == other.Modified;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Selection.GetHashCode() * 23
+                    + Modified.GetHashCode();
+            }
         }
 
         private VocabularyBrowserScreen(
