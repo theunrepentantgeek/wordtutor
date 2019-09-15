@@ -13,7 +13,7 @@ namespace WordTutor.Core.Tests.ReduxTests
         private int _lastWhenCalledValue;
         private ReduxSubscription<string> _releasedSubscription;
 
-        protected int Reader(string value) => value.Length;
+        protected static int Reader(string value) => value.Length;
 
         protected void WhenChanged(int value)
         {
@@ -115,6 +115,10 @@ namespace WordTutor.Core.Tests.ReduxTests
             }
         }
 
+        [SuppressMessage(
+            "Design",
+            "CA1001:Types that own disposable fields should be disposable",
+            Justification = "Don't need to dispose tests.")]
         public class DisposalTests : ReduxSubscriptionTests
         {
             private ReduxSubscription<string, int> _subscription;

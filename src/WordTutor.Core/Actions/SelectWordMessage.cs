@@ -1,4 +1,5 @@
-﻿using WordTutor.Core.Redux;
+﻿using System;
+using WordTutor.Core.Redux;
 
 namespace WordTutor.Core.Actions
 {
@@ -8,7 +9,7 @@ namespace WordTutor.Core.Actions
 
         public SelectWordMessage(VocabularyWord word)
         {
-            Word = word;
+            Word = word ?? throw new ArgumentNullException(nameof(word));
         }
 
         public override string ToString()

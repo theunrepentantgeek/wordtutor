@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace WordTutor.Core
 {
+    [DebuggerDisplay("Word: '{Spelling}'")]
     public class VocabularyWord : IEquatable<VocabularyWord>
     {
         /// <summary>

@@ -5,7 +5,7 @@ namespace WordTutor.Core
     public class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
     {
         /// <summary>
-        /// Gets the currently selected word
+        /// Gets the currently selected word (may be null)
         /// </summary>
         public VocabularyWord Selection { get; }
 
@@ -28,6 +28,16 @@ namespace WordTutor.Core
             return new VocabularyBrowserScreen(
                 this,
                 selection: word);
+        }
+
+        public VocabularyBrowserScreen WithNoSelection()
+        {
+            if (Selection is null)
+            {
+                return this;
+            }
+
+            return new VocabularyBrowserScreen(this, selection: null);
         }
 
         public VocabularyBrowserScreen MarkAsModified()

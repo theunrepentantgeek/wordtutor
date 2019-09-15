@@ -14,6 +14,9 @@ namespace WordTutor.Core.Reducers
 
             switch(message)
             {
+                case ClearSelectedWordMessage _:
+                    return currentState.UpdateScreen(
+                        (VocabularyBrowserScreen s) => s.WithNoSelection());
                 case SelectWordMessage m:
                     return currentState.UpdateScreen(
                         (VocabularyBrowserScreen s) => s.WithSelection(m.Word));

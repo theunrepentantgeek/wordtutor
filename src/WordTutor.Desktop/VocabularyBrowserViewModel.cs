@@ -7,7 +7,7 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
 {
-    public class VocabularyBrowserViewModel : ViewModelBase
+    public sealed class VocabularyBrowserViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly ObservableCollection<VocabularyWord> _words;
@@ -44,7 +44,7 @@ namespace WordTutor.Desktop
             set => UpdateProperty(
                 ref _selection,
                 value,
-                sel => _store.Dispatch(new SelectWordMessage(sel)));
+                sel => _store.Dispatch(CreateSelectionMessage(sel)));
         }
 
         public bool Modified
@@ -77,6 +77,16 @@ namespace WordTutor.Desktop
                 .OrderBy(w => w.Spelling)
                 .ToList();
             UpdateCollection(_words, words);
+        }
+
+        private static IReduxMessage CreateSelectionMessage(VocabularyWord selection)
+        {
+            if (selection is null)
+            {
+                return new ClearSelectedWordMessage();
+            }
+
+            return new SelectWordMessage(selection);
         }
     }
 }

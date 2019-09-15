@@ -63,8 +63,8 @@ namespace WordTutor.Core.Redux
         /// Initializes a new instance of the <see cref="ReduxSubscription{TState, TValue}"/> class
         /// </summary>
         /// <param name="reader">Function used read a value from our store state.</param>
-        /// <param name="whenChanged">Callback to invoke when the value changes.</param>
-        /// <param name="whenReleased">Callback to invoke when the subscription is disposed.</param>
+        /// <param name="whenChanged">Action to invoke when the value changes.</param>
+        /// <param name="whenReleased">Action to invoke when the subscription is disposed.</param>
         public ReduxSubscription(
             Func<TState, TValue> reader,
             Action<TValue> whenChanged,
