@@ -36,6 +36,9 @@ namespace WordTutor.Desktop
             _vocabularySubscription = _store.Subscribe(
                 app => app.VocabularySet,
                 RefreshFromVocabularySet);
+
+            AddWordCommand =
+                new RoutedCommandSink(ItemCommands.New, AddWord);
         }
 
         public VocabularyWord Selection
@@ -57,6 +60,10 @@ namespace WordTutor.Desktop
         {
             get => _words;
         }
+
+        public RoutedCommandSink AddWordCommand { get; }
+
+        public void AddWord() => _store.Dispatch(new OpenNewWordScreenMessage());
 
         private void RefreshFromScreen(VocabularyBrowserScreen screen)
         {
