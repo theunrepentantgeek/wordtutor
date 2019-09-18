@@ -47,12 +47,12 @@
         </ListBox>
 
         <Button Content="Add"
-                HorizontalAlignment="Center"
-                Width="120"
-                Grid.Row="5"
-                Grid.Column="1"
-                FontSize="18"
-                Command="desktop:ItemCommands.New"/>
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            Width="120"
+            FontSize="18"
+            Command="desktop:ItemCommands.New"/>
 
     </Grid>
 </UserControl>

@@ -28,6 +28,11 @@ namespace WordTutor.Desktop
             _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as ModifyVocabularyWordScreen,
                 RefreshFromScreen);
+
+            SaveCommand = new RoutedCommandSink(
+                ItemCommands.Save, Save, CanSave);
+            CloseCommand = new RoutedCommandSink(
+                ItemCommands.Close, Close);
         }
 
         public string Spelling
