@@ -21,8 +21,10 @@ namespace WordTutor.Core.Reducers
             return (message ?? throw new ArgumentNullException(nameof(message)))
                 switch
                 {
+                    CloseScreenMessage m => currentState.CloseScreen(),
+
                     ModifyPhraseMessage m => currentState.UpdateScreen(
-                           (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
+                            (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
 
                     ModifyPronunciationMessage m => currentState.UpdateScreen(
                             (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
@@ -30,7 +32,9 @@ namespace WordTutor.Core.Reducers
                     ModifySpellingMessage m => currentState.UpdateScreen(
                             (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
 
-                    SaveNewVocabularyWordMessage m => currentState.CloseScreen(),
+                    SaveNewVocabularyWordMessage m => currentState.UpdateVocabularySet(
+                            (VocabularySet s) => s.Add(m.Word))
+                            .CloseScreen(),
 
                     _ => currentState,
                 };

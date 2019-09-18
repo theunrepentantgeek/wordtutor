@@ -78,7 +78,21 @@
                 Command="desktop:ItemCommands.Save"
                 Margin="8"
                 Grid.Row="12"
-                Grid.Column="1"/>
+                Grid.Column="1">
+            
+            <Button Content="Done"
+                    Width="120"
+                    FontSize="18"
+                    Command="desktop:ItemCommands.Save"
+                    Margin="8">
+            </Button>
+            
+            <Button Content="Cancel"
+                    Width="120"
+                    FontSize="18"
+                    Command="desktop:ItemCommands.Close"
+                    Margin="8">
+            </Button>
 
     </Grid>
 </UserControl>
