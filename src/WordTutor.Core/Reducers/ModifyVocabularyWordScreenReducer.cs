@@ -1,4 +1,5 @@
 ﻿using System;
+
 using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
 
@@ -34,11 +35,11 @@ namespace WordTutor.Core.Reducers
 
                     SaveNewVocabularyWordMessage m => currentState.UpdateVocabularySet(
                         s => s.Add(m.Word))
-                        .CloseScreen();
+                        .CloseScreen(),
 
                     SaveModifiedVocabularyWordMessage m => currentState.UpdateVocabularySet(
                         s => s.Replace(m.OriginalWord, m.ReplacementWord))
-                        .CloseScreen();
+                        .CloseScreen(),
 
                     _ => currentState,
             };

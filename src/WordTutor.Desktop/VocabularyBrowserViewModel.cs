@@ -59,7 +59,7 @@ namespace WordTutor.Desktop
 
         public RoutedCommandSink AddWordCommand { get; }
 
-        public void AddWord() => _store.Dispatch(new OpenNewWordScreenMessage());
+        public void AddWord() => _store.Dispatch(new OpenScreenForNewWordMessage());
 
         private void RefreshFromScreen(VocabularyBrowserScreen? screen)
         {
