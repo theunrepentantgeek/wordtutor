@@ -35,7 +35,7 @@
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Add Word"
+        <Label Content="{Binding Caption}"
                FontSize="36"
                HorizontalAlignment="Center"
                Grid.Row="1"
