@@ -71,7 +71,7 @@ namespace WordTutor.Core.Tests
         public WordTutorApplication TheActionIs(WordTutorApplication application, IReduxMessage message)
             => Reducer.Reduce(message, application);
 
-        public static OpenNewWordScreenMessage OpenNewWordScreen() => new OpenNewWordScreenMessage();
+        public static OpenScreenForNewWordMessage OpenNewWordScreen() => new OpenScreenForNewWordMessage();
 
         public static SaveNewVocabularyWordMessage SaveNewVocabularyWord(VocabularyWord word)
             => new SaveNewVocabularyWordMessage(word);
