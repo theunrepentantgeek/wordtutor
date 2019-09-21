@@ -38,6 +38,9 @@ namespace WordTutor.Desktop
 
             AddWordCommand =
                 new RoutedCommandSink(ItemCommands.New, AddWord);
+
+            ModifyWordCommand = new RoutedCommandSink<VocabularyWord>(
+                ItemCommands.Open, ModifyWord, CanModifyWord);
         }
 
         public VocabularyWord? Selection
@@ -60,6 +63,14 @@ namespace WordTutor.Desktop
         public RoutedCommandSink AddWordCommand { get; }
 
         public void AddWord() => _store.Dispatch(new OpenScreenForNewWordMessage());
+
+        public RoutedCommandSink<VocabularyWord> ModifyWordCommand { get; }
+
+        public static bool CanModifyWord(VocabularyWord word)
+            => word is VocabularyWord;
+
+        public void ModifyWord(VocabularyWord word)
+            => _store.Dispatch(new OpenScreenForModifyingWordMessage(word));
 
         private void RefreshFromScreen(VocabularyBrowserScreen? screen)
         {

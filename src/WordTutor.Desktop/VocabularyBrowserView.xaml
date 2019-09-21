@@ -46,13 +46,25 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Content="Add"
-            Grid.Row="5"
-            Grid.Column="1"
-            HorizontalAlignment="Center"
-            Width="120"
-            FontSize="18"
-            Command="desktop:ItemCommands.New"/>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="5" 
+                    Grid.Column="1"
+                    HorizontalAlignment="Center">
+            
+            <Button Content="Add"
+                    Width="120"
+                    FontSize="18"
+                    Margin="8"
+                    Command="desktop:ItemCommands.New"/>
+
+            <Button Content="Modify"
+                    Width="120"
+                    FontSize="18"
+                    Margin="8"
+                    Command="desktop:ItemCommands.Open" 
+                    CommandParameter="{Binding Selection}"/>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>
