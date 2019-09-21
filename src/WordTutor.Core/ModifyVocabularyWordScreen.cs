@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace WordTutor.Core
 {
-    public class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen?>
+    public sealed class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen?>
     {
+        private readonly static EqualityComparer<VocabularyWord> _wordComparer
+            = EqualityComparer<VocabularyWord>.Default;
+
+        /// <summary>
+        /// Gets the existing word we're modifying (if any)
+        /// </summary>
+        /// <remarks>
+        /// Will be empty if we're creating a new word.
+        /// </remarks>
+        public VocabularyWord? ExistingWord { get; }
+
         /// <summary>
         /// Gets the spelling currently shown on screen
         /// </summary>
@@ -22,32 +32,37 @@ namespace WordTutor.Core
         public string Phrase { get; } = string.Empty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifyVocabularyWordScreen"/> class
+        /// Gets a value indicating whether the word has been modified
         /// </summary>
-        public ModifyVocabularyWordScreen()
-        {
-        }
+        public bool Modified { get; }
+
+        public static ModifyVocabularyWordScreen ForNewWord()
+            => new ModifyVocabularyWordScreen();
+
+        public static ModifyVocabularyWordScreen ForExistingWord(
+            VocabularyWord word)
+            => new ModifyVocabularyWordScreen(word);
 
         public ModifyVocabularyWordScreen WithSpelling(string spelling)
-        {
-            return new ModifyVocabularyWordScreen(
+            => new ModifyVocabularyWordScreen(
                 this,
-                spelling: spelling ?? string.Empty);
-        }
+                spelling: spelling ?? string.Empty,
+                modified: true);
 
         public ModifyVocabularyWordScreen WithPhrase(string phrase)
-        {
-            return new ModifyVocabularyWordScreen(
+            => new ModifyVocabularyWordScreen(
                 this,
-                phrase: phrase ?? string.Empty);
-        }
+                phrase: phrase ?? string.Empty,
+                modified: true);
 
         public ModifyVocabularyWordScreen WithPronunciation(string pronunciation)
-        {
-            return new ModifyVocabularyWordScreen(
+            => new ModifyVocabularyWordScreen(
                 this,
-                pronunciation: pronunciation ?? string.Empty);
-        }
+                pronunciation: pronunciation ?? string.Empty,
+                modified: true);
+
+        public ModifyVocabularyWordScreen ClearModified()
+            => new ModifyVocabularyWordScreen(this, modified: false);
 
         public VocabularyWord AsWord()
         {
@@ -56,25 +71,39 @@ namespace WordTutor.Core
                 .WithPhrase(Phrase);
         }
 
-        protected ModifyVocabularyWordScreen(
+        private ModifyVocabularyWordScreen(VocabularyWord? existingWord = null)
+        {
+            ExistingWord = existingWord;
+            Spelling = existingWord?.Spelling ?? string.Empty;
+            Pronunciation = existingWord?.Pronunciation ?? string.Empty;
+            Phrase = existingWord?.Phrase ?? string.Empty;
+            Modified = false;
+        }
+
+        private ModifyVocabularyWordScreen(
             ModifyVocabularyWordScreen original,
             string? spelling = null,
             string? pronunciation = null,
-            string? phrase = null)
+            string? phrase = null,
+            bool? modified = null)
         {
             if (original is null)
             {
                 throw new ArgumentNullException(nameof(original));
             }
 
+            ExistingWord = original.ExistingWord;
             Spelling = spelling ?? original.Spelling;
             Pronunciation = pronunciation ?? original.Pronunciation;
             Phrase = phrase ?? original.Phrase;
+            Modified = modified ?? original.Modified;
         }
 
-        public override bool Equals(object? other) => Equals(other as ModifyVocabularyWordScreen);
+        public override bool Equals(object? other)
+            => Equals(other as ModifyVocabularyWordScreen);
 
-        public override bool Equals(Screen? other) => Equals(other as ModifyVocabularyWordScreen);
+        public override bool Equals(Screen? other)
+            => Equals(other as ModifyVocabularyWordScreen);
 
         public override int GetHashCode()
             => HashCode.Combine(Spelling, Pronunciation, Phrase);
@@ -93,7 +122,8 @@ namespace WordTutor.Core
 
             return string.Equals(Spelling, other.Spelling, StringComparison.Ordinal)
                 && string.Equals(Pronunciation, other.Pronunciation, StringComparison.Ordinal)
-                && string.Equals(Phrase, other.Phrase, StringComparison.Ordinal);
+                && string.Equals(Phrase, other.Phrase, StringComparison.Ordinal)
+                && _wordComparer.Equals(ExistingWord, other.ExistingWord);
         }
     }
 }

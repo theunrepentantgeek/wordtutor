@@ -63,7 +63,8 @@ namespace WordTutor.Core.Tests
             return application.UpdateScreen<Screen, Screen>(_ => screen);
         }
 
-        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; } = new ModifyVocabularyWordScreen();
+        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; }
+            = ModifyVocabularyWordScreen.ForNewWord();
 
         public static VocabularyBrowserScreen VocabularyBrowserScreen { get; } = new VocabularyBrowserScreen();
 

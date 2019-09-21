@@ -19,7 +19,7 @@ namespace WordTutor.Desktop.Tests
 
         public ModifyVocabularyWordViewModelTests()
         {
-            _screen = new ModifyVocabularyWordScreen()
+            _screen = ModifyVocabularyWordScreen.ForNewWord()
                 .WithSpelling("spelling")
                 .WithPhrase("phrase")
                 .WithPronunciation("pronunciation");
