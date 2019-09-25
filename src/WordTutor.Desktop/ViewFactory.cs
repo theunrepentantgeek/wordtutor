@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-
+using System.Windows.Input;
 using SimpleInjector;
 using WordTutor.Core;
 
@@ -56,6 +57,7 @@ namespace WordTutor.Desktop
 
             var result = (ContentControl)_container.GetInstance(viewType);
             result.DataContext = viewModel;
+            result.CommandBindings.AddRange(CreateCommandBindings(viewModel));
 
             return result;
         }
@@ -83,6 +85,18 @@ namespace WordTutor.Desktop
                 ).SingleOrDefault();
 
             return viewType;
+        }
+
+        private static ICollection CreateCommandBindings(ViewModelBase model)
+        {
+            var commands =
+                from property in model.GetType().GetProperties()
+                where property.Name.EndsWith("Command", StringComparison.Ordinal)
+                let command = property.GetValue(model) as RoutedCommandSinkBase
+                where command != null
+                select command.CreateBinding();
+            var result = commands.ToList();
+            return result;
         }
     }
 }

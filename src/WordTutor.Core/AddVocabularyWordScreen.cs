@@ -67,7 +67,7 @@ namespace WordTutor.Core
 
         public override bool Equals(object other) => Equals(other as AddVocabularyWordScreen);
 
-        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+        public override bool Equals(Screen other) => Equals(other as AddVocabularyWordScreen);
 
         public override int GetHashCode()
         {
