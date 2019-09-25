@@ -24,20 +24,24 @@ namespace WordTutor.Core.Reducers
                     CloseScreenMessage m => currentState.CloseScreen(),
 
                     ModifyPhraseMessage m => currentState.UpdateScreen(
-                            (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
+                        (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
 
                     ModifyPronunciationMessage m => currentState.UpdateScreen(
-                            (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
+                        (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
 
                     ModifySpellingMessage m => currentState.UpdateScreen(
-                            (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
+                        (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
 
                     SaveNewVocabularyWordMessage m => currentState.UpdateVocabularySet(
-                            (VocabularySet s) => s.Add(m.Word))
-                            .CloseScreen(),
+                        s => s.Add(m.Word))
+                        .CloseScreen();
+
+                    SaveModifiedVocabularyWordMessage m => currentState.UpdateVocabularySet(
+                        s => s.Replace(m.OriginalWord, m.ReplacementWord))
+                        .CloseScreen();
 
                     _ => currentState,
-                };
+            };
         }
     }
 }
