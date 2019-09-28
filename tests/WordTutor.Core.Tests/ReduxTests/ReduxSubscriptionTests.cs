@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using WordTutor.Core.Redux;
@@ -112,6 +112,15 @@ namespace WordTutor.Core.Tests.ReduxTests
                     loopCount++.Should().BeLessThan(10);
                     subscription.Publish("bang");
                 }
+            }
+        
+            [Fact]
+            public void FirstPublicationWhenValueIsDefaultForType_DoesInvokeSubscription()
+            {
+                var state = ""; // Length of empty string is default value for int
+                _subscription.Publish(state);
+                _whenCalledCount.Should().Be(1);
+                _lastWhenCalledValue.Should().Be(0);
             }
         }
 
