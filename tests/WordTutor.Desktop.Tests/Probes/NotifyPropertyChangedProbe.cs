@@ -6,7 +6,7 @@ namespace WordTutor.Desktop.Tests.Probes
     public class NotifyPropertyChangedProbe
     {
         private readonly INotifyPropertyChanged _model;
-        private PropertyChangedEventArgs _args;
+        private PropertyChangedEventArgs? _args;
 
         public NotifyPropertyChangedProbe(INotifyPropertyChanged model)
         {
@@ -23,7 +23,7 @@ namespace WordTutor.Desktop.Tests.Probes
         {
             _args.Should().NotBeNull(
                 "we expect the event to have been fired.");
-            _args.PropertyName.Should().Be(
+            _args!.PropertyName.Should().Be(
                 propertyName,
                 $"we expect the event to have been fired for '{propertyName}.");
         }

@@ -14,13 +14,13 @@ namespace WordTutor.Desktop
         private readonly RoutedCommand _command;
 
         // An optional reference to our command's host
-        private readonly INotifyPropertyChanged _commandHost;
+        private readonly INotifyPropertyChanged? _commandHost;
 
         // Last value returned for CanExecute
         private bool _lastCanExecute;
 
         // Storage for our CanExecuteChanged event
-        private EventHandler _canExecuteChanged;
+        private EventHandler? _canExecuteChanged;
 
         /// <summary>
         /// Test to see if we can execute this command

@@ -14,7 +14,7 @@ namespace WordTutor.Desktop
         private readonly IDisposable _screenSubscription;
         private readonly IDisposable _vocabularySubscription;
 
-        private VocabularyWord _selection;
+        private VocabularyWord? _selection;
         private bool _modified;
 
         public VocabularyBrowserViewModel(IReduxStore<WordTutorApplication> store)

@@ -17,9 +17,9 @@ namespace WordTutor.Desktop
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         // Captured synchronization context so we always dispatch events on the UX thread
-        private readonly SynchronizationContext _synchronizationContext;
+        private readonly SynchronizationContext? _synchronizationContext;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected ViewModelBase()
         {
