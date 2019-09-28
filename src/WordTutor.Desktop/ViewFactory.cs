@@ -49,7 +49,7 @@ namespace WordTutor.Desktop
                 _mapping[viewModelType] = viewType;
             }
 
-            if (viewModelType == null)
+            if (viewType == null)
             {
                 throw new InvalidOperationException(
                     $"Failed to find ViewModel class for model type '{viewModelType.Name}'.");
