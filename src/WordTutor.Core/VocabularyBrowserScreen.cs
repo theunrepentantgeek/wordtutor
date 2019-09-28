@@ -1,9 +1,13 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WordTutor.Core
 {
     public class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
     {
+        private static readonly EqualityComparer<VocabularyWord> _selectionComparer
+            = EqualityComparer<VocabularyWord>.Default;
+
         /// <summary>
         /// Gets the currently selected word (may be null)
         /// </summary>
@@ -80,7 +84,7 @@ namespace WordTutor.Core
                 return true;
             }
 
-            return Selection.Equals(other.Selection)
+            return _selectionComparer.Equals(Selection, other.Selection)
                 && Modified == other.Modified;
         }
 
@@ -88,7 +92,8 @@ namespace WordTutor.Core
         {
             unchecked
             {
-                return Selection.GetHashCode() * 23
+                var selectionHash = Selection?.GetHashCode() ?? 0;
+                return selectionHash * 23
                     + Modified.GetHashCode();
             }
         }
