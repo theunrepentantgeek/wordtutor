@@ -38,8 +38,13 @@ namespace WordTutor.Desktop
             }
         }
 
-        private void RefreshFromScreen(Screen screen)
+        private void RefreshFromScreen(Screen? screen)
         {
+            if (screen is null)
+            {
+                return;
+            }
+
             // Only need a new instance if the screen type changes
             // As long as the type of screen is unchanged, 
             // the exiting ViewModel will update

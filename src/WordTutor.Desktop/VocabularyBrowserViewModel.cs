@@ -41,7 +41,7 @@ namespace WordTutor.Desktop
                 new RoutedCommandSink(ItemCommands.New, AddWord);
         }
 
-        public VocabularyWord Selection
+        public VocabularyWord? Selection
         {
             get => _selection;
             set => UpdateProperty(
@@ -78,12 +78,19 @@ namespace WordTutor.Desktop
             Modified = screen.Modified;
         }
 
-        private void RefreshFromVocabularySet(VocabularySet vocabularySet)
+        private void RefreshFromVocabularySet(VocabularySet? vocabularySet)
         {
-            var words = vocabularySet.Words
-                .OrderBy(w => w.Spelling)
-                .ToList();
-            UpdateCollection(_words, words);
+            if (vocabularySet is null)
+            {
+                ClearCollection(_words);
+            }
+            else
+            {
+                var words = vocabularySet.Words
+                    .OrderBy(w => w.Spelling)
+                    .ToList();
+                UpdateCollection(_words, words);
+            }
         }
 
         private static IReduxMessage CreateSelectionMessage(VocabularyWord? selection)
