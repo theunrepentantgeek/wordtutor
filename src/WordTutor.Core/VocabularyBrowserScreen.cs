@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace WordTutor.Core
 {
@@ -7,7 +7,7 @@ namespace WordTutor.Core
         /// <summary>
         /// Gets the currently selected word (may be null)
         /// </summary>
-        public VocabularyWord Selection { get; }
+        public VocabularyWord? Selection { get; }
 
         /// <summary>
         /// Gets a value indicating whether we have unsaved changes
