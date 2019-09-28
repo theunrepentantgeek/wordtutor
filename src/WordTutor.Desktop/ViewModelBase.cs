@@ -30,7 +30,7 @@ namespace WordTutor.Desktop
         protected void UpdateProperty<T>(
             ref T member,
             T newValue,
-            Action<T> whenChanged = null,
+            Action<T>? whenChanged = null,
             [CallerMemberName] string property = null)
             where T : IEquatable<T>
         {
@@ -52,7 +52,7 @@ namespace WordTutor.Desktop
         protected void UpdateEnumProperty<E>(
             ref E member,
             E newValue,
-            Action<E> whenChanged = null,
+            Action<E>? whenChanged = null,
             [CallerMemberName] string property = null)
             where E : Enum
         {

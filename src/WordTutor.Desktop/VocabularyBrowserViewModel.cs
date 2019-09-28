@@ -65,7 +65,7 @@ namespace WordTutor.Desktop
 
         public void AddWord() => _store.Dispatch(new OpenNewWordScreenMessage());
 
-        private void RefreshFromScreen(VocabularyBrowserScreen screen)
+        private void RefreshFromScreen(VocabularyBrowserScreen? screen)
         {
             if (screen == null)
             {
@@ -86,7 +86,7 @@ namespace WordTutor.Desktop
             UpdateCollection(_words, words);
         }
 
-        private static IReduxMessage CreateSelectionMessage(VocabularyWord selection)
+        private static IReduxMessage CreateSelectionMessage(VocabularyWord? selection)
         {
             if (selection is null)
             {

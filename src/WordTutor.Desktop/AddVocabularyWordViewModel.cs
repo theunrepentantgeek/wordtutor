@@ -55,7 +55,7 @@ namespace WordTutor.Desktop
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
-        private void RefreshFromScreen(AddVocabularyWordScreen screen)
+        private void RefreshFromScreen(AddVocabularyWordScreen? screen)
         {
             if (screen is null)
             {
