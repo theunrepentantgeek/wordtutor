@@ -31,7 +31,7 @@ namespace WordTutor.Desktop
             ref T member,
             T newValue,
             Action<T>? whenChanged = null,
-            [CallerMemberName] string property = null)
+            [CallerMemberName] string? property = null)
             where T : IEquatable<T>
         {
             if (member?.Equals(newValue) == true)
@@ -40,7 +40,7 @@ namespace WordTutor.Desktop
             }
 
             member = newValue;
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
 
             whenChanged?.Invoke(newValue);
         }
@@ -53,7 +53,7 @@ namespace WordTutor.Desktop
             ref E member,
             E newValue,
             Action<E>? whenChanged = null,
-            [CallerMemberName] string property = null)
+            [CallerMemberName] string? property = null)
             where E : Enum
         {
             if (member?.Equals(newValue) == true)
@@ -62,7 +62,7 @@ namespace WordTutor.Desktop
             }
 
             member = newValue;
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
 
             whenChanged?.Invoke(newValue);
         }
@@ -70,7 +70,7 @@ namespace WordTutor.Desktop
         public void UpdateCollection<T>(
             ObservableCollection<T> member,
             IEnumerable<T> newList,
-            [CallerMemberName]string property = null)
+            [CallerMemberName]string? property = null)
         {
             if (member is null)
             {
@@ -95,7 +95,7 @@ namespace WordTutor.Desktop
                 member.Add(item);
             }
 
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
         }
 
         protected void OnPropertyChanged(string property)
