@@ -64,11 +64,11 @@ namespace WordTutor.Core
                 modified: false);
         }
 
-        public override bool Equals(object obj) => Equals(obj as VocabularyBrowserScreen);
+        public override bool Equals(object? obj) => Equals(obj as VocabularyBrowserScreen);
 
-        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+        public override bool Equals(Screen? other) => Equals(other as VocabularyBrowserScreen);
 
-        public bool Equals(VocabularyBrowserScreen other)
+        public bool Equals(VocabularyBrowserScreen? other)
         {
             if (other is null)
             {
@@ -95,7 +95,7 @@ namespace WordTutor.Core
 
         private VocabularyBrowserScreen(
             VocabularyBrowserScreen original,
-            VocabularyWord selection = null,
+            VocabularyWord? selection = null,
             bool? modified = null)
         {
             Selection = selection ?? original.Selection;
