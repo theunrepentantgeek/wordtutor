@@ -89,7 +89,7 @@ namespace WordTutor.Core
             "Maintainability",
             "RCS1168:Parameter name differs from base name.",
             Justification = "The name 'word' better identifies the passed value")]
-        public bool Equals(VocabularyWord word)
+        public bool Equals(VocabularyWord? word)
         {
             if (word is null)
             {
@@ -106,7 +106,7 @@ namespace WordTutor.Core
                 && Equals(Pronunciation, word.Pronunciation);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => Equals(obj as VocabularyWord);
 
         [SuppressMessage(
@@ -127,9 +127,9 @@ namespace WordTutor.Core
 
         private VocabularyWord(
             VocabularyWord original,
-            string spelling = null,
-            string pronunciation = null,
-            string phrase = null)
+            string? spelling = null,
+            string? pronunciation = null,
+            string? phrase = null)
         {
             Spelling = spelling ?? original.Spelling;
             Pronunciation = pronunciation ?? original.Pronunciation;

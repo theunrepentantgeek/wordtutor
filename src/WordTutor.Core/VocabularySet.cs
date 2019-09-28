@@ -166,7 +166,7 @@ namespace WordTutor.Core
             return Replace(original, replacement);
         }
 
-        public bool Equals(VocabularySet other)
+        public bool Equals(VocabularySet? other)
         {
             if (other is null)
             {
@@ -182,7 +182,7 @@ namespace WordTutor.Core
                 && _words.SetEquals(other._words);
         }
 
-        public override bool Equals(object obj) => Equals(obj as VocabularySet);
+        public override bool Equals(object? obj) => Equals(obj as VocabularySet);
 
         public override int GetHashCode() => _hashCode.Value;
 
@@ -210,8 +210,8 @@ namespace WordTutor.Core
 
         private VocabularySet(
             VocabularySet original,
-            string name = null,
-            ImmutableHashSet<VocabularyWord> words = null)
+            string? name = null,
+            ImmutableHashSet<VocabularyWord>? words = null)
         {
             Name = name ?? original.Name;
             _words = words ?? original._words;

@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WordTutor.Core
 {
     public class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
     {
+        private static readonly EqualityComparer<VocabularyWord> _selectionComparer
+            = EqualityComparer<VocabularyWord>.Default;
+
         /// <summary>
         /// Gets the currently selected word (may be null)
         /// </summary>
-        public VocabularyWord Selection { get; }
+        public VocabularyWord? Selection { get; }
 
         /// <summary>
         /// Gets a value indicating whether we have unsaved changes
@@ -64,11 +68,11 @@ namespace WordTutor.Core
                 modified: false);
         }
 
-        public override bool Equals(object obj) => Equals(obj as VocabularyBrowserScreen);
+        public override bool Equals(object? obj) => Equals(obj as VocabularyBrowserScreen);
 
-        public override bool Equals(Screen other) => Equals(other as VocabularyBrowserScreen);
+        public override bool Equals(Screen? other) => Equals(other as VocabularyBrowserScreen);
 
-        public bool Equals(VocabularyBrowserScreen other)
+        public bool Equals(VocabularyBrowserScreen? other)
         {
             if (other is null)
             {
@@ -80,7 +84,7 @@ namespace WordTutor.Core
                 return true;
             }
 
-            return Selection.Equals(other.Selection)
+            return _selectionComparer.Equals(Selection, other.Selection)
                 && Modified == other.Modified;
         }
 
@@ -88,14 +92,15 @@ namespace WordTutor.Core
         {
             unchecked
             {
-                return Selection.GetHashCode() * 23
+                var selectionHash = Selection?.GetHashCode() ?? 0;
+                return selectionHash * 23
                     + Modified.GetHashCode();
             }
         }
 
         private VocabularyBrowserScreen(
             VocabularyBrowserScreen original,
-            VocabularyWord selection = null,
+            VocabularyWord? selection = null,
             bool? modified = null)
         {
             Selection = selection ?? original.Selection;

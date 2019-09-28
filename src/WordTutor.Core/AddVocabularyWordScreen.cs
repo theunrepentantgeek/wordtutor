@@ -51,9 +51,9 @@ namespace WordTutor.Core
 
         protected AddVocabularyWordScreen(
             AddVocabularyWordScreen original,
-            string spelling = null,
-            string pronunciation = null,
-            string phrase = null)
+            string? spelling = null,
+            string? pronunciation = null,
+            string? phrase = null)
         {
             if (original is null)
             {
@@ -65,9 +65,9 @@ namespace WordTutor.Core
             Phrase = phrase ?? original.Phrase;
         }
 
-        public override bool Equals(object other) => Equals(other as AddVocabularyWordScreen);
+        public override bool Equals(object? other) => Equals(other as AddVocabularyWordScreen);
 
-        public override bool Equals(Screen other) => Equals(other as AddVocabularyWordScreen);
+        public override bool Equals(Screen? other) => Equals(other as AddVocabularyWordScreen);
 
         public override int GetHashCode()
         {
@@ -79,7 +79,7 @@ namespace WordTutor.Core
             }
         }
 
-        public bool Equals(AddVocabularyWordScreen other)
+        public bool Equals(AddVocabularyWordScreen? other)
         {
             if (other is null)
             {

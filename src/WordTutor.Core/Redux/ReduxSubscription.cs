@@ -57,7 +57,10 @@ namespace WordTutor.Core.Redux
 
         private readonly EqualityComparer<TValue> _comparer = EqualityComparer<TValue>.Default;
 
-        private TValue _lastValue;
+        [AllowNull]
+        private TValue _lastValue = default;
+
+        private bool _haveEverPublished;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReduxSubscription{TState, TValue}"/> class
@@ -81,10 +84,16 @@ namespace WordTutor.Core.Redux
         /// <param name="state"></param>
         public override void Publish(TState state)
         {
+            if (Released)
+            {
+                return;
+            }
+
             var value = _reader(state);
-            if (!Released && !_comparer.Equals(value, _lastValue))
+            if (!_haveEverPublished || !_comparer.Equals(value, _lastValue))
             {
                 _lastValue = value;
+                _haveEverPublished = true;
                 _whenChanged(value);
             }
         }

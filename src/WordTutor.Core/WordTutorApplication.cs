@@ -143,9 +143,9 @@ namespace WordTutor.Core
 
         private WordTutorApplication(
             WordTutorApplication original,
-            VocabularySet vocabularySet = null,
-            Screen currentScreen = null,
-            ImmutableStack<Screen> priorScreens = null)
+            VocabularySet? vocabularySet = null,
+            Screen? currentScreen = null,
+            ImmutableStack<Screen>? priorScreens = null)
         {
             _priorScreens = priorScreens ?? original._priorScreens;
             CurrentScreen = currentScreen ?? original.CurrentScreen;
