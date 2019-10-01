@@ -49,8 +49,63 @@ namespace WordTutor.Core.Redux
     /// </summary>
     /// <typeparam name="TState">Type of value contained by the store.</typeparam>
     /// <typeparam name="TValue">Type of value subscribed.</typeparam>
-    public sealed class ReduxSubscription<TState, TValue> : ReduxSubscription<TState>
-        where TValue : IEquatable<TValue>
+    public sealed class ReduxReferenceSubscription<TState, TValue> : ReduxSubscription<TState>
+        where TValue : class, IEquatable<TValue>?
+    {
+        private readonly Func<TState, TValue?> _reader;
+        private readonly Action<TValue?> _whenChanged;
+
+        private readonly EqualityComparer<TValue> _comparer = EqualityComparer<TValue>.Default;
+
+        [AllowNull]
+        private TValue _lastValue = default;
+
+        private bool _haveEverPublished;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReduxSubscription{TState, TValue}"/> class
+        /// </summary>
+        /// <param name="reader">Function used read a value from our store state.</param>
+        /// <param name="whenChanged">Action to invoke when the value changes.</param>
+        /// <param name="whenReleased">Action to invoke when the subscription is disposed.</param>
+        public ReduxReferenceSubscription(
+            Func<TState, TValue?> reader,
+            Action<TValue?> whenChanged,
+            Action<ReduxSubscription<TState>> whenReleased)
+            : base(whenReleased)
+        {
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            _whenChanged = whenChanged ?? throw new ArgumentNullException(nameof(whenChanged));
+        }
+
+        /// <summary>
+        /// Publish our state, invoking the callback if the value has changed
+        /// </summary>
+        /// <param name="state"></param>
+        public override void Publish(TState state)
+        {
+            if (Released)
+            {
+                return;
+            }
+
+            var value = _reader(state);
+            if (!_haveEverPublished || !_comparer.Equals(value, _lastValue))
+            {
+                _lastValue = value;
+                _haveEverPublished = true;
+                _whenChanged(value);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Represents a subscription to a redux store for state changes
+    /// </summary>
+    /// <typeparam name="TState">Type of value contained by the store.</typeparam>
+    /// <typeparam name="TValue">Type of value subscribed.</typeparam>
+    public sealed class ReduxValueSubscription<TState, TValue> : ReduxSubscription<TState>
+        where TValue : struct, IEquatable<TValue>?
     {
         private readonly Func<TState, TValue> _reader;
         private readonly Action<TValue> _whenChanged;
@@ -68,7 +123,7 @@ namespace WordTutor.Core.Redux
         /// <param name="reader">Function used read a value from our store state.</param>
         /// <param name="whenChanged">Action to invoke when the value changes.</param>
         /// <param name="whenReleased">Action to invoke when the subscription is disposed.</param>
-        public ReduxSubscription(
+        public ReduxValueSubscription(
             Func<TState, TValue> reader,
             Action<TValue> whenChanged,
             Action<ReduxSubscription<TState>> whenReleased)

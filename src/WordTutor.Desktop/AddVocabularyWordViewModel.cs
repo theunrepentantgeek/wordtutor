@@ -23,7 +23,7 @@ namespace WordTutor.Desktop
             _phrase = screen?.Phrase ?? string.Empty;
             _pronunciation = screen?.Pronunciation ?? string.Empty;
 
-            _screenSubscription = _store.Subscribe(
+            _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as AddVocabularyWordScreen,
                 RefreshFromScreen);
         }

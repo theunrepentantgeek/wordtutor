@@ -29,11 +29,11 @@ namespace WordTutor.Desktop
             _words = new ObservableCollection<VocabularyWord>(
                 vocab.OrderBy(w => w.Spelling));
 
-            _screenSubscription = _store.Subscribe(
+            _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as VocabularyBrowserScreen,
                 RefreshFromScreen);
 
-            _vocabularySubscription = _store.Subscribe(
+            _vocabularySubscription = _store.SubscribeToReference(
                 app => app.VocabularySet,
                 RefreshFromVocabularySet);
 
