@@ -25,7 +25,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ReduxStore<string>(null, _initialStateFactory));
+                        () => new ReduxStore<string>(null!, _initialStateFactory));
                 exception.ParamName.Should().Be("reducer");
             }
 
@@ -46,14 +46,14 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _store.Dispatch(null));
+                        () => _store.Dispatch(null!));
                 exception.ParamName.Should().Be("message");
             }
 
             [Fact]
             public void GivenMessage_CallsReducerWithMessage()
             {
-                FakeMessage receivedMessage = null;
+                FakeMessage? receivedMessage = null;
                 _reducer.Reduce = CaptureMessage;
 
                 _store.Dispatch(_message);
@@ -70,7 +70,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void GivenMessage_CallsReducerWithState()
             {
                 string initialState = _store.State;
-                string receivedState = null;
+                string receivedState = null!;
                 _reducer.Reduce = CaptureState;
 
                 _store.Dispatch(_message);
@@ -119,14 +119,14 @@ namespace WordTutor.Core.Tests.ReduxTests
 
         public class Subscribe : ReduxStoreTests
         {
-            private string _handledValue;
+            private string? _handledValue;
 
             public Subscribe()
             {
                 _reducer.Reduce = (m, s)
                     => m is FakeMessage f
-                    ? f.Id
-                    : s;
+                        ? f.Id
+                        : s;
             }
 
             [Fact]

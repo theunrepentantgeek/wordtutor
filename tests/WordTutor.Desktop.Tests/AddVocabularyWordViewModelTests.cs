@@ -1,8 +1,9 @@
 using System;
-
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
+using WordTutor.Core.Redux;
 using WordTutor.Desktop.Tests.Fakes;
 using WordTutor.Desktop.Tests.Probes;
 using Xunit;
@@ -36,7 +37,7 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new AddVocabularyWordViewModel(null));
+                        () => new AddVocabularyWordViewModel(null!));
                 exception.ParamName.Should().Be("store");
             }
 
