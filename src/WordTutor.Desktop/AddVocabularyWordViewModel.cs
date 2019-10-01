@@ -31,7 +31,7 @@ namespace WordTutor.Desktop
         public string Spelling
         {
             get => _spelling;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _spelling,
                 value,
                 sp => _store.Dispatch(new ModifySpellingMessage(sp)));
@@ -40,7 +40,7 @@ namespace WordTutor.Desktop
         public string Phrase
         {
             get => _phrase;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _phrase,
                 value,
                 ph => _store.Dispatch(new ModifyPhraseMessage(ph)));
@@ -49,7 +49,7 @@ namespace WordTutor.Desktop
         public string Pronunciation
         {
             get => _pronunciation;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _pronunciation,
                 value,
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));

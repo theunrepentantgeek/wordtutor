@@ -27,12 +27,30 @@ namespace WordTutor.Desktop
             _synchronizationContext = SynchronizationContext.Current;
         }
 
-        protected void UpdateProperty<T>(
+        protected void UpdateValueProperty<T>(
             ref T member,
             T newValue,
             Action<T>? whenChanged = null,
             [CallerMemberName] string? property = null)
-            where T : IEquatable<T>
+            where T : struct, IEquatable<T>
+        {
+            if (member.Equals(newValue) == true)
+            {
+                return;
+            }
+
+            member = newValue;
+            OnPropertyChanged(property!);
+
+            whenChanged?.Invoke(newValue);
+        }
+
+        protected void UpdateReferenceProperty<T>(
+            ref T member,
+            T newValue,
+            Action<T>? whenChanged = null,
+            [CallerMemberName] string? property = null)
+            where T : class?, IEquatable<T>?
         {
             if (member?.Equals(newValue) == true)
             {
@@ -96,6 +114,24 @@ namespace WordTutor.Desktop
             }
 
             OnPropertyChanged(property!);
+        }
+
+        public void ClearCollection<T>(
+            ObservableCollection<T> member,
+            [CallerMemberName]string? property = null)
+        {
+            if (member is null)
+            {
+                throw new ArgumentException(
+                    "Member collection should never be null",
+                    nameof(member));
+            }
+
+            if (member.Count > 0)
+            {
+                member.Clear();
+                OnPropertyChanged(property!);
+            }
         }
 
         protected void OnPropertyChanged(string property)

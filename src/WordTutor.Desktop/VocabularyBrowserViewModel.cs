@@ -44,7 +44,7 @@ namespace WordTutor.Desktop
         public VocabularyWord? Selection
         {
             get => _selection;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _selection,
                 value,
                 sel => _store.Dispatch(CreateSelectionMessage(sel)));
@@ -53,7 +53,7 @@ namespace WordTutor.Desktop
         public bool Modified
         {
             get => _modified;
-            set => UpdateProperty(ref _modified, value);
+            set => UpdateValueProperty(ref _modified, value);
         }
 
         public ObservableCollection<VocabularyWord> Words
