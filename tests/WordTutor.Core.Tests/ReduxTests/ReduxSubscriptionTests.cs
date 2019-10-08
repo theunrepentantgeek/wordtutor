@@ -60,7 +60,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class PublishTests : ReduxSubscriptionTests
         {
-            private ReduxValueSubscription<string, int> _subscription;
+            private readonly ReduxValueSubscription<string, int> _subscription;
 
             public PublishTests()
             {
@@ -130,7 +130,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class DisposalTests : ReduxSubscriptionTests
         {
-            private ReduxValueSubscription<string, int> _subscription;
+            private readonly ReduxValueSubscription<string, int> _subscription;
 
             public DisposalTests()
             {
