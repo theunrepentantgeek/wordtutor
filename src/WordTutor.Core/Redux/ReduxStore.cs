@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +16,8 @@ namespace WordTutor.Core.Redux
         private bool _dispatching;
 
         // Set of all our current subscriptions
-        private HashSet<ReduxSubscription<T>> _subscriptions = new HashSet<ReduxSubscription<T>>();
+        private readonly HashSet<ReduxSubscription<T>> _subscriptions
+            = new HashSet<ReduxSubscription<T>>();
 
         /// <summary>
         /// Gets the current state of the application

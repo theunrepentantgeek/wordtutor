@@ -223,7 +223,7 @@ namespace WordTutor.Core
     {
         public static VocabularySet Add(this VocabularySet vocabulary, params VocabularyWord[] words)
             => words.Aggregate(
-                vocabulary ?? throw new ArgumentNullException(nameof(vocabulary)), 
+                vocabulary ?? throw new ArgumentNullException(nameof(vocabulary)),
                 (s, w) => s.Add(w));
     }
 }
