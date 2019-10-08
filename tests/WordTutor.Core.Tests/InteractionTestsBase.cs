@@ -38,7 +38,7 @@ namespace WordTutor.Core.Tests
             = new CompositeReduxReducer<WordTutorApplication>(
                 new IReduxReducer<WordTutorApplication>[]
                 {
-                    new AddVocabularyWordScreenReducer(),
+                    new ModifyVocabularyWordScreenReducer(),
                     new VocabularyBrowserScreenReducer()
                 });
             
@@ -55,7 +55,7 @@ namespace WordTutor.Core.Tests
         public static WordTutorApplication CurrentScreenIs(WordTutorApplication application, Screen screen)
             => application.UpdateScreen<Screen, Screen>(_ => screen);
 
-        public static AddVocabularyWordScreen AddVocabularyWordScreen { get; } = new AddVocabularyWordScreen();
+        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; } = new ModifyVocabularyWordScreen();
 
         public static VocabularyBrowserScreen VocabularyBrowserScreen { get; } = new VocabularyBrowserScreen();
 

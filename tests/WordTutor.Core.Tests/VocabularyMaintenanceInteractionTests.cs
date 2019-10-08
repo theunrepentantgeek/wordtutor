@@ -7,11 +7,11 @@ namespace WordTutor.Core.Tests
     public class VocabularyMaintenanceInteractionTests : InteractionTestsBase
     {
         [Fact]
-        public void WhenStartingNewVocabularyWord_AddVocabularyWordScreenOpens() =>
+        public void WhenStartingNewVocabularyWord_MaintainVocabularyWordScreenOpens() =>
             Given(ApplicationStateWithVocabulary, MusicPace)
             .And(CurrentScreenIs, VocabularyBrowserScreen)
             .When(TheActionIs, OpenNewWordScreen())
-            .Then(AssertTheCurrentScreenIs<AddVocabularyWordScreen>);
+            .Then(AssertTheCurrentScreenIs<ModifyVocabularyWordScreen>);
 
         [Fact]
         public void WhenNewVocabularyWordAdded_VocabularyBrowserScreenRestored()

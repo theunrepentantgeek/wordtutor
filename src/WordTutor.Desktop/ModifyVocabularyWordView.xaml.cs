@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace WordTutor.Desktop
 {
     /// <summary>
-    /// Interaction logic for AddVocabularyWordView.xaml
+    /// Interaction logic for ModifyVocabularyWordView.xaml
     /// </summary>
-    public partial class AddVocabularyWordView : UserControl
+    public partial class ModifyVocabularyWordView : UserControl
     {
-        public AddVocabularyWordView()
+        public ModifyVocabularyWordView()
         {
             InitializeComponent();
         }

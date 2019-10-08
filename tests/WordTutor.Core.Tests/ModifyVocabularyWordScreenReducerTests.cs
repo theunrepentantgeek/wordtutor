@@ -5,29 +5,29 @@ using Xunit;
 
 namespace WordTutor.Core.Tests
 {
-    public class AddVocabularyWordScreenReducerTests
+    public class ModifyVocabularyWordScreenReducerTests
     {
-        private readonly AddVocabularyWordScreenReducer _reducer = new AddVocabularyWordScreenReducer();
+        private readonly ModifyVocabularyWordScreenReducer _reducer = new ModifyVocabularyWordScreenReducer();
         private readonly WordTutorApplication _initialState;
 
-        public AddVocabularyWordScreenReducerTests()
+        public ModifyVocabularyWordScreenReducerTests()
         {
             var screen =
-                new AddVocabularyWordScreen()
+                new ModifyVocabularyWordScreen()
                     .WithSpelling("Phoo")
                     .WithPronunciation("Foo")
                     .WithPhrase("Phrase");
             _initialState = new WordTutorApplication(screen);
         }
 
-        public class ModifySpellingMessageTests : AddVocabularyWordScreenReducerTests
+        public class ModifySpellingMessageTests : ModifyVocabularyWordScreenReducerTests
         {
             [Fact]
-            public void GivenMessage_ReturnsAddVocabularyWordScreen()
+            public void GivenMessage_ReturnsMaintainVocabularyWordScreen()
             {
                 var message = new ModifySpellingMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
-                state.CurrentScreen.Should().BeOfType<AddVocabularyWordScreen>();
+                state.CurrentScreen.Should().BeOfType<ModifyVocabularyWordScreen>();
             }
 
             [Fact]
@@ -35,19 +35,19 @@ namespace WordTutor.Core.Tests
             {
                 var message = new ModifySpellingMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
-                var screen = (AddVocabularyWordScreen)state.CurrentScreen;
+                var screen = (ModifyVocabularyWordScreen)state.CurrentScreen;
                 screen.Spelling.Should().Be(message.Spelling);
             }
         }
 
-        public class ModifyPhraseMessageTests : AddVocabularyWordScreenReducerTests
+        public class ModifyPhraseMessageTests : ModifyVocabularyWordScreenReducerTests
         {
             [Fact]
-            public void GivenMessage_ReturnsAddVocabularyWordScreen()
+            public void GivenMessage_ReturnsMaintainVocabularyWordScreen()
             {
                 var message = new ModifyPhraseMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
-                state.CurrentScreen.Should().BeOfType<AddVocabularyWordScreen>();
+                state.CurrentScreen.Should().BeOfType<ModifyVocabularyWordScreen>();
             }
 
             [Fact]
@@ -55,20 +55,20 @@ namespace WordTutor.Core.Tests
             {
                 var message = new ModifyPhraseMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
-                var screen = (AddVocabularyWordScreen)state.CurrentScreen;
+                var screen = (ModifyVocabularyWordScreen)state.CurrentScreen;
                 screen.Phrase.Should().Be(message.Phrase);
             }
         }
 
-        public class ModifyPronunciationMessageTests : AddVocabularyWordScreenReducerTests
+        public class ModifyPronunciationMessageTests : ModifyVocabularyWordScreenReducerTests
         {
             [Fact]
-            public void GivenMessage_ReturnsAddVocabularyWordScreen()
+            public void GivenMessage_ReturnsMaintainVocabularyWordScreen()
             {
                 var message = new ModifyPronunciationMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
                 var screen = state.CurrentScreen;
-                screen.Should().BeOfType<AddVocabularyWordScreen>();
+                screen.Should().BeOfType<ModifyVocabularyWordScreen>();
             }
 
             [Fact]
@@ -76,7 +76,7 @@ namespace WordTutor.Core.Tests
             {
                 var message = new ModifyPronunciationMessage("Bar");
                 var state = _reducer.Reduce(message, _initialState);
-                var screen = (AddVocabularyWordScreen)state.CurrentScreen;
+                var screen = (ModifyVocabularyWordScreen)state.CurrentScreen;
                 screen.Pronunciation.Should().Be(message.Pronunciation);
             }
         }

@@ -21,10 +21,10 @@ namespace WordTutor.Desktop.Tests
         [StaFact]
         public void Create_WhenGivenScreen_ReturnsExpectedViewModel()
         {
-            var screen = new AddVocabularyWordScreen();
+            var screen = new ModifyVocabularyWordScreen();
             var viewModel = _factory.Create(screen);
             viewModel.Should().NotBeNull();
-            viewModel.Should().BeOfType<AddVocabularyWordViewModel>();
+            viewModel.Should().BeOfType<ModifyVocabularyWordViewModel>();
         }
 
         [StaTheory]

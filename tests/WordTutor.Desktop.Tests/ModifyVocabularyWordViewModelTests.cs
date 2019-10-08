@@ -10,48 +10,48 @@ using Xunit;
 
 namespace WordTutor.Desktop.Tests
 {
-    public class AddVocabularyWordViewModelTests
+    public class ModifyVocabularyWordViewModelTests
     {
         private readonly FakeApplicationStore _store;
-        private readonly AddVocabularyWordScreen _screen;
-        private readonly AddVocabularyWordViewModel _model;
+        private readonly ModifyVocabularyWordScreen _screen;
+        private readonly ModifyVocabularyWordViewModel _model;
         private readonly NotifyPropertyChangedProbe _notifyPropertyChanged;
 
-        public AddVocabularyWordViewModelTests()
+        public ModifyVocabularyWordViewModelTests()
         {
-            _screen = new AddVocabularyWordScreen()
+            _screen = new ModifyVocabularyWordScreen()
                 .WithSpelling("spelling")
                 .WithPhrase("phrase")
                 .WithPronunciation("pronunciation");
             var application = new WordTutorApplication(_screen);
             _store = new FakeApplicationStore(application);
-            _model = new AddVocabularyWordViewModel(_store);
+            _model = new ModifyVocabularyWordViewModel(_store);
             _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
             _store.ClearCapturedMessages();
         }
 
-        public class Constructor : AddVocabularyWordViewModelTests
+        public class Constructor : ModifyVocabularyWordViewModelTests
         {
             [Fact]
             public void GivenNullStore_ThrowsException()
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new AddVocabularyWordViewModel(null!));
+                        () => new ModifyVocabularyWordViewModel(null));
                 exception.ParamName.Should().Be("store");
             }
 
             [Fact]
             public void GivenStore_InitializesPropertiesFromModel()
             {
-                var viewModel = new AddVocabularyWordViewModel(_store);
+                var viewModel = new ModifyVocabularyWordViewModel(_store);
                 viewModel.Spelling.Should().Be(_screen.Spelling);
                 viewModel.Phrase.Should().Be(_screen.Phrase);
                 viewModel.Pronunciation.Should().Be(_screen.Pronunciation);
             }
         }
 
-        public class SpellingProperty : AddVocabularyWordViewModelTests
+        public class SpellingProperty : ModifyVocabularyWordViewModelTests
         {
             [Fact]
             public void AssigningValue_ChangesProperty()
@@ -84,7 +84,7 @@ namespace WordTutor.Desktop.Tests
             }
         }
 
-        public class PhraseProperty : AddVocabularyWordViewModelTests
+        public class PhraseProperty : ModifyVocabularyWordViewModelTests
         {
             [Fact]
             public void AssigningValue_ChangesProperty()
@@ -117,7 +117,7 @@ namespace WordTutor.Desktop.Tests
             }
         }
 
-        public class PronunciationProperty : AddVocabularyWordViewModelTests
+        public class PronunciationProperty : ModifyVocabularyWordViewModelTests
         {
             [Fact]
             public void AssigningValue_ChangesProperty()

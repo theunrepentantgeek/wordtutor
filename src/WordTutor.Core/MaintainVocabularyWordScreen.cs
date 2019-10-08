@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordTutor.Core
 {
-    public class AddVocabularyWordScreen : Screen, IEquatable<AddVocabularyWordScreen>
+    public class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen>
     {
         /// <summary>
         /// Gets the spelling currently shown on screen
@@ -22,35 +22,42 @@ namespace WordTutor.Core
         public string Phrase { get; } = string.Empty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddVocabularyWordScreen"/> class
+        /// Initializes a new instance of the <see cref="ModifyVocabularyWordScreen"/> class
         /// </summary>
-        public AddVocabularyWordScreen()
+        public ModifyVocabularyWordScreen()
         {
         }
 
-        public AddVocabularyWordScreen WithSpelling(string spelling)
+        public ModifyVocabularyWordScreen WithSpelling(string spelling)
         {
-            return new AddVocabularyWordScreen(
+            return new ModifyVocabularyWordScreen(
                 this,
                 spelling: spelling ?? string.Empty);
         }
 
-        public AddVocabularyWordScreen WithPhrase(string phrase)
+        public ModifyVocabularyWordScreen WithPhrase(string phrase)
         {
-            return new AddVocabularyWordScreen(
+            return new ModifyVocabularyWordScreen(
                 this,
                 phrase: phrase ?? string.Empty);
         }
 
-        public AddVocabularyWordScreen WithPronunciation(string pronunciation)
+        public ModifyVocabularyWordScreen WithPronunciation(string pronunciation)
         {
-            return new AddVocabularyWordScreen(
+            return new ModifyVocabularyWordScreen(
                 this,
                 pronunciation: pronunciation ?? string.Empty);
         }
 
-        protected AddVocabularyWordScreen(
-            AddVocabularyWordScreen original,
+        public VocabularyWord AsWord()
+        {
+            return new VocabularyWord(Spelling)
+                .WithPronunciation(Pronunciation)
+                .WithPhrase(Phrase);
+        }
+
+        protected ModifyVocabularyWordScreen(
+            ModifyVocabularyWordScreen original,
             string? spelling = null,
             string? pronunciation = null,
             string? phrase = null)
@@ -65,9 +72,9 @@ namespace WordTutor.Core
             Phrase = phrase ?? original.Phrase;
         }
 
-        public override bool Equals(object? other) => Equals(other as AddVocabularyWordScreen);
+        public override bool Equals(object? other) => Equals(other as ModifyVocabularyWordScreen);
 
-        public override bool Equals(Screen? other) => Equals(other as AddVocabularyWordScreen);
+        public override bool Equals(Screen? other) => Equals(other as ModifyVocabularyWordScreen);
 
         public override int GetHashCode()
         {
@@ -79,7 +86,7 @@ namespace WordTutor.Core
             }
         }
 
-        public bool Equals(AddVocabularyWordScreen? other)
+        public bool Equals(ModifyVocabularyWordScreen? other)
         {
             if (other is null)
             {

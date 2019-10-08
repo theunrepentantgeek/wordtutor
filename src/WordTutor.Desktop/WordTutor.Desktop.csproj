@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AddVocabularyWordView.xaml" />
+    <None Remove="MaintainVocabularyWordView.xaml" />
     <None Remove="VocabularyBrowserView.xaml" />
   </ItemGroup>
 

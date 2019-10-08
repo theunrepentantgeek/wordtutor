@@ -6,11 +6,11 @@ using Xunit;
 
 namespace WordTutor.Core.Tests
 {
-    public class AddVocabularyWordScreenTests
+    public class ModifyVocabularyWordScreenTests
     {
-        public class Constructor : AddVocabularyWordScreenTests
+        public class Constructor : ModifyVocabularyWordScreenTests
         {
-            private readonly AddVocabularyWordScreen _screen = new AddVocabularyWordScreen();
+            private readonly ModifyVocabularyWordScreen _screen = new ModifyVocabularyWordScreen();
 
             [Fact]
             public void CreatesScreenWithNoSpelling()
@@ -31,10 +31,10 @@ namespace WordTutor.Core.Tests
             }
         }
 
-        public class WithSpelling : AddVocabularyWordScreenTests
+        public class WithSpelling : ModifyVocabularyWordScreenTests
         {
-            private readonly AddVocabularyWordScreen _screen =
-                new AddVocabularyWordScreen()
+            private readonly ModifyVocabularyWordScreen _screen =
+                new ModifyVocabularyWordScreen()
                     .WithSpelling("Foo")
                     .WithPhrase("Do the Foo")
                     .WithPronunciation("Fu");
@@ -75,10 +75,10 @@ namespace WordTutor.Core.Tests
             }
         }
 
-        public class WithPhrase : AddVocabularyWordScreenTests
+        public class WithPhrase : ModifyVocabularyWordScreenTests
         {
-            private readonly AddVocabularyWordScreen _screen =
-                new AddVocabularyWordScreen()
+            private readonly ModifyVocabularyWordScreen _screen =
+                new ModifyVocabularyWordScreen()
                     .WithSpelling("Foo")
                     .WithPhrase("Do the Foo")
                     .WithPronunciation("Fu");
@@ -119,10 +119,10 @@ namespace WordTutor.Core.Tests
             }
         }
 
-        public class WithPronunciation : AddVocabularyWordScreenTests
+        public class WithPronunciation : ModifyVocabularyWordScreenTests
         {
-            private readonly AddVocabularyWordScreen _screen =
-                new AddVocabularyWordScreen()
+            private readonly ModifyVocabularyWordScreen _screen =
+                new ModifyVocabularyWordScreen()
                     .WithSpelling("Foo")
                     .WithPhrase("Do the Foo")
                     .WithPronunciation("Fu");

@@ -21,7 +21,7 @@ namespace WordTutor.Core.Reducers
                     return currentState.UpdateScreen(
                         (VocabularyBrowserScreen s) => s.WithSelection(m.Word));
                 case OpenNewWordScreenMessage _:
-                    return currentState.OpenScreen(new AddVocabularyWordScreen());
+                    return currentState.OpenScreen(new ModifyVocabularyWordScreen());
             }
 
             return currentState;
