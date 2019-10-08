@@ -2,7 +2,7 @@
 
 namespace WordTutor.Desktop.Tests.Fakes
 {
-    public class FakeSubscription : IDisposable
+    public sealed class FakeSubscription : IDisposable
     {
         public void Dispose() { }
     }
