@@ -176,7 +176,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
-                VocabularyWord other = null;
+                VocabularyWord? other = null;
                 _word.Equals(other).Should().BeFalse();
             }
 
@@ -223,7 +223,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
-                object other = null;
+                object? other = null;
                 _word.Equals(other).Should().BeFalse();
             }
 
