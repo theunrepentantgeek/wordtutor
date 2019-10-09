@@ -37,7 +37,7 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ModifyVocabularyWordViewModel(null));
+                        () => new ModifyVocabularyWordViewModel(null!));
                 exception.ParamName.Should().Be("store");
             }
 

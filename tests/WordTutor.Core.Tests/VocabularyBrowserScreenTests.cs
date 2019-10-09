@@ -41,7 +41,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _browser.WithSelection(null));
+                        () => _browser.WithSelection(null!));
                 exception.ParamName.Should().Be("word");
             }
 
@@ -55,7 +55,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenExistingSelection_ReturnsSameInstance()
             {
-                var browser = _browser.WithSelection(_browser.Selection);
+                var browser = _browser.WithSelection(_browser.Selection!);
                 browser.Should().BeSameAs(_browser);
             }
 

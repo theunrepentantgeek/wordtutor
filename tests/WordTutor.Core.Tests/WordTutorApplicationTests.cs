@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +25,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new WordTutorApplication(null));
+                        () => new WordTutorApplication(null!));
                 exception.ParamName.Should().Be("initialScreen");
             }
 
@@ -45,7 +45,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.OpenScreen(null));
+                        () => _app.OpenScreen(null!));
                 exception.ParamName.Should().Be("screen");
             }
 
@@ -84,7 +84,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.UpdateScreen<FakeScreen, FakeScreen>(null));
+                        () => _app.UpdateScreen<FakeScreen, FakeScreen>(null!));
                 exception.ParamName.Should().Be("transformation");
             }
 
@@ -134,7 +134,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.WithVocabularySet(null));
+                        () => _app.WithVocabularySet(null!));
                 exception.ParamName.Should().Be("vocabularySet");
             }
 
@@ -160,14 +160,14 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                  Assert.Throws<ArgumentNullException>(
-                     () => _app.UpdateVocabularySet(null));
+                     () => _app.UpdateVocabularySet(null!));
                 exception.ParamName.Should().Be("transformation");
             }
 
             [Fact]
             public void GivenTransformation_ItReceivesCurrentVocabularySet()
             {
-                VocabularySet set = null;
+                VocabularySet? set = null;
                 var app = _app.UpdateVocabularySet(
                     s =>
                     {

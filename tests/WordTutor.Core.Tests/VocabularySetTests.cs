@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using Xunit;
 
@@ -43,7 +43,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                    () => _set.WithName(null));
+                    () => _set.WithName(null!));
                 exception.ParamName.Should().Be("name");
             }
 
@@ -78,7 +78,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _empty.Add(null));
+                        () => _empty.Add(null!));
                 exception.ParamName.Should().Be("word");
             }
 
@@ -117,7 +117,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _set.Remove(null));
+                        () => _set.Remove(null!));
             }
 
             [Fact]
@@ -144,7 +144,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                    Assert.Throws<ArgumentNullException>(
-                       () => _set.Replace(null, _gamma));
+                       () => _set.Replace(null!, _gamma));
                 exception.ParamName.Should().Be("existing");
             }
 
@@ -153,7 +153,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _set.Replace(_alpha, null));
+                        () => _set.Replace(_alpha, null!));
                 exception.ParamName.Should().Be("replacement");
             }
 
@@ -195,7 +195,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _set.Update(null, w => w.WithSpelling("alfa")));
+                        () => _set.Update(null!, w => w.WithSpelling("alfa")));
                 exception.ParamName.Should().Be("word");
             }
 
@@ -204,7 +204,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _set.Update("alpha", null));
+                        () => _set.Update("alpha", null!));
                 exception.ParamName.Should().Be("transform");
             }
 
@@ -258,7 +258,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
-                VocabularySet other = null;
+                VocabularySet other = null!;
                 _set.Equals(other).Should().BeFalse();
             }
 
