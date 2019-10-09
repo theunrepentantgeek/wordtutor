@@ -313,7 +313,7 @@ namespace WordTutor.Core.Tests
             public void GivenSelf_ReturnsTrue()
             {
                 object other = _set;
-                _set.Equals(_set).Should().BeTrue();
+                _set.Equals(other).Should().BeTrue();
             }
 
             [Fact]
