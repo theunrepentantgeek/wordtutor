@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using System;
 using Xunit;
 
@@ -50,7 +50,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenName_ReturnsSetWithNewName()
             {
-                var newName = "Not the same";
+                const string newName = "Not the same";
                 var set = _set.WithName(newName);
                 set.Name.Should().Be(newName);
             }

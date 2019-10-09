@@ -70,7 +70,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void FirstPublication_InvokesWhenChangedWithValue()
             {
-                var state = "sample";
+                const string state = "sample";
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
                 _lastWhenCalledValue.Should().Be(6);
@@ -79,7 +79,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void DuplicatePublication_DoesNotInvokeWhenChanged()
             {
-                var state = "sample";
+                const string state = "sample";
                 _subscription.Publish(state);
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
@@ -113,11 +113,11 @@ namespace WordTutor.Core.Tests.ReduxTests
                     subscription.Publish("bang");
                 }
             }
-        
+
             [Fact]
             public void FirstPublicationWhenValueIsDefaultForType_DoesInvokeSubscription()
             {
-                var state = ""; // Length of empty string is default value for int
+                const string state = ""; // Length of empty string is default value for int
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
                 _lastWhenCalledValue.Should().Be(0);
