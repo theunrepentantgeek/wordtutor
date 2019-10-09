@@ -9,3 +9,8 @@ using System.Diagnostics.CodeAnalysis;
     "Naming",
     "CA1715:Identifiers should have correct prefix",
     Justification = "This project uses single capital letters for type parameters")]
+
+[assembly: SuppressMessage(
+    "Globalization",
+    "CA1303:Do not pass literals as localized parameters",
+    Justification = "Literals used for exceptions")]
