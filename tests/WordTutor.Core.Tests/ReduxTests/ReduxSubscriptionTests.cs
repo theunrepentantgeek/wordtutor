@@ -107,7 +107,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                     WhenReleased);
                 subscription.Publish("bang");
 
-                void ValueChanged(int value)
+                void ValueChanged(int _)
                 {
                     loopCount++.Should().BeLessThan(10);
                     subscription.Publish("bang");

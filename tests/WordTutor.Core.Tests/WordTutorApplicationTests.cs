@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -92,7 +92,7 @@ namespace WordTutor.Core.Tests
             public void WhenTransformationReturnsScreen_UpdatesScreen()
             {
                 var screen = new FakeScreen();
-                var app = _app.UpdateScreen((FakeScreen s) => screen);
+                var app = _app.UpdateScreen((FakeScreen _) => screen);
                 app.CurrentScreen.Should().Be(screen);
             }
 
@@ -110,7 +110,7 @@ namespace WordTutor.Core.Tests
                 var beta = new FakeScreen();
                 var current = _app.CurrentScreen;
                 var app = _app.OpenScreen(alpha)
-                    .UpdateScreen((FakeScreen s) => beta)
+                    .UpdateScreen((FakeScreen _) => beta)
                     .CloseScreen();
                 app.CurrentScreen.Should().Be(current);
             }
@@ -182,7 +182,7 @@ namespace WordTutor.Core.Tests
             {
                 var alpha = new VocabularyWord("alpha");
                 var set = _app.VocabularySet.Add(alpha);
-                var app = _app.UpdateVocabularySet(s => set);
+                var app = _app.UpdateVocabularySet(_ => set);
                 app.VocabularySet.Should().Be(set);
             }
 
