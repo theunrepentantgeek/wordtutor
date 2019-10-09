@@ -11,13 +11,14 @@ namespace WordTutor.Desktop
         private readonly IDisposable _screenSubscription;
 
         private ViewModelBase _currentScreen;
-
+        
         public WordTutorViewModel(
             IReduxStore<WordTutorApplication> store,
             ViewModelFactory factory)
         {
-            _store = store;
-            _factory = factory;
+            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+
             _currentScreen = _factory.Create(_store.State.CurrentScreen);
 
             _screenSubscription = _store.SubscribeToReference(

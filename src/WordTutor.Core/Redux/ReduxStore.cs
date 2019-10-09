@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,6 +33,11 @@ namespace WordTutor.Core.Redux
             IReduxReducer<T> reducer,
             IReduxStateFactory<T> initialStateFactory)
         {
+            if (initialStateFactory is null)
+            {
+                throw new ArgumentNullException(nameof(initialStateFactory));
+            }
+
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
             State = initialStateFactory.Create();
         }

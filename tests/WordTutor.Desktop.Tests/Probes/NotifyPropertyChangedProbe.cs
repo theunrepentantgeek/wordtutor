@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System;
 using System.ComponentModel;
 
 namespace WordTutor.Desktop.Tests.Probes
@@ -10,7 +11,7 @@ namespace WordTutor.Desktop.Tests.Probes
 
         public NotifyPropertyChangedProbe(INotifyPropertyChanged model)
         {
-            _model = model;
+            _model = model ?? throw new ArgumentNullException(nameof(model));
             _model.PropertyChanged += (_, a) => _args = a;
         }
 

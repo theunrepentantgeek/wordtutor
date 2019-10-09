@@ -1,4 +1,5 @@
-﻿using WordTutor.Core.Actions;
+﻿using System;
+using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
 
 namespace WordTutor.Core.Reducers
@@ -7,12 +8,17 @@ namespace WordTutor.Core.Reducers
     {
         public WordTutorApplication Reduce(IReduxMessage message, WordTutorApplication currentState)
         {
+            if (currentState is null)
+            {
+                throw new ArgumentNullException(nameof(currentState));
+            }
+
             if (!(currentState.CurrentScreen is VocabularyBrowserScreen))
             {
                 return currentState;
             }
 
-            switch(message)
+            switch(message ?? throw new ArgumentNullException(nameof(message)))
             {
                 case ClearSelectedWordMessage _:
                     return currentState.UpdateScreen(

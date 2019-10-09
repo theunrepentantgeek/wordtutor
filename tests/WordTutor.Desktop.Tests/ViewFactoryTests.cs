@@ -30,6 +30,11 @@ namespace WordTutor.Desktop.Tests
         [MemberData(nameof(FindViewModelTypes))]
         public void FindViewType_WhenGivenViewModelType_FindsSuitableViewType(Type viewModelType)
         {
+            if (viewModelType is null)
+            {
+                throw new ArgumentNullException(nameof(viewModelType));
+            }
+
             ViewFactory.FindViewType(viewModelType)
                 .Should().NotBeNull($"ViewModelType type {viewModelType.Name} should have a matching View");
         }

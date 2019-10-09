@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System;
 using WordTutor.Core.Actions;
 using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
@@ -53,7 +54,14 @@ namespace WordTutor.Core.Tests
                 .WithVocabularySet(words);
 
         public static WordTutorApplication CurrentScreenIs(WordTutorApplication application, Screen screen)
-            => application.UpdateScreen<Screen, Screen>(_ => screen);
+        {
+            if (application is null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
+
+            return application.UpdateScreen<Screen, Screen>(_ => screen);
+        }
 
         public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; } = new ModifyVocabularyWordScreen();
 
@@ -69,6 +77,13 @@ namespace WordTutor.Core.Tests
 
         public static void AssertTheCurrentScreenIs<S>(WordTutorApplication application)
             where S : Screen
-            => application.CurrentScreen.Should().BeOfType<S>();
+        {
+            if (application is null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
+
+            application.CurrentScreen.Should().BeOfType<S>();
+        }
     }
 }
