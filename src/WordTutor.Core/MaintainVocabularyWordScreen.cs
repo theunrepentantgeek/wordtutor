@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordTutor.Core
 {
-    public class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen>
+    public class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen?>
     {
         /// <summary>
         /// Gets the spelling currently shown on screen

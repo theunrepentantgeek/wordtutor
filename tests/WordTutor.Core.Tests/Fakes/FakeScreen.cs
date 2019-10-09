@@ -5,6 +5,8 @@
     /// </summary>
     public class FakeScreen : Screen
     {
-        public override bool Equals(Screen other) => other is FakeScreen;
+        public override bool Equals(Screen? other) => other is FakeScreen;
+
+        public override int GetHashCode() => 1;
     }
 }
