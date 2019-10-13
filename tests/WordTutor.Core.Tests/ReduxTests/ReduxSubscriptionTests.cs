@@ -105,11 +105,13 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 int loopCount = 0;
                 ReduxValueSubscription<string, int> subscription = null!;
-                subscription = new ReduxValueSubscription<string, int>(
+                using (subscription = new ReduxValueSubscription<string, int>(
                     s => s.Length,
                     ValueChanged,
-                    WhenReleased);
-                subscription.Publish("bang");
+                    WhenReleased))
+                {
+                    subscription.Publish("bang");
+                }
 
                 void ValueChanged(int _)
                 {
