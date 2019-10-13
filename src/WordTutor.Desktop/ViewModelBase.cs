@@ -85,6 +85,10 @@ namespace WordTutor.Desktop
             whenChanged?.Invoke(newValue);
         }
 
+        [SuppressMessage(
+            "Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            Justification = "Exception message doesn't need localization")]
         public void UpdateCollection<T>(
             ObservableCollection<T> member,
             IEnumerable<T> newList,
@@ -116,6 +120,10 @@ namespace WordTutor.Desktop
             OnPropertyChanged(property!);
         }
 
+        [SuppressMessage(
+            "Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            Justification = "Don't need to localize exception messages.")]
         public void ClearCollection<T>(
             ObservableCollection<T> member,
             [CallerMemberName]string? property = null)
