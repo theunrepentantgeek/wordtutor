@@ -13,7 +13,7 @@ public static class Program
     [STAThread]
     static void Main()
     {
-        var container = CreateContainer();
+        using var container = CreateContainer();
 
         var app = new App();
 
