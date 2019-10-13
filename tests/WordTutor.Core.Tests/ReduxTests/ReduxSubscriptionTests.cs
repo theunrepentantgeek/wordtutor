@@ -13,6 +13,10 @@ namespace WordTutor.Core.Tests.ReduxTests
         private int _lastWhenCalledValue;
         private ReduxSubscription<string>? _releasedSubscription;
 
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test doesn't pass null here.")]
         protected static int Reader(string value) => value.Length;
 
         protected void WhenChanged(int value)
