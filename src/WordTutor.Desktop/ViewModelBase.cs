@@ -34,7 +34,7 @@ namespace WordTutor.Desktop
             [CallerMemberName] string? property = null)
             where T : struct, IEquatable<T>
         {
-            if (member.Equals(newValue) == true)
+            if (member.Equals(newValue))
             {
                 return;
             }
@@ -106,7 +106,7 @@ namespace WordTutor.Desktop
                 throw new ArgumentNullException(nameof(newList));
             }
 
-            if (Enumerable.SequenceEqual(member, newList))
+            if (member.SequenceEqual(newList))
             {
                 return;
             }

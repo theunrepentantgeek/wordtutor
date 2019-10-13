@@ -10,7 +10,6 @@ namespace WordTutor.Desktop
     public sealed class VocabularyBrowserViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
-        private readonly ObservableCollection<VocabularyWord> _words;
         private readonly IDisposable _screenSubscription;
         private readonly IDisposable _vocabularySubscription;
 
@@ -26,7 +25,7 @@ namespace WordTutor.Desktop
 
             _selection = screen.Selection;
             _modified = screen.Modified;
-            _words = new ObservableCollection<VocabularyWord>(
+            Words = new ObservableCollection<VocabularyWord>(
                 vocab.OrderBy(w => w.Spelling));
 
             _screenSubscription = _store.SubscribeToReference(
@@ -56,10 +55,7 @@ namespace WordTutor.Desktop
             set => UpdateValueProperty(ref _modified, value);
         }
 
-        public ObservableCollection<VocabularyWord> Words
-        {
-            get => _words;
-        }
+        public ObservableCollection<VocabularyWord> Words { get; }
 
         public RoutedCommandSink AddWordCommand { get; }
 
@@ -82,14 +78,14 @@ namespace WordTutor.Desktop
         {
             if (vocabularySet is null)
             {
-                ClearCollection(_words);
+                ClearCollection(Words);
             }
             else
             {
                 var words = vocabularySet.Words
                     .OrderBy(w => w.Spelling)
                     .ToList();
-                UpdateCollection(_words, words);
+                UpdateCollection(Words, words);
             }
         }
 
