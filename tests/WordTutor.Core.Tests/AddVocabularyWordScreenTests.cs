@@ -56,7 +56,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNullSpelling_UpdatesPropertyToEmpty()
             {
-                _screen.WithSpelling(null).Spelling
+                _screen.WithSpelling(null!).Spelling
                     .Should().Be(string.Empty);
             }
 
@@ -100,7 +100,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNullPhrase_UpdatesPropertyToEmpty()
             {
-                _screen.WithPhrase(null)
+                _screen.WithPhrase(null!)
                     .Phrase.Should().Be(string.Empty);
             }
 
@@ -144,7 +144,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNullPronunciation_UpdatesPropertyToEmpty()
             {
-                _screen.WithPronunciation(null)
+                _screen.WithPronunciation(null!)
                     .Pronunciation.Should().Be(string.Empty);
             }
 

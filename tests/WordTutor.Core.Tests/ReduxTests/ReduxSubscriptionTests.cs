@@ -11,7 +11,7 @@ namespace WordTutor.Core.Tests.ReduxTests
         private int _whenCalledCount;
         private int _whenReleasedCount;
         private int _lastWhenCalledValue;
-        private ReduxSubscription<string> _releasedSubscription;
+        private ReduxSubscription<string>? _releasedSubscription;
 
         protected static int Reader(string value) => value.Length;
 
@@ -34,7 +34,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ReduxSubscription<string, int>(null, WhenChanged, WhenReleased));
+                        () => new ReduxValueSubscription<string, int>(null!, WhenChanged, WhenReleased));
             }
 
             [Fact]
@@ -42,7 +42,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ReduxSubscription<string, int>(Reader, null, WhenReleased));
+                        () => new ReduxValueSubscription<string, int>(Reader, null!, WhenReleased));
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                    Assert.Throws<ArgumentNullException>(
-                       () => new ReduxSubscription<string, int>(Reader, WhenChanged, null));
+                       () => new ReduxValueSubscription<string, int>(Reader, WhenChanged, null!));
             }
         }
 
@@ -60,11 +60,11 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class PublishTests : ReduxSubscriptionTests
         {
-            private ReduxSubscription<string, int> _subscription;
+            private ReduxValueSubscription<string, int> _subscription;
 
             public PublishTests()
             {
-                _subscription = new ReduxSubscription<string, int>(Reader, WhenChanged, WhenReleased);
+                _subscription = new ReduxValueSubscription<string, int>(Reader, WhenChanged, WhenReleased);
             }
 
             [Fact]
@@ -100,8 +100,8 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void CircularUpdates_DoNotLoopForever()
             {
                 int loopCount = 0;
-                ReduxSubscription<string, int> subscription = null;
-                subscription = new ReduxSubscription<string, int>(
+                ReduxValueSubscription<string, int> subscription = null!;
+                subscription = new ReduxValueSubscription<string, int>(
                     s => s.Length,
                     ValueChanged,
                     WhenReleased);
@@ -130,11 +130,11 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class DisposalTests : ReduxSubscriptionTests
         {
-            private ReduxSubscription<string, int> _subscription;
+            private ReduxValueSubscription<string, int> _subscription;
 
             public DisposalTests()
             {
-                _subscription = new ReduxSubscription<string, int>(
+                _subscription = new ReduxValueSubscription<string, int>(
                     Reader, WhenChanged, WhenReleased);
             }
 

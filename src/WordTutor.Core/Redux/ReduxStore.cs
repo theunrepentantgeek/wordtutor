@@ -72,16 +72,38 @@ namespace WordTutor.Core.Redux
         /// Create a subscription to be notified of changes to our state
         /// </summary>
         /// <typeparam name="V">Type of value being monitored</typeparam>
-        /// <param name="reader">Reader used to access a value from the store.</param>
+        /// <param name="referenceReader">Reader used to access a reference from the store.</param>
+        /// <param name="whenChanged">Action to invoke when the reference changes.</param>
+        /// <returns>Subscription object; disposal release the subscription.</returns>
+        public IDisposable SubscribeToReference<V>(
+            Func<T, V?> referenceReader,
+            Action<V?> whenChanged)
+            where V : class, IEquatable<V>?
+        {
+            var subscription = new ReduxReferenceSubscription<T, V>(
+                referenceReader ?? throw new ArgumentNullException(nameof(referenceReader)),
+                whenChanged ?? throw new ArgumentNullException(nameof(whenChanged)),
+                ReleaseSubscription);
+
+            _subscriptions.Add(subscription);
+
+            return subscription;
+        }
+
+        /// <summary>
+        /// Create a subscription to be notified of changes to our state
+        /// </summary>
+        /// <typeparam name="V">Type of value being monitored</typeparam>
+        /// <param name="valueReader">Reader used to access a value from the store.</param>
         /// <param name="whenChanged">Action to invoke when the value changes.</param>
         /// <returns>Subscription object; disposal release the subscription.</returns>
-        public IDisposable Subscribe<V>(
-            Func<T, V> reader,
+        public IDisposable SubscribeToValue<V>(
+            Func<T, V> valueReader,
             Action<V> whenChanged)
-            where V : IEquatable<V>
+            where V : struct, IEquatable<V>
         {
-            var subscription = new ReduxSubscription<T, V>(
-                reader ?? throw new ArgumentNullException(nameof(reader)),
+            var subscription = new ReduxValueSubscription<T, V>(
+                valueReader ?? throw new ArgumentNullException(nameof(valueReader)),
                 whenChanged ?? throw new ArgumentNullException(nameof(whenChanged)),
                 ReleaseSubscription);
 

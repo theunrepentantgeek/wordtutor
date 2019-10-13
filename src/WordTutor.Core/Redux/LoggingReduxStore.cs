@@ -20,8 +20,22 @@ namespace WordTutor.Core.Redux
             _store.Dispatch(message);
         }
 
-        public IDisposable Subscribe<V>(Func<T, V> reader, Action<V> whenChanged)
-            where V : IEquatable<V> 
-            => _store.Subscribe(reader, whenChanged);
+        public IDisposable SubscribeToReference<V>(
+            Func<T, V?> referenceReader,
+            Action<V?> whenChanged)
+            where V : class, IEquatable<V>?
+        {
+            Debug.WriteLine($"Subscribing to {typeof(V).Name}.");
+            return _store.SubscribeToReference(referenceReader, whenChanged);
+        }
+
+        public IDisposable SubscribeToValue<V>(
+            Func<T, V> valueReader, 
+            Action<V> whenChanged) 
+            where V : struct, IEquatable<V>
+        {
+            Debug.WriteLine($"Subscribing to {typeof(V).Name}.");
+            return _store.SubscribeToValue(valueReader, whenChanged);
+        }
     }
 }

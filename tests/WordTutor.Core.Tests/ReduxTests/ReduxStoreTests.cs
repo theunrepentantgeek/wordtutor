@@ -25,7 +25,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ReduxStore<string>(null, _initialStateFactory));
+                        () => new ReduxStore<string>(null!, _initialStateFactory));
                 exception.ParamName.Should().Be("reducer");
             }
 
@@ -46,14 +46,14 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _store.Dispatch(null));
+                        () => _store.Dispatch(null!));
                 exception.ParamName.Should().Be("message");
             }
 
             [Fact]
             public void GivenMessage_CallsReducerWithMessage()
             {
-                FakeMessage receivedMessage = null;
+                FakeMessage? receivedMessage = null;
                 _reducer.Reduce = CaptureMessage;
 
                 _store.Dispatch(_message);
@@ -70,7 +70,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void GivenMessage_CallsReducerWithState()
             {
                 string initialState = _store.State;
-                string receivedState = null;
+                string receivedState = null!;
                 _reducer.Reduce = CaptureState;
 
                 _store.Dispatch(_message);
@@ -119,14 +119,14 @@ namespace WordTutor.Core.Tests.ReduxTests
 
         public class Subscribe : ReduxStoreTests
         {
-            private string _handledValue;
+            private string? _handledValue;
 
             public Subscribe()
             {
                 _reducer.Reduce = (m, s)
                     => m is FakeMessage f
-                    ? f.Id
-                    : s;
+                        ? f.Id
+                        : s;
             }
 
             [Fact]
@@ -134,7 +134,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _store.Subscribe<string>(null, HandleUpdate));
+                        () => _store.SubscribeToReference<string>(null!, HandleUpdate));
                 exception.ParamName.Should().Be("reader");
             }
 
@@ -143,21 +143,21 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 var exception =
                    Assert.Throws<ArgumentNullException>(
-                       () => _store.Subscribe<string>(ReadValue, null));
+                       () => _store.SubscribeToReference<string>(ReadValue, null!));
                 exception.ParamName.Should().Be("whenChanged");
             }
 
             [Fact]
             public void GivenValidParameters_ReturnsSubscription()
             {
-                _store.Subscribe(ReadValue, HandleUpdate).Should().NotBeNull();
+                _store.SubscribeToReference(ReadValue, HandleUpdate).Should().NotBeNull();
             }
 
             [Fact]
             public void WhenSubscribed_ReceivesNotificationForChangesOfState()
             {
                 var message = new FakeMessage("foo");
-                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                using (var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate))
                 {
                     _store.Dispatch(message);
                     _handledValue.Should().Be(message.Id);
@@ -168,7 +168,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void WhenSubscribed_DoesNotReceiveNotificationIfValueUnchanged()
             {
                 var message = new FakeMessage(_store.State);
-                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                using (var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate))
                 {
                 }
 
@@ -180,7 +180,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void AfterSubscriptionReleased_SubscriptionCountIsReduced()
             {
                 int subscriptionCount;
-                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                using (var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate))
                 {
                     subscriptionCount = _store.SubscriptionCount;
                 }
@@ -192,7 +192,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void AfterSubscriptionReleased_DoesNotReceiveNotification()
             {
                 var message = new FakeMessage("foo");
-                using (var subscription = _store.Subscribe(ReadValue, HandleUpdate))
+                using (var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate))
                 {
                 }
 
@@ -200,7 +200,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 _handledValue.Should().BeNull();
             }
 
-            private void HandleUpdate(string value)
+            private void HandleUpdate(string? value)
             {
                 _handledValue = value;
             }

@@ -14,7 +14,7 @@ namespace WordTutor.Desktop
         private readonly IDisposable _screenSubscription;
         private readonly IDisposable _vocabularySubscription;
 
-        private VocabularyWord _selection;
+        private VocabularyWord? _selection;
         private bool _modified;
 
         public VocabularyBrowserViewModel(IReduxStore<WordTutorApplication> store)
@@ -29,11 +29,11 @@ namespace WordTutor.Desktop
             _words = new ObservableCollection<VocabularyWord>(
                 vocab.OrderBy(w => w.Spelling));
 
-            _screenSubscription = _store.Subscribe(
+            _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as VocabularyBrowserScreen,
                 RefreshFromScreen);
 
-            _vocabularySubscription = _store.Subscribe(
+            _vocabularySubscription = _store.SubscribeToReference(
                 app => app.VocabularySet,
                 RefreshFromVocabularySet);
 
@@ -41,10 +41,10 @@ namespace WordTutor.Desktop
                 new RoutedCommandSink(ItemCommands.New, AddWord);
         }
 
-        public VocabularyWord Selection
+        public VocabularyWord? Selection
         {
             get => _selection;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _selection,
                 value,
                 sel => _store.Dispatch(CreateSelectionMessage(sel)));
@@ -53,7 +53,7 @@ namespace WordTutor.Desktop
         public bool Modified
         {
             get => _modified;
-            set => UpdateProperty(ref _modified, value);
+            set => UpdateValueProperty(ref _modified, value);
         }
 
         public ObservableCollection<VocabularyWord> Words
@@ -65,7 +65,7 @@ namespace WordTutor.Desktop
 
         public void AddWord() => _store.Dispatch(new OpenNewWordScreenMessage());
 
-        private void RefreshFromScreen(VocabularyBrowserScreen screen)
+        private void RefreshFromScreen(VocabularyBrowserScreen? screen)
         {
             if (screen == null)
             {
@@ -78,15 +78,22 @@ namespace WordTutor.Desktop
             Modified = screen.Modified;
         }
 
-        private void RefreshFromVocabularySet(VocabularySet vocabularySet)
+        private void RefreshFromVocabularySet(VocabularySet? vocabularySet)
         {
-            var words = vocabularySet.Words
-                .OrderBy(w => w.Spelling)
-                .ToList();
-            UpdateCollection(_words, words);
+            if (vocabularySet is null)
+            {
+                ClearCollection(_words);
+            }
+            else
+            {
+                var words = vocabularySet.Words
+                    .OrderBy(w => w.Spelling)
+                    .ToList();
+                UpdateCollection(_words, words);
+            }
         }
 
-        private static IReduxMessage CreateSelectionMessage(VocabularyWord selection)
+        private static IReduxMessage CreateSelectionMessage(VocabularyWord? selection)
         {
             if (selection is null)
             {

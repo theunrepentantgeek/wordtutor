@@ -17,9 +17,9 @@ namespace WordTutor.Desktop
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         // Captured synchronization context so we always dispatch events on the UX thread
-        private readonly SynchronizationContext _synchronizationContext;
+        private readonly SynchronizationContext? _synchronizationContext;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected ViewModelBase()
         {
@@ -27,12 +27,30 @@ namespace WordTutor.Desktop
             _synchronizationContext = SynchronizationContext.Current;
         }
 
-        protected void UpdateProperty<T>(
+        protected void UpdateValueProperty<T>(
             ref T member,
             T newValue,
-            Action<T> whenChanged = null,
-            [CallerMemberName] string property = null)
-            where T : IEquatable<T>
+            Action<T>? whenChanged = null,
+            [CallerMemberName] string? property = null)
+            where T : struct, IEquatable<T>
+        {
+            if (member.Equals(newValue) == true)
+            {
+                return;
+            }
+
+            member = newValue;
+            OnPropertyChanged(property!);
+
+            whenChanged?.Invoke(newValue);
+        }
+
+        protected void UpdateReferenceProperty<T>(
+            ref T member,
+            T newValue,
+            Action<T>? whenChanged = null,
+            [CallerMemberName] string? property = null)
+            where T : class?, IEquatable<T>?
         {
             if (member?.Equals(newValue) == true)
             {
@@ -40,7 +58,7 @@ namespace WordTutor.Desktop
             }
 
             member = newValue;
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
 
             whenChanged?.Invoke(newValue);
         }
@@ -52,8 +70,8 @@ namespace WordTutor.Desktop
         protected void UpdateEnumProperty<E>(
             ref E member,
             E newValue,
-            Action<E> whenChanged = null,
-            [CallerMemberName] string property = null)
+            Action<E>? whenChanged = null,
+            [CallerMemberName] string? property = null)
             where E : Enum
         {
             if (member?.Equals(newValue) == true)
@@ -62,7 +80,7 @@ namespace WordTutor.Desktop
             }
 
             member = newValue;
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
 
             whenChanged?.Invoke(newValue);
         }
@@ -70,7 +88,7 @@ namespace WordTutor.Desktop
         public void UpdateCollection<T>(
             ObservableCollection<T> member,
             IEnumerable<T> newList,
-            [CallerMemberName]string property = null)
+            [CallerMemberName]string? property = null)
         {
             if (member is null)
             {
@@ -95,7 +113,25 @@ namespace WordTutor.Desktop
                 member.Add(item);
             }
 
-            OnPropertyChanged(property);
+            OnPropertyChanged(property!);
+        }
+
+        public void ClearCollection<T>(
+            ObservableCollection<T> member,
+            [CallerMemberName]string? property = null)
+        {
+            if (member is null)
+            {
+                throw new ArgumentException(
+                    "Member collection should never be null",
+                    nameof(member));
+            }
+
+            if (member.Count > 0)
+            {
+                member.Clear();
+                OnPropertyChanged(property!);
+            }
         }
 
         protected void OnPropertyChanged(string property)

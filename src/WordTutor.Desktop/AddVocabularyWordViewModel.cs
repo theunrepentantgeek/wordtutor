@@ -23,7 +23,7 @@ namespace WordTutor.Desktop
             _phrase = screen?.Phrase ?? string.Empty;
             _pronunciation = screen?.Pronunciation ?? string.Empty;
 
-            _screenSubscription = _store.Subscribe(
+            _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as AddVocabularyWordScreen,
                 RefreshFromScreen);
         }
@@ -31,7 +31,7 @@ namespace WordTutor.Desktop
         public string Spelling
         {
             get => _spelling;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _spelling,
                 value,
                 sp => _store.Dispatch(new ModifySpellingMessage(sp)));
@@ -40,7 +40,7 @@ namespace WordTutor.Desktop
         public string Phrase
         {
             get => _phrase;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _phrase,
                 value,
                 ph => _store.Dispatch(new ModifyPhraseMessage(ph)));
@@ -49,13 +49,13 @@ namespace WordTutor.Desktop
         public string Pronunciation
         {
             get => _pronunciation;
-            set => UpdateProperty(
+            set => UpdateReferenceProperty(
                 ref _pronunciation,
                 value,
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
-        private void RefreshFromScreen(AddVocabularyWordScreen screen)
+        private void RefreshFromScreen(AddVocabularyWordScreen? screen)
         {
             if (screen is null)
             {

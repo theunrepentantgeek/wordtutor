@@ -29,7 +29,7 @@ namespace WordTutor.Desktop
             : base(command)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = null;
+            _canExecute = () => true;
         }
 
         /// <summary>
@@ -105,12 +105,12 @@ namespace WordTutor.Desktop
         /// <param name="command">Command we provide.</param>
         /// <param name="execute">Action to trigger</param>
         public RoutedCommandSink(
-            RoutedCommand command, 
+            RoutedCommand command,
             Action<T> execute)
             : base(command)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = null;
+            _canExecute = _ => true;
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace WordTutor.Desktop
         /// <param name="execute">Action to trigger</param>
         /// <param name="canExecute">Predicate used to control access to the action.</param>
         public RoutedCommandSink(
-            RoutedCommand command, 
-            Action<T> execute, 
+            RoutedCommand command,
+            Action<T> execute,
             Func<T, bool> canExecute)
             : base(command)
         {
@@ -137,9 +137,9 @@ namespace WordTutor.Desktop
         /// <param name="canExecute">Predicate used to control access to the action.</param>
         /// <param name="host">Host that is providing the action.</param>
         public RoutedCommandSink(
-            RoutedCommand command, 
-            Action<T> execute, 
-            Func<T, bool> canExecute, 
+            RoutedCommand command,
+            Action<T> execute,
+            Func<T, bool> canExecute,
             INotifyPropertyChanged host)
             : base(command, host)
         {
@@ -171,11 +171,6 @@ namespace WordTutor.Desktop
         /// <returns>True if this command is available, false otherwise.</returns>
         protected override bool CanExecuteCore(object parameter)
         {
-            if (_canExecute == null)
-            {
-                return true;
-            }
-
             return parameter is T actual && _canExecute(actual);
         }
     }

@@ -63,8 +63,18 @@ namespace WordTutor.Desktop.Tests.Fakes
                 $"did not expect to have received a message of type '{typeof(M).Name}'");
         }
 
-        public IDisposable Subscribe<V>(Func<WordTutorApplication, V> reader, Action<V> whenChanged)
-            where V : IEquatable<V>
+        public IDisposable SubscribeToReference<V>(
+            Func<WordTutorApplication, V?> referenceReader,
+            Action<V?> whenChanged)
+            where V : class, IEquatable<V>?
+        {
+            return new FakeSubscription();
+        }
+
+        public IDisposable SubscribeToValue<V>(
+            Func<WordTutorApplication, V> valueReader,
+            Action<V> whenChanged)
+            where V : struct, IEquatable<V>
         {
             return new FakeSubscription();
         }

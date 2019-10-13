@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WordTutor.Core;
 using WordTutor.Core.Redux;
 
@@ -20,7 +20,7 @@ namespace WordTutor.Desktop
             _factory = factory;
             _currentScreen = _factory.Create(_store.State.CurrentScreen);
 
-            _screenSubscription = _store.Subscribe(
+            _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen,
                 RefreshFromScreen);
         }
@@ -38,8 +38,13 @@ namespace WordTutor.Desktop
             }
         }
 
-        private void RefreshFromScreen(Screen screen)
+        private void RefreshFromScreen(Screen? screen)
         {
+            if (screen is null)
+            {
+                return;
+            }
+
             // Only need a new instance if the screen type changes
             // As long as the type of screen is unchanged, 
             // the exiting ViewModel will update

@@ -71,7 +71,7 @@ namespace WordTutor.Desktop.Tests
                 public int Count
                 {
                     get => _count;
-                    set => UpdateProperty(ref _count, value, _ => Modified = true);
+                    set => UpdateValueProperty(ref _count, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -142,7 +142,7 @@ namespace WordTutor.Desktop.Tests
                 public string Name
                 {
                     get => _name;
-                    set => UpdateProperty(ref _name, value, _ => Modified = true);
+                    set => UpdateReferenceProperty(ref _name, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -221,7 +221,7 @@ namespace WordTutor.Desktop.Tests
                 public DateTimeOffset Start
                 {
                     get => _start;
-                    set => UpdateProperty(ref _start, value, _ => Modified = true);
+                    set => UpdateValueProperty(ref _start, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -301,7 +301,7 @@ namespace WordTutor.Desktop.Tests
                 public TimeSpan Duration
                 {
                     get => _duration;
-                    set => UpdateProperty(ref _duration, value, _ => Modified = true);
+                    set => UpdateValueProperty(ref _duration, value, _ => Modified = true);
                 }
 
                 public bool Modified { get; set; }
@@ -392,11 +392,11 @@ namespace WordTutor.Desktop.Tests
         {
             private readonly FakeViewModel<string> _viewModel;
 
-            private string _lastValueSeen;
+            private string? _lastValueSeen = null;
 
             public ModelPropertyTests()
             {
-                _viewModel = new FakeViewModel<string>(WhenUpdated);
+                _viewModel = new FakeViewModel<string>("", WhenUpdated);
             }
 
             [Fact]
@@ -413,7 +413,7 @@ namespace WordTutor.Desktop.Tests
                 _lastValueSeen.Should().Be("newValue");
             }
 
-            private void WhenUpdated(string newModel)
+            private void WhenUpdated(string? newModel)
             {
                 _lastValueSeen = newModel;
             }
