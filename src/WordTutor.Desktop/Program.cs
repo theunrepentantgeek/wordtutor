@@ -11,10 +11,9 @@ using WordTutor.Desktop;
 public static class Program
 {
     [STAThread]
-    static void Main()
+    public static void Main()
     {
         using var container = CreateContainer();
-
         var app = new App();
 
         var factory = container.GetInstance<ViewFactory>();
