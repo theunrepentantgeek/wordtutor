@@ -58,18 +58,7 @@ namespace WordTutor.Desktop
         public ModifyVocabularyWordScreen? Screen
             => _store.State.CurrentScreen as ModifyVocabularyWordScreen;
 
-        public RoutedCommandSink SaveCommand { get; }
-
-        public bool CanSave() => !(Screen is null);
-
-        public void Save()
-        {
-            var word = Screen.AsWord();
-            var message = new SaveNewVocabularyWordMessage(word);
-            _store.Dispatch(message);
-        }
-
-        private void RefreshFromScreen(ModifyVocabularyWordScreen screen)
+        private void RefreshFromScreen(ModifyVocabularyWordScreen? screen)
         {
             if (screen is null)
             {
