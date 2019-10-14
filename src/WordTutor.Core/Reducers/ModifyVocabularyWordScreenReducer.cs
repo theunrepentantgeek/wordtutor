@@ -18,25 +18,22 @@ namespace WordTutor.Core.Reducers
                 return currentState;
             }
 
-            switch (message ?? throw new ArgumentNullException(nameof(message)))
-            {
-                case ModifyPhraseMessage m:
-                    return currentState.UpdateScreen(
-                        (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase));
+            return (message ?? throw new ArgumentNullException(nameof(message)))
+                switch
+                {
+                    ModifyPhraseMessage m => currentState.UpdateScreen(
+                           (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
 
-                case ModifyPronunciationMessage m:
-                    return currentState.UpdateScreen(
-                        (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation));
+                    ModifyPronunciationMessage m => currentState.UpdateScreen(
+                            (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
 
-                case ModifySpellingMessage m:
-                    return currentState.UpdateScreen(
-                        (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling));
+                    ModifySpellingMessage m => currentState.UpdateScreen(
+                            (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
 
-                case SaveNewVocabularyWordMessage m:
-                    return currentState.CloseScreen();
-            }
+                    SaveNewVocabularyWordMessage m => currentState.CloseScreen(),
 
-            return currentState;
+                    _ => currentState,
+                };
         }
     }
 }

@@ -18,19 +18,19 @@ namespace WordTutor.Core.Reducers
                 return currentState;
             }
 
-            switch(message ?? throw new ArgumentNullException(nameof(message)))
-            {
-                case ClearSelectedWordMessage _:
-                    return currentState.UpdateScreen(
-                        (VocabularyBrowserScreen s) => s.WithNoSelection());
-                case SelectWordMessage m:
-                    return currentState.UpdateScreen(
-                        (VocabularyBrowserScreen s) => s.WithSelection(m.Word));
-                case OpenNewWordScreenMessage _:
-                    return currentState.OpenScreen(new ModifyVocabularyWordScreen());
-            }
+            return (message ?? throw new ArgumentNullException(nameof(message)))
+                switch
+                {
+                    ClearSelectedWordMessage _ => currentState.UpdateScreen(
+                           (VocabularyBrowserScreen s) => s.WithNoSelection()),
 
-            return currentState;
+                    SelectWordMessage m => currentState.UpdateScreen(
+                            (VocabularyBrowserScreen s) => s.WithSelection(m.Word)),
+
+                    OpenNewWordScreenMessage _ => currentState.OpenScreen(new ModifyVocabularyWordScreen()),
+
+                    _ => currentState,
+                };
         }
     }
 }
