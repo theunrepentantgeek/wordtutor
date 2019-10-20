@@ -22,6 +22,11 @@ using System.Diagnostics.CodeAnalysis;
     Justification = "This project uses underscores to separate clauses of test names")]
 
 [assembly: SuppressMessage(
+    "Naming",
+    "CA1715:Identifiers should have correct prefix",
+    Justification = "This project uses single capital letters for type parameters")]
+
+[assembly: SuppressMessage(
     "Design",
     "RCS1102:Make class static.",
     Justification = "This project uses nested types to structure uni tests; some of these have no members.")]

@@ -13,6 +13,10 @@ namespace WordTutor.Core.Tests.ReduxTests
         private int _lastWhenCalledValue;
         private ReduxSubscription<string>? _releasedSubscription;
 
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test doesn't pass null here.")]
         protected static int Reader(string value) => value.Length;
 
         protected void WhenChanged(int value)
@@ -60,7 +64,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class PublishTests : ReduxSubscriptionTests
         {
-            private ReduxValueSubscription<string, int> _subscription;
+            private readonly ReduxValueSubscription<string, int> _subscription;
 
             public PublishTests()
             {
@@ -70,7 +74,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void FirstPublication_InvokesWhenChangedWithValue()
             {
-                var state = "sample";
+                const string state = "sample";
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
                 _lastWhenCalledValue.Should().Be(6);
@@ -79,7 +83,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void DuplicatePublication_DoesNotInvokeWhenChanged()
             {
-                var state = "sample";
+                const string state = "sample";
                 _subscription.Publish(state);
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
@@ -101,23 +105,25 @@ namespace WordTutor.Core.Tests.ReduxTests
             {
                 int loopCount = 0;
                 ReduxValueSubscription<string, int> subscription = null!;
-                subscription = new ReduxValueSubscription<string, int>(
+                using (subscription = new ReduxValueSubscription<string, int>(
                     s => s.Length,
                     ValueChanged,
-                    WhenReleased);
-                subscription.Publish("bang");
+                    WhenReleased))
+                {
+                    subscription.Publish("bang");
+                }
 
-                void ValueChanged(int value)
+                void ValueChanged(int _)
                 {
                     loopCount++.Should().BeLessThan(10);
                     subscription.Publish("bang");
                 }
             }
-        
+
             [Fact]
             public void FirstPublicationWhenValueIsDefaultForType_DoesInvokeSubscription()
             {
-                var state = ""; // Length of empty string is default value for int
+                const string state = ""; // Length of empty string is default value for int
                 _subscription.Publish(state);
                 _whenCalledCount.Should().Be(1);
                 _lastWhenCalledValue.Should().Be(0);
@@ -130,7 +136,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             Justification = "Don't need to dispose tests.")]
         public class DisposalTests : ReduxSubscriptionTests
         {
-            private ReduxValueSubscription<string, int> _subscription;
+            private readonly ReduxValueSubscription<string, int> _subscription;
 
             public DisposalTests()
             {

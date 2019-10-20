@@ -30,8 +30,8 @@ namespace WordTutor.Core.Redux
         }
 
         public IDisposable SubscribeToValue<V>(
-            Func<T, V> valueReader, 
-            Action<V> whenChanged) 
+            Func<T, V> valueReader,
+            Action<V> whenChanged)
             where V : struct, IEquatable<V>
         {
             Debug.WriteLine($"Subscribing to {typeof(V).Name}.");

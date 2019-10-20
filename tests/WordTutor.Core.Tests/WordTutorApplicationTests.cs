@@ -25,7 +25,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new WordTutorApplication(null));
+                        () => new WordTutorApplication(null!));
                 exception.ParamName.Should().Be("initialScreen");
             }
 
@@ -45,7 +45,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.OpenScreen(null));
+                        () => _app.OpenScreen(null!));
                 exception.ParamName.Should().Be("screen");
             }
 
@@ -84,7 +84,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.UpdateScreen<FakeScreen, FakeScreen>(null));
+                        () => _app.UpdateScreen<FakeScreen, FakeScreen>(null!));
                 exception.ParamName.Should().Be("transformation");
             }
 
@@ -92,7 +92,7 @@ namespace WordTutor.Core.Tests
             public void WhenTransformationReturnsScreen_UpdatesScreen()
             {
                 var screen = new FakeScreen();
-                var app = _app.UpdateScreen((FakeScreen s) => screen);
+                var app = _app.UpdateScreen((FakeScreen _) => screen);
                 app.CurrentScreen.Should().Be(screen);
             }
 
@@ -110,7 +110,7 @@ namespace WordTutor.Core.Tests
                 var beta = new FakeScreen();
                 var current = _app.CurrentScreen;
                 var app = _app.OpenScreen(alpha)
-                    .UpdateScreen((FakeScreen s) => beta)
+                    .UpdateScreen((FakeScreen _) => beta)
                     .CloseScreen();
                 app.CurrentScreen.Should().Be(current);
             }
@@ -134,7 +134,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _app.WithVocabularySet(null));
+                        () => _app.WithVocabularySet(null!));
                 exception.ParamName.Should().Be("vocabularySet");
             }
 
@@ -160,14 +160,14 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                  Assert.Throws<ArgumentNullException>(
-                     () => _app.UpdateVocabularySet(null));
+                     () => _app.UpdateVocabularySet(null!));
                 exception.ParamName.Should().Be("transformation");
             }
 
             [Fact]
             public void GivenTransformation_ItReceivesCurrentVocabularySet()
             {
-                VocabularySet set = null;
+                VocabularySet? set = null;
                 var app = _app.UpdateVocabularySet(
                     s =>
                     {
@@ -182,7 +182,7 @@ namespace WordTutor.Core.Tests
             {
                 var alpha = new VocabularyWord("alpha");
                 var set = _app.VocabularySet.Add(alpha);
-                var app = _app.UpdateVocabularySet(s => set);
+                var app = _app.UpdateVocabularySet(_ => set);
                 app.VocabularySet.Should().Be(set);
             }
 

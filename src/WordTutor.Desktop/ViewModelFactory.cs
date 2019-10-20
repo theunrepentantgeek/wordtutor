@@ -57,6 +57,11 @@ namespace WordTutor.Desktop
 
         public static Type FindViewModelType(Type modelType)
         {
+            if (modelType is null)
+            {
+                throw new ArgumentNullException(nameof(modelType));
+            }
+
             // Look for view models in the Desktop assembly 
             // (might need changing if we introduce additional assemblies in future)
             var desktopAssembly = typeof(ViewModelBase).Assembly;

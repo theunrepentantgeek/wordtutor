@@ -28,7 +28,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new VocabularyWord(null));
+                        () => new VocabularyWord(null!));
                 exception.ParamName.Should().Be("spelling");
             }
 
@@ -61,7 +61,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _word.WithSpelling(null));
+                        () => _word.WithSpelling(null!));
                 exception.ParamName.Should().Be("spelling");
             }
 
@@ -88,7 +88,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                    () => _word.HasSpelling(null));
+                    () => _word.HasSpelling(null!));
                 exception.ParamName.Should().Be("spelling");
             }
 
@@ -124,7 +124,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _word.WithPronunciation(null));
+                        () => _word.WithPronunciation(null!));
                 exception.ParamName.Should().Be("pronunciation");
             }
 
@@ -151,7 +151,7 @@ namespace WordTutor.Core.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => _word.WithPhrase(null));
+                        () => _word.WithPhrase(null!));
                 exception.ParamName.Should().Be("phrase");
             }
 
@@ -176,7 +176,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
-                VocabularyWord other = null;
+                VocabularyWord? other = null;
                 _word.Equals(other).Should().BeFalse();
             }
 
@@ -223,7 +223,7 @@ namespace WordTutor.Core.Tests
             [Fact]
             public void GivenNull_ReturnsFalse()
             {
-                object other = null;
+                object? other = null;
                 _word.Equals(other).Should().BeFalse();
             }
 

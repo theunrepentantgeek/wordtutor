@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System;
 using WordTutor.Core.Actions;
 using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
@@ -8,27 +9,27 @@ namespace WordTutor.Core.Tests
 {
     public class InteractionTestsBase
     {
-        protected VocabularyWord Grave { get; } 
+        protected VocabularyWord Grave { get; }
             = new VocabularyWord("grave")
                 .WithPhrase("Slow and solemn slower than largo");
 
-        protected VocabularyWord Adagio { get; } 
+        protected VocabularyWord Adagio { get; }
             = new VocabularyWord("adagio")
                 .WithPhrase("Slow, but not as slow as largo");
 
-        protected VocabularyWord Allegretto { get; } 
+        protected VocabularyWord Allegretto { get; }
             = new VocabularyWord("allegretto")
                 .WithPhrase("Slightly slower than allegro");
 
-        protected VocabularyWord Moderato { get; } 
+        protected VocabularyWord Moderato { get; }
             = new VocabularyWord("moderato")
                 .WithPhrase("At a moderate speed");
 
-        protected VocabularyWord Accelerando { get; } 
+        protected VocabularyWord Accelerando { get; }
             = new VocabularyWord("accelerando")
                 .WithPhrase("Accelerating");
 
-        protected VocabularyWord Prestissimo { get; } 
+        protected VocabularyWord Prestissimo { get; }
             = new VocabularyWord("prestissimo")
                 .WithPhrase("Very very fast, as fast as possible");
 
@@ -38,10 +39,10 @@ namespace WordTutor.Core.Tests
             = new CompositeReduxReducer<WordTutorApplication>(
                 new IReduxReducer<WordTutorApplication>[]
                 {
-                    new AddVocabularyWordScreenReducer(),
+                    new ModifyVocabularyWordScreenReducer(),
                     new VocabularyBrowserScreenReducer()
                 });
-            
+
         public InteractionTestsBase()
         {
             MusicPace = VocabularySet.Empty
@@ -53,9 +54,16 @@ namespace WordTutor.Core.Tests
                 .WithVocabularySet(words);
 
         public static WordTutorApplication CurrentScreenIs(WordTutorApplication application, Screen screen)
-            => application.UpdateScreen<Screen, Screen>(_ => screen);
+        {
+            if (application is null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
 
-        public static AddVocabularyWordScreen AddVocabularyWordScreen { get; } = new AddVocabularyWordScreen();
+            return application.UpdateScreen<Screen, Screen>(_ => screen);
+        }
+
+        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; } = new ModifyVocabularyWordScreen();
 
         public static VocabularyBrowserScreen VocabularyBrowserScreen { get; } = new VocabularyBrowserScreen();
 
@@ -64,11 +72,18 @@ namespace WordTutor.Core.Tests
 
         public static OpenNewWordScreenMessage OpenNewWordScreen() => new OpenNewWordScreenMessage();
 
-        public static SaveNewVocabularyWordMessage SaveNewVocabularyWord(VocabularyWord word) 
+        public static SaveNewVocabularyWordMessage SaveNewVocabularyWord(VocabularyWord word)
             => new SaveNewVocabularyWordMessage(word);
 
         public static void AssertTheCurrentScreenIs<S>(WordTutorApplication application)
             where S : Screen
-            => application.CurrentScreen.Should().BeOfType<S>();
+        {
+            if (application is null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
+
+            application.CurrentScreen.Should().BeOfType<S>();
+        }
     }
 }

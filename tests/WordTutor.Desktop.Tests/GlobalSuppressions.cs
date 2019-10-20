@@ -20,3 +20,8 @@ using System.Diagnostics.CodeAnalysis;
     "Naming",
     "CA1707:Identifiers should not contain underscores",
     Justification = "This project uses underscores to separate clauses of test names")]
+
+[assembly: SuppressMessage(
+    "Naming",
+    "CA1715:Identifiers should have correct prefix",
+    Justification = "This project uses single capital letters for type parameters")]

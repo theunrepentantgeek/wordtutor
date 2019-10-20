@@ -9,7 +9,7 @@ namespace WordTutor.Core
     /// <summary>
     /// A set of words that make up a vocabulary for spelling drills
     /// </summary>
-    public class VocabularySet : IEquatable<VocabularySet>
+    public sealed class VocabularySet : IEquatable<VocabularySet>
     {
         private static readonly StringComparer _nameComparer = StringComparer.CurrentCulture;
 
@@ -223,7 +223,7 @@ namespace WordTutor.Core
     {
         public static VocabularySet Add(this VocabularySet vocabulary, params VocabularyWord[] words)
             => words.Aggregate(
-                vocabulary ?? throw new ArgumentNullException(nameof(vocabulary)), 
+                vocabulary ?? throw new ArgumentNullException(nameof(vocabulary)),
                 (s, w) => s.Add(w));
     }
 }

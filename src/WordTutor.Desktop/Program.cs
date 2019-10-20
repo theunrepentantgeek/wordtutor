@@ -8,57 +8,59 @@ using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
 using WordTutor.Desktop;
 
-public static class Program
+namespace WordTutor
 {
-    [STAThread]
-    static void Main()
+    public static class Program
     {
-        var container = CreateContainer();
-
-        var app = new App();
-
-        var factory = container.GetInstance<ViewFactory>();
-        var wordTutorModel = container.GetInstance<WordTutorViewModel>();
-        var wordTutorWindow = (Window)factory.Create(wordTutorModel);
-
-        app.Run(wordTutorWindow);
-    }
-
-    public static Container CreateContainer()
-    {
-        var container = new Container();
-        var coreAssembly = typeof(WordTutorApplication).Assembly;
-        var desktopAssembly = typeof(WordTutorWindow).Assembly;
-
-        // Register Redux Store
-        container.RegisterSingleton<
-            IReduxStore<WordTutorApplication>,
-            ReduxStore<WordTutorApplication>>();
-        container.RegisterSingleton<
-            IReduxStateFactory<WordTutorApplication>,
-            WordTutorApplicationStateFactory>();
-
-        // Register Reducers
-        container.RegisterSingleton<
-            IReduxReducer<WordTutorApplication>,
-            CompositeReduxReducer<WordTutorApplication>>();
-        foreach (var type in container.GetTypesToRegister<IReduxReducer<WordTutorApplication>>(coreAssembly))
+        [STAThread]
+        public static void Main()
         {
-            container.Collection.Append(
-                typeof(IReduxReducer<WordTutorApplication>),
-                type,
-                Lifestyle.Singleton);
+            using var container = CreateContainer();
+            var app = new App();
+
+            var factory = container.GetInstance<ViewFactory>();
+            var wordTutorModel = container.GetInstance<WordTutorViewModel>();
+            var wordTutorWindow = (Window)factory.Create(wordTutorModel);
+
+            app.Run(wordTutorWindow);
         }
 
-        // Register ViewModels
-        container.Collection.Register<ViewModelBase>(desktopAssembly);
+        public static Container CreateContainer()
+        {
+            var container = new Container();
+            var coreAssembly = typeof(WordTutorApplication).Assembly;
+            var desktopAssembly = typeof(WordTutorWindow).Assembly;
 
-        // Register Views
-        container.Collection.Register(typeof(UserControl), desktopAssembly);
-        container.Collection.Register(typeof(Window), desktopAssembly);
+            // Register Redux Store
+            container.RegisterSingleton<
+                IReduxStore<WordTutorApplication>,
+                ReduxStore<WordTutorApplication>>();
+            container.RegisterSingleton<
+                IReduxStateFactory<WordTutorApplication>,
+                WordTutorApplicationStateFactory>();
 
-        container.Verify();
+            // Register Reducers
+            container.RegisterSingleton<
+                IReduxReducer<WordTutorApplication>,
+                CompositeReduxReducer<WordTutorApplication>>();
+            foreach (var type in container.GetTypesToRegister<IReduxReducer<WordTutorApplication>>(coreAssembly))
+            {
+                container.Collection.Append(
+                    typeof(IReduxReducer<WordTutorApplication>),
+                    type,
+                    Lifestyle.Singleton);
+            }
 
-        return container;
+            // Register ViewModels
+            container.Collection.Register<ViewModelBase>(desktopAssembly);
+
+            // Register Views
+            container.Collection.Register(typeof(UserControl), desktopAssembly);
+            container.Collection.Register(typeof(Window), desktopAssembly);
+
+            container.Verify();
+
+            return container;
+        }
     }
 }

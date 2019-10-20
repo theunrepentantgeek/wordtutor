@@ -16,7 +16,8 @@ namespace WordTutor.Core.Redux
         private bool _dispatching;
 
         // Set of all our current subscriptions
-        private HashSet<ReduxSubscription<T>> _subscriptions = new HashSet<ReduxSubscription<T>>();
+        private readonly HashSet<ReduxSubscription<T>> _subscriptions
+            = new HashSet<ReduxSubscription<T>>();
 
         /// <summary>
         /// Gets the current state of the application
@@ -32,6 +33,11 @@ namespace WordTutor.Core.Redux
             IReduxReducer<T> reducer,
             IReduxStateFactory<T> initialStateFactory)
         {
+            if (initialStateFactory is null)
+            {
+                throw new ArgumentNullException(nameof(initialStateFactory));
+            }
+
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
             State = initialStateFactory.Create();
         }

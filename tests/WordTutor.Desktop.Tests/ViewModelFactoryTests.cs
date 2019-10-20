@@ -2,6 +2,7 @@
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WordTutor.Core;
 using Xunit;
@@ -21,14 +22,18 @@ namespace WordTutor.Desktop.Tests
         [StaFact]
         public void Create_WhenGivenScreen_ReturnsExpectedViewModel()
         {
-            var screen = new AddVocabularyWordScreen();
+            var screen = new ModifyVocabularyWordScreen();
             var viewModel = _factory.Create(screen);
             viewModel.Should().NotBeNull();
-            viewModel.Should().BeOfType<AddVocabularyWordViewModel>();
+            viewModel.Should().BeOfType<ModifyVocabularyWordViewModel>();
         }
 
         [StaTheory]
         [MemberData(nameof(FindScreenTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "FindScreenTypes() will never supply a null to this test method.")]
         public void FindViewModelType_WhenGivenScreenType_FindsSuitableViewModelType(Type screenType)
         {
             ViewModelFactory.FindViewModelType(screenType)

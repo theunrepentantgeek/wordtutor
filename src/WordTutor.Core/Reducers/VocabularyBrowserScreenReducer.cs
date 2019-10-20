@@ -1,4 +1,5 @@
-﻿using WordTutor.Core.Actions;
+﻿using System;
+using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
 
 namespace WordTutor.Core.Reducers
@@ -7,24 +8,29 @@ namespace WordTutor.Core.Reducers
     {
         public WordTutorApplication Reduce(IReduxMessage message, WordTutorApplication currentState)
         {
+            if (currentState is null)
+            {
+                throw new ArgumentNullException(nameof(currentState));
+            }
+
             if (!(currentState.CurrentScreen is VocabularyBrowserScreen))
             {
                 return currentState;
             }
 
-            switch(message)
-            {
-                case ClearSelectedWordMessage _:
-                    return currentState.UpdateScreen(
-                        (VocabularyBrowserScreen s) => s.WithNoSelection());
-                case SelectWordMessage m:
-                    return currentState.UpdateScreen(
-                        (VocabularyBrowserScreen s) => s.WithSelection(m.Word));
-                case OpenNewWordScreenMessage _:
-                    return currentState.OpenScreen(new AddVocabularyWordScreen());
-            }
+            return (message ?? throw new ArgumentNullException(nameof(message)))
+                switch
+                {
+                    ClearSelectedWordMessage _ => currentState.UpdateScreen(
+                           (VocabularyBrowserScreen s) => s.WithNoSelection()),
 
-            return currentState;
+                    SelectWordMessage m => currentState.UpdateScreen(
+                            (VocabularyBrowserScreen s) => s.WithSelection(m.Word)),
+
+                    OpenNewWordScreenMessage _ => currentState.OpenScreen(new ModifyVocabularyWordScreen()),
+
+                    _ => currentState,
+                };
         }
     }
 }

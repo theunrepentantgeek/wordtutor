@@ -4,7 +4,7 @@ using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
 {
-    public class WordTutorViewModel : ViewModelBase
+    public sealed class WordTutorViewModel : ViewModelBase, IDisposable
     {
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly ViewModelFactory _factory;
@@ -16,8 +16,9 @@ namespace WordTutor.Desktop
             IReduxStore<WordTutorApplication> store,
             ViewModelFactory factory)
         {
-            _store = store;
-            _factory = factory;
+            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+
             _currentScreen = _factory.Create(_store.State.CurrentScreen);
 
             _screenSubscription = _store.SubscribeToReference(
@@ -36,6 +37,11 @@ namespace WordTutor.Desktop
                     OnPropertyChanged(nameof(CurrentScreen));
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            _screenSubscription?.Dispose();
         }
 
         private void RefreshFromScreen(Screen? screen)

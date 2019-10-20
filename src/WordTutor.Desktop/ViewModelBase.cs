@@ -34,7 +34,7 @@ namespace WordTutor.Desktop
             [CallerMemberName] string? property = null)
             where T : struct, IEquatable<T>
         {
-            if (member.Equals(newValue) == true)
+            if (member.Equals(newValue))
             {
                 return;
             }
@@ -85,6 +85,10 @@ namespace WordTutor.Desktop
             whenChanged?.Invoke(newValue);
         }
 
+        [SuppressMessage(
+            "Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            Justification = "Exception message doesn't need localization")]
         public void UpdateCollection<T>(
             ObservableCollection<T> member,
             IEnumerable<T> newList,
@@ -102,7 +106,7 @@ namespace WordTutor.Desktop
                 throw new ArgumentNullException(nameof(newList));
             }
 
-            if (Enumerable.SequenceEqual(member, newList))
+            if (member.SequenceEqual(newList))
             {
                 return;
             }
@@ -116,6 +120,10 @@ namespace WordTutor.Desktop
             OnPropertyChanged(property!);
         }
 
+        [SuppressMessage(
+            "Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            Justification = "Don't need to localize exception messages.")]
         public void ClearCollection<T>(
             ObservableCollection<T> member,
             [CallerMemberName]string? property = null)
