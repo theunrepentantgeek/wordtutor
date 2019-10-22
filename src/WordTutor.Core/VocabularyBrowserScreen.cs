@@ -89,14 +89,7 @@ namespace WordTutor.Core
         }
 
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                var selectionHash = Selection?.GetHashCode() ?? 0;
-                return selectionHash * 23
-                    + Modified.GetHashCode();
-            }
-        }
+            => HashCode.Combine(Selection, Modified);
 
         private VocabularyBrowserScreen(
             VocabularyBrowserScreen original,

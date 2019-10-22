@@ -188,17 +188,14 @@ namespace WordTutor.Core
 
         private int GetHashCodeCore()
         {
-            unchecked
+            var hash = new HashCode();
+            hash.Add(Name);
+            foreach (var w in _words.OrderBy(w => w.Spelling))
             {
-                int hash = 17;
-                hash = hash * 23 + Name.GetHashCode();
-                foreach (var w in _words.OrderBy(w => w.Spelling))
-                {
-                    hash = hash * 23 + w.GetHashCode();
-                }
-
-                return hash;
+                hash.Add(w);
             }
+
+            return hash.ToHashCode();
         }
 
         private VocabularySet()

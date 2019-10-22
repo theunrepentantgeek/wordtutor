@@ -113,21 +113,8 @@ namespace WordTutor.Core
         public override bool Equals(object? obj)
             => Equals(obj as VocabularyWord);
 
-        [SuppressMessage(
-            "Redundancy",
-            "RCS1212:Remove redundant assignment.",
-            Justification = "Treating each step the same aids in readability.")]
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = (hash * 23) + Spelling.GetHashCode();
-                hash = (hash * 23) + Phrase.GetHashCode();
-                hash = (hash * 23) + Pronunciation.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCode.Combine(Spelling, Phrase, Pronunciation);
 
         private VocabularyWord(
             VocabularyWord original,
