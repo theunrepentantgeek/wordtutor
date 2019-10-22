@@ -77,14 +77,7 @@ namespace WordTutor.Core
         public override bool Equals(Screen? other) => Equals(other as ModifyVocabularyWordScreen);
 
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                return Spelling.GetHashCode() * 23
-                    + Pronunciation.GetHashCode() * 41
-                    + Phrase.GetHashCode() * 71;
-            }
-        }
+            => HashCode.Combine(Spelling, Pronunciation, Phrase);
 
         public bool Equals(ModifyVocabularyWordScreen? other)
         {
