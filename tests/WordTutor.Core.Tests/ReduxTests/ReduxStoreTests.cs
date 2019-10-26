@@ -134,7 +134,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 var exception =
                     Assert.Throws<ArgumentNullException>(
                         () => _store.SubscribeToReference<string>(null!, HandleUpdate));
-                exception.ParamName.Should().Be("reader");
+                exception.ParamName.Should().Be("referenceReader");
             }
 
             [Fact]
