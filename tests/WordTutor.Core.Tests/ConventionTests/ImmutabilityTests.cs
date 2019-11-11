@@ -14,8 +14,16 @@ namespace WordTutor.Core.Tests.ConventionTests
         [MemberData(nameof(PropertiesOfImmutableTypesToTest))]
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
-            property.PropertyType.IsImmutableType()
-                .Should().BeTrue($"property {property.Name} should be declared as an immutable type");
+            property.PropertyType.IsImmutableType().Should().BeTrue(
+                $"property {property.Name} should be declared as an immutable type");
+        }
+
+        [Theory]
+        [MemberData(nameof(PropertiesOfImmutableTypesToTest))]
+        public void PropertiesOfImmutableTypesMustNotBeWritable(PropertyInfo property)
+        {
+            property.CanWrite.Should().BeFalse(
+                $"property {property.Name} of immutable type {property.DeclaringType!.Name} should not be writable");
         }
 
         public static IEnumerable<object[]> PropertiesOfImmutableTypesToTest()
