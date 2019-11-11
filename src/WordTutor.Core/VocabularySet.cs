@@ -9,6 +9,7 @@ namespace WordTutor.Core
     /// <summary>
     /// A set of words that make up a vocabulary for spelling drills
     /// </summary>
+    [Immutable]
     public sealed class VocabularySet : IEquatable<VocabularySet>
     {
         private static readonly StringComparer _nameComparer = StringComparer.CurrentCulture;

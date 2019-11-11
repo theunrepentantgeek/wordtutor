@@ -6,6 +6,7 @@ using System.Text;
 
 namespace WordTutor.Core
 {
+    [Immutable]
     public class WordTutorApplication
     {
         // a stack of previously active screens
