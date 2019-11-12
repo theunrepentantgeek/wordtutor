@@ -8,7 +8,7 @@ namespace WordTutor.Core.Tests
 {
     public static class TypeExtensions
     {
-        private static HashSet<Type> _systemImmutableTypes 
+        private static HashSet<Type> _systemImmutableTypes
             = new HashSet<Type>
             {
                 typeof(int),
@@ -16,7 +16,7 @@ namespace WordTutor.Core.Tests
                 typeof(bool),
                 typeof(IImmutableSet<>)
             };
-        
+
         public static bool IsImmutableType(this Type type)
         {
             if (type is null)
@@ -24,7 +24,7 @@ namespace WordTutor.Core.Tests
                 return false;
             }
 
-            if (type.GetCustomAttribute<ImmutableAttribute>() is object)
+            if (type.GetCustomAttribute<ImmutableAttribute>(inherit: false) is object)
             {
                 return true;
             }
@@ -41,7 +41,7 @@ namespace WordTutor.Core.Tests
                 return definition.IsImmutableType()
                     && parameters.All(t => t.IsImmutableType());
             }
-            
+
             return false;
         }
     }
