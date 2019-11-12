@@ -34,6 +34,17 @@ namespace WordTutor.Core.Tests.ConventionTests
                 $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType.Name}.");
         }
 
+        [Theory]
+        [MemberData(nameof(TestCasesAreImmutableTypes))]
+        public void ImmutableTypesShouldBeSealedOrAbstract(Type type)
+        {
+            type.Should().Match(t => t.IsAbstract || t.IsSealed);
+        }
+
+        public static IEnumerable<object[]> TestCasesAreImmutableTypes()
+            => from t in FindDeclaredImmutableTypes()
+               select new object[] { t };
+
         public static IEnumerable<object[]> TestCasesAreSubclassesOfImmutableTypes()
         {
             var immutableTypes = FindDeclaredImmutableTypes().ToHashSet();

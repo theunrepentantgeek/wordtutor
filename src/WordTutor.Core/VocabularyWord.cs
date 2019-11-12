@@ -9,7 +9,7 @@ namespace WordTutor.Core
     // in order to satisfy the expanded type constraint IEquatable<VW?>
     [Immutable]
     [DebuggerDisplay("Word: '{Spelling}'")]
-    public class VocabularyWord : IEquatable<VocabularyWord?>
+    public sealed class VocabularyWord : IEquatable<VocabularyWord?>
     {
         /// <summary>
         /// Gets the word as correctly spelt
