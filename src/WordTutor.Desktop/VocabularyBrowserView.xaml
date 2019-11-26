@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:desktop="clr-namespace:WordTutor.Desktop"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800">
@@ -44,6 +45,13 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="MouseDoubleClick">
+                    <b:InvokeCommandAction 
+                        Command="desktop:ItemCommands.Open" 
+                        CommandParameter="{Binding Selection}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
         </ListBox>
 
         <StackPanel Orientation="Horizontal"
