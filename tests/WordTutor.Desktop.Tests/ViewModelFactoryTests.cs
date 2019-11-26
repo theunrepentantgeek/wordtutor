@@ -22,7 +22,7 @@ namespace WordTutor.Desktop.Tests
         [StaFact]
         public void Create_WhenGivenScreen_ReturnsExpectedViewModel()
         {
-            var screen = new ModifyVocabularyWordScreen();
+            var screen = ModifyVocabularyWordScreen.ForNewWord();
             var viewModel = _factory.Create(screen);
             viewModel.Should().NotBeNull();
             viewModel.Should().BeOfType<ModifyVocabularyWordViewModel>();

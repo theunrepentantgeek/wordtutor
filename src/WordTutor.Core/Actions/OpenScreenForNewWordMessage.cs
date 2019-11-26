@@ -2,7 +2,7 @@
 
 namespace WordTutor.Core.Actions
 {
-    public class OpenNewWordScreenMessage : IReduxMessage
+    public class OpenScreenForNewWordMessage : IReduxMessage
     {
     }
 }

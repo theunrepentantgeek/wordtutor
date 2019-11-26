@@ -32,7 +32,6 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void GivenInitialState_InitializesProperty()
             {
-
                 var reducer = new FakeReducer<string>();
                 var store = new ReduxStore<string>(reducer, _initialStateFactory);
                 store.State.Should().Be(_initialStateFactory.State);
@@ -76,7 +75,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 _store.Dispatch(_message);
                 receivedState.Should().Be(initialState);
 
-                string CaptureState(IReduxMessage message, string state)
+                string CaptureState(IReduxMessage _, string state)
                 {
                     receivedState = state;
                     return state;
@@ -86,13 +85,13 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void GivenMessage_UpdatesState()
             {
-                var newState = "updated";
+                const string newState = "updated";
                 _reducer.Reduce = ReduceToNewState;
 
                 _store.Dispatch(_message);
                 _store.State.Should().Be(newState);
 
-                string ReduceToNewState(IReduxMessage message, string state)
+                static string ReduceToNewState(IReduxMessage _, string __)
                 {
                     return newState;
                 }
@@ -101,7 +100,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             [Fact]
             public void RecursiveCall_ThrowsException()
             {
-                var newState = "updated";
+                const string newState = "updated";
                 _reducer.Reduce = RecursiveDispatch;
 
                 var exception =
@@ -109,7 +108,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                         () => _store.Dispatch(_message));
                 exception.Message.Should().Contain("Dispatch");
 
-                string RecursiveDispatch(IReduxMessage message, string state)
+                string RecursiveDispatch(IReduxMessage _, string __)
                 {
                     _store.Dispatch(_message);
                     return newState;
@@ -135,7 +134,7 @@ namespace WordTutor.Core.Tests.ReduxTests
                 var exception =
                     Assert.Throws<ArgumentNullException>(
                         () => _store.SubscribeToReference<string>(null!, HandleUpdate));
-                exception.ParamName.Should().Be("reader");
+                exception.ParamName.Should().Be("referenceReader");
             }
 
             [Fact]
@@ -157,11 +156,9 @@ namespace WordTutor.Core.Tests.ReduxTests
             public void WhenSubscribed_ReceivesNotificationForChangesOfState()
             {
                 var message = new FakeMessage("foo");
-                using (var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate))
-                {
-                    _store.Dispatch(message);
-                    _handledValue.Should().Be(message.Id);
-                }
+                using var subscription = _store.SubscribeToReference(ReadValue, HandleUpdate);
+                _store.Dispatch(message);
+                _handledValue.Should().Be(message.Id);
             }
 
             [Fact]

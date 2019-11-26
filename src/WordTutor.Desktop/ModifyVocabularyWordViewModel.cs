@@ -13,6 +13,7 @@ namespace WordTutor.Desktop
         private string _spelling;
         private string _phrase;
         private string _pronunciation;
+        private string _caption;
 
         public ModifyVocabularyWordViewModel(IReduxStore<WordTutorApplication> store)
         {
@@ -22,10 +23,16 @@ namespace WordTutor.Desktop
             _spelling = screen?.Spelling ?? string.Empty;
             _phrase = screen?.Phrase ?? string.Empty;
             _pronunciation = screen?.Pronunciation ?? string.Empty;
+            _caption = screen?.ExistingWord is null ? "Add Word" : "Modify Word";
 
             _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as ModifyVocabularyWordScreen,
                 RefreshFromScreen);
+
+            SaveCommand = new RoutedCommandSink(
+                ItemCommands.Save, Save, CanSave);
+            CloseCommand = new RoutedCommandSink(
+                ItemCommands.Close, Close);
         }
 
         public string Spelling
@@ -55,8 +62,45 @@ namespace WordTutor.Desktop
                 pr => _store.Dispatch(new ModifyPronunciationMessage(pr)));
         }
 
+        public string Caption
+        {
+            get => _caption;
+            set => UpdateReferenceProperty(
+                ref _caption,
+                value);
+        }
+
         public ModifyVocabularyWordScreen? Screen
             => _store.State.CurrentScreen as ModifyVocabularyWordScreen;
+
+        public RoutedCommandSink SaveCommand { get; }
+
+        public bool CanSave() => Screen?.Modified ?? false;
+
+        public void Save()
+        {
+            var word = Screen!.AsWord();
+            var existingWord = Screen!.ExistingWord;
+
+            IReduxMessage message;
+            if (existingWord is null)
+            {
+                message = new SaveNewVocabularyWordMessage(word);
+            }
+            else
+            {
+                message = new SaveModifiedVocabularyWordMessage(existingWord, word);
+            }
+
+            _store.Dispatch(message);
+        }
+
+        public RoutedCommandSink CloseCommand { get; }
+
+        public void Close()
+        {
+            _store.Dispatch(new CloseScreenMessage());
+        }
 
         private void RefreshFromScreen(ModifyVocabularyWordScreen? screen)
         {
@@ -69,6 +113,7 @@ namespace WordTutor.Desktop
             Spelling = screen.Spelling ?? string.Empty;
             Phrase = screen.Phrase ?? string.Empty;
             Pronunciation = screen.Pronunciation ?? string.Empty;
+            Caption = screen.ExistingWord is null ? "Add Word" : "Modify Word";
         }
     }
 }

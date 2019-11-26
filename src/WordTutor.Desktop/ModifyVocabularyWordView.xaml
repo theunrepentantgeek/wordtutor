@@ -35,7 +35,7 @@
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Add Word"
+        <Label Content="{Binding Caption}"
                FontSize="36"
                HorizontalAlignment="Center"
                Grid.Row="1"
@@ -71,14 +71,26 @@
                  Grid.Row="10"
                  Grid.Column="1"/>
 
-        <Button Content="Add"
+        <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Center"
-                Width="120"
-                FontSize="18"
-                Command="desktop:ItemCommands.Save"
-                Margin="8"
                 Grid.Row="12"
-                Grid.Column="1"/>
+                Grid.Column="1">
+            
+            <Button Content="Save"
+                    Width="120"
+                    FontSize="18"
+                    Command="desktop:ItemCommands.Save"
+                    Margin="8">
+            </Button>
+            
+            <Button Content="Cancel"
+                    Width="120"
+                    FontSize="18"
+                    Command="desktop:ItemCommands.Close"
+                    Margin="8">
+            </Button>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

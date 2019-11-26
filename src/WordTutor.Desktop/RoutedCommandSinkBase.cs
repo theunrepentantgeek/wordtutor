@@ -78,7 +78,9 @@ namespace WordTutor.Desktop
         /// </summary>
         /// <param name="command">Command we provide.</param>
         /// <param name="commandHost">Host instance providing the command.</param>
-        protected RoutedCommandSinkBase(RoutedCommand command, INotifyPropertyChanged commandHost)
+        protected RoutedCommandSinkBase(
+            RoutedCommand command, 
+            INotifyPropertyChanged commandHost)
             : this(command)
         {
             _commandHost = commandHost ?? throw new ArgumentNullException(nameof(commandHost));

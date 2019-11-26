@@ -1,4 +1,5 @@
 ﻿using System;
+
 using WordTutor.Core.Actions;
 using WordTutor.Core.Redux;
 
@@ -21,19 +22,27 @@ namespace WordTutor.Core.Reducers
             return (message ?? throw new ArgumentNullException(nameof(message)))
                 switch
                 {
+                    CloseScreenMessage m => currentState.CloseScreen(),
+
                     ModifyPhraseMessage m => currentState.UpdateScreen(
-                           (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
+                        (ModifyVocabularyWordScreen s) => s.WithPhrase(m.Phrase)),
 
                     ModifyPronunciationMessage m => currentState.UpdateScreen(
-                            (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
+                        (ModifyVocabularyWordScreen s) => s.WithPronunciation(m.Pronunciation)),
 
                     ModifySpellingMessage m => currentState.UpdateScreen(
-                            (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
+                        (ModifyVocabularyWordScreen s) => s.WithSpelling(m.Spelling)),
 
-                    SaveNewVocabularyWordMessage m => currentState.CloseScreen(),
+                    SaveNewVocabularyWordMessage m => currentState.UpdateVocabularySet(
+                        s => s.Add(m.Word))
+                        .CloseScreen(),
+
+                    SaveModifiedVocabularyWordMessage m => currentState.UpdateVocabularySet(
+                        s => s.Replace(m.OriginalWord, m.ReplacementWord))
+                        .CloseScreen(),
 
                     _ => currentState,
-                };
+            };
         }
     }
 }

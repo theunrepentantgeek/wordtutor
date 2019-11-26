@@ -63,14 +63,15 @@ namespace WordTutor.Core.Tests
             return application.UpdateScreen<Screen, Screen>(_ => screen);
         }
 
-        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; } = new ModifyVocabularyWordScreen();
+        public static ModifyVocabularyWordScreen ModifyVocabularyWordScreen { get; }
+            = ModifyVocabularyWordScreen.ForNewWord();
 
         public static VocabularyBrowserScreen VocabularyBrowserScreen { get; } = new VocabularyBrowserScreen();
 
         public WordTutorApplication TheActionIs(WordTutorApplication application, IReduxMessage message)
             => Reducer.Reduce(message, application);
 
-        public static OpenNewWordScreenMessage OpenNewWordScreen() => new OpenNewWordScreenMessage();
+        public static OpenScreenForNewWordMessage OpenNewWordScreen() => new OpenScreenForNewWordMessage();
 
         public static SaveNewVocabularyWordMessage SaveNewVocabularyWord(VocabularyWord word)
             => new SaveNewVocabularyWordMessage(word);

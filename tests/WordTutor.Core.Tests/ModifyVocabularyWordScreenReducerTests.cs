@@ -13,7 +13,7 @@ namespace WordTutor.Core.Tests
         public ModifyVocabularyWordScreenReducerTests()
         {
             var screen =
-                new ModifyVocabularyWordScreen()
+                ModifyVocabularyWordScreen.ForNewWord()
                     .WithSpelling("Phoo")
                     .WithPronunciation("Foo")
                     .WithPhrase("Phrase");

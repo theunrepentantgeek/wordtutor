@@ -1,4 +1,5 @@
 ﻿using SimpleInjector;
+using SimpleInjector.Diagnostics;
 using System;
 using System.Reflection;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace WordTutor
             var app = new App();
 
             var factory = container.GetInstance<ViewFactory>();
-            var wordTutorModel = container.GetInstance<WordTutorViewModel>();
+            using var wordTutorModel = container.GetInstance<WordTutorViewModel>();
             var wordTutorWindow = (Window)factory.Create(wordTutorModel);
 
             app.Run(wordTutorWindow);
@@ -57,6 +58,13 @@ namespace WordTutor
             // Register Views
             container.Collection.Register(typeof(UserControl), desktopAssembly);
             container.Collection.Register(typeof(Window), desktopAssembly);
+
+            // Suppress Warnings
+            var registration = container.GetRegistration(typeof(WordTutorViewModel))!.Registration;
+
+            registration.SuppressDiagnosticWarning(
+                DiagnosticType.DisposableTransientComponent,
+                "WordTutorViewModel is disposed in Main()");
 
             container.Verify();
 
