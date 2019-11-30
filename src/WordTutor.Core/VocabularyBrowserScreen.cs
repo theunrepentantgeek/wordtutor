@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace WordTutor.Core
 {
-    public class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
+    [Immutable]
+    public sealed class VocabularyBrowserScreen : Screen, IEquatable<VocabularyBrowserScreen>
     {
         private static readonly EqualityComparer<VocabularyWord> _selectionComparer
             = EqualityComparer<VocabularyWord>.Default;

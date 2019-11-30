@@ -2,6 +2,7 @@
 
 namespace WordTutor.Core
 {
+    [Immutable]
     public abstract class Screen : IEquatable<Screen?>
     {
         public abstract bool Equals(Screen? other);

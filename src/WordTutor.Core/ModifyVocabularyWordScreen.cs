@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WordTutor.Core
 {
+    [Immutable]
     public sealed class ModifyVocabularyWordScreen : Screen, IEquatable<ModifyVocabularyWordScreen?>
     {
         private readonly static EqualityComparer<VocabularyWord> _wordComparer
