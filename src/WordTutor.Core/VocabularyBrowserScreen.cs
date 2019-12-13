@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace WordTutor.Core
@@ -23,16 +23,16 @@ namespace WordTutor.Core
         {
         }
 
-        public VocabularyBrowserScreen WithSelection(VocabularyWord word)
+        public VocabularyBrowserScreen WithSelection(VocabularyWord selection)
         {
-            if (Equals(Selection, word ?? throw new ArgumentNullException(nameof(word))))
+            if (Equals(Selection, selection ?? throw new ArgumentNullException(nameof(selection))))
             {
                 return this;
             }
 
             return new VocabularyBrowserScreen(
                 this,
-                selection: word);
+                selection: selection);
         }
 
         public VocabularyBrowserScreen WithNoSelection()

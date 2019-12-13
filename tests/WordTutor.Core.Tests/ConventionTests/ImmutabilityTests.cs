@@ -68,6 +68,19 @@ namespace WordTutor.Core.Tests.ConventionTests
                 + $"should return {wither.DeclaringType.Name}");
         }
 
+        [Theory]
+        [MemberData(nameof(FindWithersOfImmutableTypes))]
+        public void WitherParametersShouldIdentifyProperties(MethodInfo wither)
+        {
+            var properties = (
+                from p in wither.DeclaringType.GetProperties()
+                select p.Name
+            ).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            wither.GetParameters().Should().OnlyContain(
+                p => properties.Contains(p.Name),
+                $"parameters should be one of {string.Join(", ", properties)}");
+        }
+
         public static IEnumerable<object[]> FindWithersOfImmutableTypes()
             => from t in GetForImmutableTypes()
                from m in t.GetMethods()
