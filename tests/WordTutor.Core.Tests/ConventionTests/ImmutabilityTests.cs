@@ -58,6 +58,22 @@ namespace WordTutor.Core.Tests.ConventionTests
             => from t in GetForImmutableTypes()
                select new object[] { t };
 
+        [Theory]
+        [MemberData(nameof(FindWithersOfImmutableTypes))]
+        public void WithersShouldReturnTheirDeclaringType(MethodInfo wither)
+        {
+            wither.ReturnType.Should().Be(
+                wither.DeclaringType,
+                $"wither {wither.Name} of type {wither.DeclaringType.Name} "
+                + $"should return {wither.DeclaringType.Name}");
+        }
+
+        public static IEnumerable<object[]> FindWithersOfImmutableTypes()
+            => from t in GetForImmutableTypes()
+               from m in t.GetMethods()
+               where m.Name.StartsWith("With", StringComparison.Ordinal)
+               select new object[] { m };
+
         private static IEnumerable<Type> GetForImmutableTypes()
             => from t in typeof(WordTutorApplication).Assembly.GetTypes()
                where t.IsImmutableType()
