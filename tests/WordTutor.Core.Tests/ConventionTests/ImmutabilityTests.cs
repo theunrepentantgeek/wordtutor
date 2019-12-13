@@ -11,7 +11,7 @@ namespace WordTutor.Core.Tests.ConventionTests
     public class ImmutabilityTests
     {
         [Theory]
-        [MemberData(nameof(TestCasesArePropertiesOfImmutableTypes))]
+        [MemberData(nameof(FindPropertiesOfImmutableTypes))]
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
             property.PropertyType.IsImmutableType().Should().BeTrue(
@@ -19,46 +19,46 @@ namespace WordTutor.Core.Tests.ConventionTests
         }
 
         [Theory]
-        [MemberData(nameof(TestCasesArePropertiesOfImmutableTypes))]
+        [MemberData(nameof(FindPropertiesOfImmutableTypes))]
         public void PropertiesOfImmutableTypesMustNotBeWritable(PropertyInfo property)
         {
             property.CanWrite.Should().BeFalse(
                 $"property {property.Name} of immutable type {property.DeclaringType!.Name} should not be writable");
         }
 
+        public static IEnumerable<object[]> FindPropertiesOfImmutableTypes()
+            => from t in GetForImmutableTypes()
+               from p in t.GetProperties()
+               select new object[] { p };
+
         [Theory]
-        [MemberData(nameof(TestCasesAreSubclassesOfImmutableTypes))]
+        [MemberData(nameof(FindSubclassesOfImmutableTypes))]
         public void SubTypesOfImmutableTypesMustBeImmutable(Type type)
         {
             type.IsImmutableType().Should().BeTrue(
                 $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType.Name}.");
         }
 
-        [Theory]
-        [MemberData(nameof(TestCasesAreImmutableTypes))]
-        public void ImmutableTypesShouldBeSealedOrAbstract(Type type)
+        public static IEnumerable<object[]> FindSubclassesOfImmutableTypes()
         {
-            type.Should().Match(t => t.IsAbstract || t.IsSealed);
-        }
-
-        public static IEnumerable<object[]> TestCasesAreImmutableTypes()
-            => from t in FindDeclaredImmutableTypes()
-               select new object[] { t };
-
-        public static IEnumerable<object[]> TestCasesAreSubclassesOfImmutableTypes()
-        {
-            var immutableTypes = FindDeclaredImmutableTypes().ToHashSet();
+            var immutableTypes = GetForImmutableTypes().ToHashSet();
             return from t in typeof(WordTutorApplication).Assembly.GetTypes()
                    where t.BaseType is Type && immutableTypes.Contains(t.BaseType)
                    select new object[] { t };
         }
 
-        public static IEnumerable<object[]> TestCasesArePropertiesOfImmutableTypes()
-            => from t in FindDeclaredImmutableTypes()
-               from p in t.GetProperties()
-               select new object[] { p };
+        [Theory]
+        [MemberData(nameof(FindImmutableTypes))]
+        public void ImmutableTypesShouldBeSealedOrAbstract(Type type)
+        {
+            type.Should().Match(t => t.IsAbstract || t.IsSealed);
+        }
 
-        private static IEnumerable<Type> FindDeclaredImmutableTypes()
+        public static IEnumerable<object[]> FindImmutableTypes()
+            => from t in GetForImmutableTypes()
+               select new object[] { t };
+
+        private static IEnumerable<Type> GetForImmutableTypes()
             => from t in typeof(WordTutorApplication).Assembly.GetTypes()
                where t.IsImmutableType()
                select t;
