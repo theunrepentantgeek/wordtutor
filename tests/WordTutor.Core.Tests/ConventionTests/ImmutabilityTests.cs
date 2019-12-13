@@ -87,6 +87,22 @@ namespace WordTutor.Core.Tests.ConventionTests
                where m.Name.StartsWith("With", StringComparison.Ordinal)
                select new object[] { m };
 
+        [Theory]
+        [MemberData(nameof(FindClearersOfImmutableTypes))]
+        public void ClearersShouldReturnTheirDeclaringType(MethodInfo clearer)
+        {
+            clearer.ReturnType.Should().Be(
+                clearer.DeclaringType,
+                $"wither {clearer.Name} of type {clearer.DeclaringType.Name} "
+                + $"should return {clearer.DeclaringType.Name}");
+        }
+
+        public static IEnumerable<object[]> FindClearersOfImmutableTypes()
+            => from t in GetForImmutableTypes()
+               from m in t.GetMethods()
+               where m.Name.StartsWith("Clear", StringComparison.Ordinal)
+               select new object[] { m };
+
         private static IEnumerable<Type> GetForImmutableTypes()
             => from t in typeof(WordTutorApplication).Assembly.GetTypes()
                where t.IsImmutableType()

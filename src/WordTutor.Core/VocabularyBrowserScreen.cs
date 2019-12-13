@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace WordTutor.Core
@@ -35,7 +35,7 @@ namespace WordTutor.Core
                 selection: selection);
         }
 
-        public VocabularyBrowserScreen WithNoSelection()
+        public VocabularyBrowserScreen ClearSelection()
         {
             if (Selection is null)
             {
