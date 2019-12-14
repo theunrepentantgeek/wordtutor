@@ -27,7 +27,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         }
 
         public static IEnumerable<object[]> FindPropertiesOfImmutableTypes()
-            => from t in GetForImmutableTypes()
+            => from t in GetImmutableTypes()
                from p in t.GetProperties()
                select new object[] { p };
 
@@ -41,7 +41,7 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         public static IEnumerable<object[]> FindSubclassesOfImmutableTypes()
         {
-            var immutableTypes = GetForImmutableTypes().ToHashSet();
+            var immutableTypes = GetImmutableTypes().ToHashSet();
             return from t in typeof(WordTutorApplication).Assembly.GetTypes()
                    where t.BaseType is Type && immutableTypes.Contains(t.BaseType)
                    select new object[] { t };
@@ -55,7 +55,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         }
 
         public static IEnumerable<object[]> FindImmutableTypes()
-            => from t in GetForImmutableTypes()
+            => from t in GetImmutableTypes()
                select new object[] { t };
 
         [Theory]
@@ -82,7 +82,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         }
 
         public static IEnumerable<object[]> FindWithersOfImmutableTypes()
-            => from t in GetForImmutableTypes()
+            => from t in GetImmutableTypes()
                from m in t.GetMethods()
                where m.Name.StartsWith("With", StringComparison.Ordinal)
                select new object[] { m };
@@ -93,7 +93,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         {
             clearer.ReturnType.Should().Be(
                 clearer.DeclaringType,
-                $"wither {clearer.Name} of type {clearer.DeclaringType.Name} "
+                $"clearer {clearer.Name} of type {clearer.DeclaringType.Name} "
                 + $"should return {clearer.DeclaringType.Name}");
         }
 
@@ -109,12 +109,12 @@ namespace WordTutor.Core.Tests.ConventionTests
         }
 
         public static IEnumerable<object[]> FindClearersOfImmutableTypes()
-            => from t in GetForImmutableTypes()
+            => from t in GetImmutableTypes()
                from m in t.GetMethods()
                where m.Name.StartsWith("Clear", StringComparison.Ordinal)
                select new object[] { m };
 
-        private static IEnumerable<Type> GetForImmutableTypes()
+        private static IEnumerable<Type> GetImmutableTypes()
             => from t in typeof(WordTutorApplication).Assembly.GetTypes()
                where t.IsImmutableType()
                select t;
