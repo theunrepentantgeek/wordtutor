@@ -97,6 +97,17 @@ namespace WordTutor.Core.Tests.ConventionTests
                 + $"should return {clearer.DeclaringType.Name}");
         }
 
+        [Theory]
+        [MemberData(nameof(FindClearersOfImmutableTypes))]
+        public void ClearersShouldHaveNamesIdentifyingTheClearedProperty(MethodInfo clearer)
+        {
+            var propertyName = clearer.Name.Substring("Clear".Length);
+            clearer.DeclaringType.GetProperties()
+                .Should().Contain(
+                    p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase),
+                    $"no property {propertyName} was found on {clearer.DeclaringType.Name}");
+        }
+
         public static IEnumerable<object[]> FindClearersOfImmutableTypes()
             => from t in GetForImmutableTypes()
                from m in t.GetMethods()
