@@ -22,7 +22,7 @@ namespace WordTutor.Core.Reducers
                 switch
                 {
                     ClearSelectedWordMessage _ => currentState.UpdateScreen(
-                           (VocabularyBrowserScreen s) => s.WithNoSelection()),
+                           (VocabularyBrowserScreen s) => s.ClearSelection()),
 
                     SelectWordMessage m => currentState.UpdateScreen(
                             (VocabularyBrowserScreen s) => s.WithSelection(m.Word)),

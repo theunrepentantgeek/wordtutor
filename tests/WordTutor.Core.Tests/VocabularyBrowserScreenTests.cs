@@ -42,7 +42,7 @@ namespace WordTutor.Core.Tests
                 var exception =
                     Assert.Throws<ArgumentNullException>(
                         () => _browser.WithSelection(null!));
-                exception.ParamName.Should().Be("word");
+                exception.ParamName.Should().Be("selection");
             }
 
             [Fact]
