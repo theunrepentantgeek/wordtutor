@@ -12,6 +12,6 @@ namespace WordTutor.Core.Actions
         }
 
         public override string ToString()
-            => $"Modify Spelling to '{Spelling}'";
+            => $"Modify Spelling to '{Spelling}'.";
     }
 }

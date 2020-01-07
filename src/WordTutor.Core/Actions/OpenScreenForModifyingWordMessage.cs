@@ -10,5 +10,8 @@ namespace WordTutor.Core.Actions
         }
 
         public VocabularyWord Word { get; }
+
+        public override string ToString()
+            => $"Open screen to modify '{Word.Spelling}'.";
     }
 }

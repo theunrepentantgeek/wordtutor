@@ -12,6 +12,6 @@ namespace WordTutor.Core.Actions
         }
 
         public override string ToString()
-            => $"Modify Pronunciation to '{Pronunciation}'";
+            => $"Modify Pronunciation to '{Pronunciation}'.";
     }
 }

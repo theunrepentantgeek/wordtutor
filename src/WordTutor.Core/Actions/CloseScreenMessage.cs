@@ -4,6 +4,7 @@ namespace WordTutor.Core.Actions
 {
     public class CloseScreenMessage : IReduxMessage
     {
-        public override string ToString() => "Close screen";
+        public override string ToString()
+            => "Close screen.";
     }
 }
