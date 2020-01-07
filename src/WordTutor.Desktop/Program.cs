@@ -1,10 +1,11 @@
-﻿using SimpleInjector;
+using SimpleInjector;
 using SimpleInjector.Diagnostics;
 using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using WordTutor.Core;
+using WordTutor.Core.Logging;
 using WordTutor.Core.Reducers;
 using WordTutor.Core.Redux;
 using WordTutor.Desktop;
@@ -31,6 +32,9 @@ namespace WordTutor
             var container = new Container();
             var coreAssembly = typeof(WordTutorApplication).Assembly;
             var desktopAssembly = typeof(WordTutorWindow).Assembly;
+
+            // General Infrastructure
+            container.RegisterSingleton<ILogger, Logger>();
 
             // Register Redux Store
             container.RegisterSingleton<
@@ -61,7 +65,6 @@ namespace WordTutor
 
             // Suppress Warnings
             var registration = container.GetRegistration(typeof(WordTutorViewModel))!.Registration;
-
             registration.SuppressDiagnosticWarning(
                 DiagnosticType.DisposableTransientComponent,
                 "WordTutorViewModel is disposed in Main()");
