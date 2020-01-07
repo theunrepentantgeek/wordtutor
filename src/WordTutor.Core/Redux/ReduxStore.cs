@@ -39,6 +39,7 @@ namespace WordTutor.Core.Redux
             }
 
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+
             State = initialStateFactory.Create();
         }
 
