@@ -120,6 +120,9 @@ namespace WordTutor.Core.Redux
 
         public int SubscriptionCount => _subscriptions.Count;
 
+        public void ClearSubscriptions()
+            => _subscriptions.Clear();
+
         private void ReleaseSubscription(ReduxSubscription<T> subscription)
         {
             _subscriptions.Remove(subscription);

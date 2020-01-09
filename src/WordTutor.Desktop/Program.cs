@@ -20,6 +20,9 @@ namespace WordTutor
             using var container = CreateContainer();
             var app = new App();
 
+            var store = (ReduxStore<WordTutorApplication>)container.GetInstance<IReduxStore<WordTutorApplication>>();
+            store.ClearSubscriptions();
+            
             var factory = container.GetInstance<ViewFactory>();
             using var wordTutorModel = container.GetInstance<WordTutorViewModel>();
             var wordTutorWindow = (Window)factory.Create(wordTutorModel);
