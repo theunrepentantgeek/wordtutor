@@ -1,6 +1,7 @@
 using System;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
+using WordTutor.Core.Logging;
 using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
@@ -8,6 +9,7 @@ namespace WordTutor.Desktop
     public class ModifyVocabularyWordViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
+        private readonly IActionLogger _logger;
         private readonly IDisposable _screenSubscription;
 
         private string _spelling;
@@ -15,15 +17,29 @@ namespace WordTutor.Desktop
         private string _pronunciation;
         private string _caption;
 
-        public ModifyVocabularyWordViewModel(IReduxStore<WordTutorApplication> store)
+        public ModifyVocabularyWordViewModel(
+            IReduxStore<WordTutorApplication> store,
+            ILogger logger)
         {
+            if (logger is null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
+
             _store = store ?? throw new ArgumentNullException(nameof(store));
 
             var screen = _store.State.CurrentScreen as ModifyVocabularyWordScreen;
+            var areAdding = screen?.ExistingWord is null;
+
+            _logger = logger.Action(
+                areAdding
+                ? "Create Vocabulary Word"
+                : "Modify Vocabulary Word");
+
             _spelling = screen?.Spelling ?? string.Empty;
             _phrase = screen?.Phrase ?? string.Empty;
             _pronunciation = screen?.Pronunciation ?? string.Empty;
-            _caption = screen?.ExistingWord is null ? "Add Word" : "Modify Word";
+            _caption = areAdding ? "Add Word" : "Modify Word";
 
             _screenSubscription = _store.SubscribeToReference(
                 app => app.CurrentScreen as ModifyVocabularyWordScreen,
@@ -107,6 +123,7 @@ namespace WordTutor.Desktop
             if (screen is null)
             {
                 _screenSubscription.Dispose();
+                _logger.Dispose();
                 return;
             }
 
