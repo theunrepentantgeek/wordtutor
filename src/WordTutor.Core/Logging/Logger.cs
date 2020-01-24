@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace WordTutor.Core.Logging
 {
-    public class Logger : ILogger
+    public abstract class LoggerBase : ILogger
     {
         private static readonly AsyncLocal<ActionLogger?> _currentLogger
             = new AsyncLocal<ActionLogger?>();
@@ -24,9 +24,8 @@ namespace WordTutor.Core.Logging
         public IActionLogger Action(string message)
         {
             WriteLogMessage(LogKind.OpenAction, message);
-            var result = new ActionLogger(ActiveAction());
-            UpdateActiveAction(result);
-            return result;
+            CurrentLogger = new ActionLogger(CurrentLogger);
+            return CurrentLogger;
         }
 
         public void Info(string message)
@@ -35,19 +34,21 @@ namespace WordTutor.Core.Logging
         public void Debug(string message)
             => WriteLogMessage(LogKind.Debug, message);
 
-        protected void WriteLogMessage(LogKind logKind, string message)
+        protected abstract void WriteLogMessage(LogKind logKind, string message);
+
+        protected void WriteLogMessage(ActionLogger? currentAction, LogKind logKind, string message)
         {
-            var level = ActiveAction()?.Level ?? 0;
+            var level = currentAction?.Level ?? 0;
             var indent = new string(' ', level * 4);
             var now = DateTimeOffset.Now;
             System.Diagnostics.Debug.WriteLine($"{now:u} {indent}{_prefixes[logKind]} {message}");
         }
 
-        protected virtual ActionLogger? ActiveAction()
-            => _currentLogger.Value;
-
-        protected static void UpdateActiveAction(ActionLogger? logger)
-            => _currentLogger.Value = logger;
+        protected static ActionLogger? CurrentLogger
+        {
+            get => _currentLogger.Value;
+            set => _currentLogger.Value = value;
+        }
 
         protected enum LogKind
         {
@@ -61,7 +62,21 @@ namespace WordTutor.Core.Logging
         }
     }
 
-    public sealed class ActionLogger : Logger, IActionLogger
+    public sealed class DelegatingLogger : LoggerBase, ILogger
+    {
+        protected override void WriteLogMessage(LogKind logKind, string message)
+            => WriteLogMessage(CurrentLogger, logKind, message);
+    }
+
+    [SuppressMessage(
+        "Usage",
+        "CA1816:Dispose methods should call SuppressFinalize",
+        Justification = "Dispose is being used for scope management, not resource disposal.")]
+    [SuppressMessage(
+        "Design",
+        "CA1063:Implement IDisposable Correctly",
+        Justification = "Dispose is being used for scope management, not resource disposal.")]
+    public sealed class ActionLogger : LoggerBase, IActionLogger
     {
         private readonly DateTimeOffset _started = DateTimeOffset.Now;
         private readonly ActionLogger? _parent;
@@ -81,23 +96,15 @@ namespace WordTutor.Core.Logging
         public void Failure(string message)
             => WriteLogMessage(LogKind.Failure, message);
 
-        [SuppressMessage(
-            "Usage",
-            "CA1816:Dispose methods should call SuppressFinalize",
-            Justification = "Dispose is being used for scope management, not resource disposal.")]
-        [SuppressMessage(
-            "Design",
-            "CA1063:Implement IDisposable Correctly",
-            Justification = "Dispose is being used for scope management, not resource disposal.")]
         public void Dispose()
         {
             var elapsed = DateTimeOffset.Now - _started;
-            UpdateActiveAction(_parent);
+            CurrentLogger = _parent;
             WriteLogMessage(LogKind.CloseAction, $"Elapsed {elapsed:c}.");
             _disposed = true;
         }
 
-        protected override ActionLogger? ActiveAction()
+        protected override void WriteLogMessage(LogKind logKind, string message)
         {
             if (_disposed)
             {
@@ -105,7 +112,7 @@ namespace WordTutor.Core.Logging
                     "Scoped loggers may not be used after disposal.");
             }
 
-            return base.ActiveAction();
+            base.WriteLogMessage(this, logKind, message);
         }
     }
 }
