@@ -25,7 +25,7 @@ namespace WordTutor.Core.Logging
         private readonly List<string> _indents
             = new List<string> { string.Empty };
 
-        public IActionLogger Action(string message)
+        public IScopedLogger Action(string message)
         {
             WriteLogMessage(LogKind.OpenAction, message);
             CurrentLogger = new ScopedLogger(CurrentLogger);

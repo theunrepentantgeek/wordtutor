@@ -11,7 +11,7 @@ namespace WordTutor.Core.Logging
         "Design",
         "CA1063:Implement IDisposable Correctly",
         Justification = "Dispose is being used for scope management, not resource disposal.")]
-    public sealed class ScopedLogger : LoggerBase, IActionLogger
+    public sealed class ScopedLogger : LoggerBase, IScopedLogger
     {
         private readonly DateTimeOffset _started = DateTimeOffset.Now;
         private readonly ScopedLogger? _parent;
