@@ -25,12 +25,6 @@ namespace WordTutor.Core.Logging
 
         public int Level { get; }
 
-        public void Success(string message)
-            => WriteLogMessage(LogKind.Success, message);
-
-        public void Failure(string message)
-            => WriteLogMessage(LogKind.Failure, message);
-
         public void Dispose()
         {
             var elapsed = DateTimeOffset.Now - _started;

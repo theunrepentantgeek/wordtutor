@@ -25,12 +25,18 @@ namespace WordTutor.Core.Logging
         private readonly List<string> _indents
             = new List<string> { string.Empty };
 
-        public IScopedLogger Action(string message)
-        {
-            WriteLogMessage(LogKind.OpenAction, message);
-            CurrentLogger = new ScopedLogger(CurrentLogger);
-            return CurrentLogger;
-        }
+    public IScopedLogger Action(string message)
+    {
+        WriteLogMessage(LogKind.OpenAction, message);
+        CurrentLogger = new ScopedLogger(CurrentLogger);
+        return CurrentLogger;
+    }
+
+        public void Success(string message)
+            => WriteLogMessage(LogKind.Success, message);
+
+        public void Failure(string message)
+            => WriteLogMessage(LogKind.Failure, message);
 
         public void Info(string message)
             => WriteLogMessage(LogKind.Info, message);
@@ -38,7 +44,9 @@ namespace WordTutor.Core.Logging
         public void Debug(string message)
             => WriteLogMessage(LogKind.Debug, message);
 
-        protected abstract void WriteLogMessage(LogKind logKind, string message);
+        protected abstract void WriteLogMessage(
+            LogKind logKind,
+            string message);
 
         protected void WriteLogMessage(ScopedLogger? currentAction, LogKind logKind, string message)
         {
@@ -55,7 +63,7 @@ namespace WordTutor.Core.Logging
 
         private string Indent(int level)
         {
-            while(_indents.Count <= level)
+            while (_indents.Count <= level)
             {
                 _indents.Add(new string(' ', _indents.Count * 4));
             }
