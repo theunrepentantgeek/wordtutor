@@ -35,7 +35,7 @@ namespace WordTutor
             var desktopAssembly = typeof(WordTutorWindow).Assembly;
 
             // General Infrastructure
-            container.RegisterSingleton<ILogger, Logger>();
+            container.RegisterSingleton<ILogger, DelegatingLogger>();
 
             // Register Redux Store
             container.RegisterSingleton<

@@ -12,6 +12,7 @@ namespace WordTutor.Desktop.Tests
     public class VocabularyBrowserViewModelTests
     {
         private readonly FakeApplicationStore _store;
+        private readonly FakeLogger _logger = new FakeLogger();
         private readonly WordTutorApplication _application;
         private readonly VocabularyBrowserScreen _screen;
         private readonly VocabularyBrowserViewModel _model;
@@ -32,7 +33,7 @@ namespace WordTutor.Desktop.Tests
             _application = new WordTutorApplication(_screen)
                 .WithVocabularySet(vocabulary);
             _store = new FakeApplicationStore(_application);
-            _model = new VocabularyBrowserViewModel(_store);
+            _model = new VocabularyBrowserViewModel(_store, _logger);
             _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
             _store.ClearCapturedMessages();
         }
@@ -44,14 +45,23 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new VocabularyBrowserViewModel(null!));
+                        () => new VocabularyBrowserViewModel(null!, _logger));
+                exception.ParamName.Should().Be("store");
+            }
+
+            [Fact]
+            public void GivenNullLogger_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => new VocabularyBrowserViewModel(_store, null!));
                 exception.ParamName.Should().Be("store");
             }
 
             [Fact]
             public void GivenStore_InitializesPropertiesFromModel()
             {
-                var viewModel = new VocabularyBrowserViewModel(_store);
+                var viewModel = new VocabularyBrowserViewModel(_store, _logger);
                 viewModel.Selection.Should().Be(_screen.Selection);
                 viewModel.Modified.Should().Be(_screen.Modified);
                 viewModel.Words.Should().BeEquivalentTo(_application.VocabularySet.Words);
@@ -108,7 +118,6 @@ namespace WordTutor.Desktop.Tests
 
         public class Words : VocabularyBrowserViewModelTests
         {
-
         }
     }
 }

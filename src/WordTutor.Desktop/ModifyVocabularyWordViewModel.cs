@@ -9,7 +9,7 @@ namespace WordTutor.Desktop
     public class ModifyVocabularyWordViewModel : ViewModelBase
     {
         private readonly IReduxStore<WordTutorApplication> _store;
-        private readonly IActionLogger _logger;
+        private readonly IScopedLogger _logger;
         private readonly IDisposable _screenSubscription;
 
         private string _spelling;

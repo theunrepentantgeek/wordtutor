@@ -13,7 +13,7 @@ namespace WordTutor.Desktop
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly IDisposable _screenSubscription;
         private readonly IDisposable _vocabularySubscription;
-        private readonly IActionLogger _logger;
+        private readonly IScopedLogger _logger;
 
         private VocabularyWord? _selection;
         private bool _modified;
