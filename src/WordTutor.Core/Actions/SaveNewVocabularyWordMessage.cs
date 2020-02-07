@@ -11,5 +11,8 @@ namespace WordTutor.Core.Actions
         {
             Word = word ?? throw new ArgumentNullException(nameof(word));
         }
+
+        public override string ToString()
+            => $"Save new word '{Word.Spelling}'.";
     }
 }

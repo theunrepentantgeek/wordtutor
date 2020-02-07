@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
+using WordTutor.Core.Logging;
 using WordTutor.Core.Redux;
 
 namespace WordTutor.Desktop
@@ -12,13 +13,22 @@ namespace WordTutor.Desktop
         private readonly IReduxStore<WordTutorApplication> _store;
         private readonly IDisposable _screenSubscription;
         private readonly IDisposable _vocabularySubscription;
+        private readonly IActionLogger _logger;
 
         private VocabularyWord? _selection;
         private bool _modified;
 
-        public VocabularyBrowserViewModel(IReduxStore<WordTutorApplication> store)
+        public VocabularyBrowserViewModel(
+            IReduxStore<WordTutorApplication> store,
+            ILogger logger)
         {
+            if (logger is null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
+
             _store = store ?? throw new ArgumentNullException(nameof(store));
+            _logger = logger.Action("Browse Vocabulary List");
 
             var screen = (VocabularyBrowserScreen)_store.State.CurrentScreen;
             var vocab = _store.State.VocabularySet.Words;
@@ -78,6 +88,7 @@ namespace WordTutor.Desktop
             {
                 _screenSubscription.Dispose();
                 _vocabularySubscription.Dispose();
+                _logger.Dispose();
                 return;
             }
 

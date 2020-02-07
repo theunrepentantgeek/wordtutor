@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WordTutor.Core.Logging
+﻿namespace WordTutor.Core.Logging
 {
     public interface ILogger
     {
@@ -10,12 +6,12 @@ namespace WordTutor.Core.Logging
         /// Log the start of an action
         /// </summary>
         /// <remarks>
-        /// Disposable so that the end of the action can be captured.
+        /// Returns a disposable IScopedLogger so that the end of the action can be captured.
         /// </remarks>
         /// <param name="message">
         /// Description of the action to be performed.
         /// </param>
-        IActionLogger Action(string message);
+        IScopedLogger Action(string message);
 
         /// <summary>
         /// Log info information about the application
@@ -32,24 +28,5 @@ namespace WordTutor.Core.Logging
         /// Information to be logged.
         /// </param>
         void Debug(string message);
-    }
-
-    public interface IActionLogger : ILogger, IDisposable
-    {
-        /// <summary>
-        /// Indicate that the current action (or part thereof) has been successful
-        /// </summary>
-        /// <param name="message">
-        /// Information about the successful outcome.
-        /// </param>
-        void Success(string message);
-
-        /// <summary>
-        /// Indicate that the current action (or part thereof) has failed
-        /// </summary>
-        /// <param name="message">
-        /// Information about the failure
-        /// </param>
-        void Failure(string message);
     }
 }

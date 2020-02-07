@@ -13,6 +13,6 @@ namespace WordTutor.Core.Actions
         }
 
         public override string ToString()
-            => $"Select '{Word.Spelling}'";
+            => $"Select '{Word.Spelling}'.";
     }
 }

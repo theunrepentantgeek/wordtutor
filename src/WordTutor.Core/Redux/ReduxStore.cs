@@ -39,6 +39,7 @@ namespace WordTutor.Core.Redux
             }
 
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+
             State = initialStateFactory.Create();
         }
 
@@ -119,6 +120,9 @@ namespace WordTutor.Core.Redux
         }
 
         public int SubscriptionCount => _subscriptions.Count;
+
+        public void ClearSubscriptions()
+            => _subscriptions.Clear();
 
         private void ReleaseSubscription(ReduxSubscription<T> subscription)
         {

@@ -13,6 +13,7 @@ namespace WordTutor.Desktop.Tests
     public class ModifyVocabularyWordViewModelTests
     {
         private readonly FakeApplicationStore _store;
+        private readonly FakeLogger _logger;
         private readonly ModifyVocabularyWordScreen _screen;
         private readonly ModifyVocabularyWordViewModel _model;
         private readonly NotifyPropertyChangedProbe _notifyPropertyChanged;
@@ -23,9 +24,12 @@ namespace WordTutor.Desktop.Tests
                 .WithSpelling("spelling")
                 .WithPhrase("phrase")
                 .WithPronunciation("pronunciation");
+
             var application = new WordTutorApplication(_screen);
             _store = new FakeApplicationStore(application);
-            _model = new ModifyVocabularyWordViewModel(_store);
+            _logger = new FakeLogger();
+
+            _model = new ModifyVocabularyWordViewModel(_store, _logger);
             _notifyPropertyChanged = new NotifyPropertyChangedProbe(_model);
             _store.ClearCapturedMessages();
         }
@@ -37,14 +41,23 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new ModifyVocabularyWordViewModel(null!));
+                        () => new ModifyVocabularyWordViewModel(null!, _logger));
                 exception.ParamName.Should().Be("store");
+            }
+
+            [Fact]
+            public void GivenNullLogger_ThrowsException()
+            {
+                var exception =
+                    Assert.Throws<ArgumentNullException>(
+                        () => new ModifyVocabularyWordViewModel(_store, null!));
+                exception.ParamName.Should().Be("logger");
             }
 
             [Fact]
             public void GivenStore_InitializesPropertiesFromModel()
             {
-                var viewModel = new ModifyVocabularyWordViewModel(_store);
+                var viewModel = new ModifyVocabularyWordViewModel(_store, _logger);
                 viewModel.Spelling.Should().Be(_screen.Spelling);
                 viewModel.Phrase.Should().Be(_screen.Phrase);
                 viewModel.Pronunciation.Should().Be(_screen.Pronunciation);

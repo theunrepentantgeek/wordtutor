@@ -16,5 +16,8 @@ namespace WordTutor.Core.Actions
             ReplacementWord = replacementWord 
                 ?? throw new ArgumentNullException(nameof(replacementWord));
         }
+
+        public override string ToString()
+            => $"Save changes to '{OriginalWord.Spelling}'.";
     }
 }
