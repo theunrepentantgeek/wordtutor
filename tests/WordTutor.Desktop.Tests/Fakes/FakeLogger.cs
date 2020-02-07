@@ -5,9 +5,9 @@ using WordTutor.Core.Logging;
 
 namespace WordTutor.Desktop.Tests.Fakes
 {
-    public class FakeLogger : ILogger, IActionLogger
+    public sealed class FakeLogger : ILogger, IScopedLogger
     {
-        public IActionLogger Action(string message)
+        public IScopedLogger Action(string message)
             => this;
 
         public void Debug(string message)
