@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WordTutor.Core.Services;
 
 namespace WordTutor.Desktop
 {
@@ -20,16 +21,26 @@ namespace WordTutor.Desktop
     /// </summary>
     public partial class WordTutorWindow : Window
     {
-        public WordTutorWindow(ViewModelToViewValueConverter converter)
+        private readonly ISpeechService speechService;
+
+        public WordTutorWindow(
+            ViewModelToViewValueConverter converter,
+            ISpeechService speechService)
         {
             Resources.Add("ViewModelToViewValueConverter", converter);
 
             InitializeComponent();
+            this.speechService = speechService;
         }
 
         private void ButtonExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            speechService.SayAsync("Hello World.");
         }
     }
 }
