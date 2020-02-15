@@ -16,7 +16,7 @@ namespace WordTutor.Azure
         public AzureSpeechService(IConfigurationRoot configuration, ILogger logger)
         {
             _configurationRoot = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             var apiKey = _configurationRoot["WordTutor:SpeechApiKey"];
             var apiRegion = _configurationRoot["WordTutor:SpeechApiRegion"];
