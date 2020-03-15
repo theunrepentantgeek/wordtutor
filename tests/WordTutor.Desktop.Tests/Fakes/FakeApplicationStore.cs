@@ -78,5 +78,10 @@ namespace WordTutor.Desktop.Tests.Fakes
         {
             return new FakeSubscription();
         }
+
+        public void AddMiddleware(IReduxMiddleware middleware)
+        {
+            // Do nothing
+        }
     }
 }
