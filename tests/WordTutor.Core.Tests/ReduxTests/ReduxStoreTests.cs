@@ -8,7 +8,7 @@ namespace WordTutor.Core.Tests.ReduxTests
 {
     public class ReduxStoreTests
     {
-        private readonly StringStateFactory _initialStateFactory = new StringStateFactory("alpha");
+        private readonly TestStateFactory<string> _initialStateFactory = new TestStateFactory<string>("alpha");
         private readonly FakeReducer<string> _reducer = new FakeReducer<string>();
         private readonly ReduxStore<string> _store;
         private readonly FakeMessage _message = new FakeMessage("message");
@@ -203,15 +203,6 @@ namespace WordTutor.Core.Tests.ReduxTests
             }
 
             private string ReadValue(string value) => value;
-        }
-
-        private class StringStateFactory : IReduxStateFactory<string>
-        {
-            public StringStateFactory(string state) => State = state;
-
-            public string State { get; }
-
-            public string Create() => State;
         }
     }
 }
