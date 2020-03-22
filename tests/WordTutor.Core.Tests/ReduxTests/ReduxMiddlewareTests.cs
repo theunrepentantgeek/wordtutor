@@ -37,7 +37,21 @@ namespace WordTutor.Core.Tests.ReduxTests
         {
             _store.AddMiddleware(_passThroughMiddleware);
             _store.Dispatch(new IncrementMessage(42));
+
             _store.State.Should().Be(42);
+        }
+
+        [Fact]
+        public void WithMiddleware_DispatchOfSingleMessage_PassesMessageToMiddleware()
+        {
+            IReduxMessage dispatchedMessage = new IncrementMessage(37);
+            var capturingMiddleware = new CapturingReduxMiddleware();
+
+            _store.AddMiddleware(capturingMiddleware);
+            _store.Dispatch(dispatchedMessage);
+
+            capturingMiddleware.LastCapturedMessage
+                .Should().BeSameAs(dispatchedMessage);
         }
 
         private int Incrementer(IReduxMessage message, int state) 

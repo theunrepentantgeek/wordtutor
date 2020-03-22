@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace WordTutor.Core.Redux
@@ -7,7 +8,7 @@ namespace WordTutor.Core.Redux
     /// <summary>
     /// Central store for the state of the application
     /// </summary>
-    public class ReduxStore<T> : IReduxStore<T>
+    public partial class ReduxStore<T> : IReduxStore<T>
     {
         // Reference to our state reducer
         private readonly IReduxReducer<T> _reducer;
@@ -18,6 +19,14 @@ namespace WordTutor.Core.Redux
         // Set of all our current subscriptions
         private readonly HashSet<ReduxSubscription<T>> _subscriptions
             = new HashSet<ReduxSubscription<T>>();
+
+        // List of middleware introduced for processing
+        private readonly List<IReduxMiddleware> _middleware
+            = new List<IReduxMiddleware>();
+
+        // Queue of middleware used for processing, including internal middleware
+        // Immutable queue used to allow our iterator to cheaply take a copy for use
+        private readonly Cached<ImmutableQueue<IReduxMiddleware>> _processingQueue;
 
         /// <summary>
         /// Gets the current state of the application
@@ -39,6 +48,7 @@ namespace WordTutor.Core.Redux
             }
 
             _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+            _processingQueue = new Cached<ImmutableQueue<IReduxMiddleware>>(CreateProcessingQueue);
 
             State = initialStateFactory.Create();
         }
@@ -60,9 +70,10 @@ namespace WordTutor.Core.Redux
             _dispatching = true;
             try
             {
-                State = _reducer.Reduce(
-                    message ?? throw new ArgumentNullException(nameof(message)),
-                    State);
+                var iterator = new ReduxMiddlewareIterator(_processingQueue.Value);
+                iterator.Dispatch(message ?? throw new ArgumentNullException(nameof(message)));
+
+                State = _reducer.Reduce(message, State);
             }
             finally
             {
@@ -86,7 +97,8 @@ namespace WordTutor.Core.Redux
         /// </param>
         public void AddMiddleware(IReduxMiddleware middleware)
         {
-            // Nothing
+            _middleware.Add(middleware);
+            _processingQueue.Clear();
         }
 
         /// <summary>
@@ -141,6 +153,38 @@ namespace WordTutor.Core.Redux
         private void ReleaseSubscription(ReduxSubscription<T> subscription)
         {
             _subscriptions.Remove(subscription);
+        }
+
+        private ImmutableQueue<IReduxMiddleware> CreateProcessingQueue()
+        {
+            var queue = _middleware.Aggregate(
+                ImmutableQueue<IReduxMiddleware>.Empty,
+                (queue, middleware) => queue.Enqueue(middleware));
+
+            return queue;
+        }
+
+        private class ReduxMiddlewareIterator : IReduxDispatcher
+        {
+            private ImmutableQueue<IReduxMiddleware> _middleware;
+
+            public ReduxMiddlewareIterator(
+                ImmutableQueue<IReduxMiddleware> middleware)
+            {
+                _middleware = middleware
+                    ?? throw new ArgumentNullException(nameof(middleware));
+            }
+
+            public void Dispatch(IReduxMessage message)
+            {
+                if (_middleware.IsEmpty)
+                {
+                    return;
+                }
+
+                _middleware = _middleware.Dequeue(out var stage);
+                 stage.Dispatch(message, this);
+            }
         }
     }
 }
