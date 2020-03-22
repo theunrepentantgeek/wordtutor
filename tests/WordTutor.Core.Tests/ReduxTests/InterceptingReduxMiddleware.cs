@@ -16,6 +16,6 @@ namespace WordTutor.Core.Tests.ReduxTests
         }
 
         public void Dispatch(IReduxMessage message, IReduxDispatcher next)
-            => Dispatch(message, next);
+            => _dispatch(message, next);
     }
 }
