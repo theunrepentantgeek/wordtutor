@@ -1,16 +1,19 @@
+using Microsoft.Extensions.Configuration;
 using SimpleInjector;
 using SimpleInjector.Diagnostics;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using WordTutor.Azure;
 using WordTutor.Core;
 using WordTutor.Core.Logging;
 using WordTutor.Core.Redux;
+using WordTutor.Core.Services;
 using WordTutor.Desktop;
 
 namespace WordTutor
 {
-    public static class Program
+    public class Program
     {
         [STAThread]
         public static void Main()
@@ -57,12 +60,20 @@ namespace WordTutor
                     Lifestyle.Singleton);
             }
 
+            // Register Services
+            container.RegisterSingleton<ISpeechService, AzureSpeechService>();
+
             // Register ViewModels
             container.Collection.Register<ViewModelBase>(desktopAssembly);
 
             // Register Views
             container.Collection.Register(typeof(UserControl), desktopAssembly);
             container.Collection.Register(typeof(Window), desktopAssembly);
+
+            // Register Configuration
+            var builder = new ConfigurationBuilder();
+            builder.AddUserSecrets<Program>();
+            container.RegisterInstance<IConfigurationRoot>(builder.Build());
 
             // Suppress Warnings
             var registration = container.GetRegistration(typeof(WordTutorViewModel))!.Registration;

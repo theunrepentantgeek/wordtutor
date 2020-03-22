@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Desktop", "src\Wo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTutor.Desktop.Tests", "tests\WordTutor.Desktop.Tests\WordTutor.Desktop.Tests.csproj", "{A79E83C4-56F8-4579-8129-05B031302943}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTutor.Azure", "src\WordTutor.Azure\WordTutor.Azure.csproj", "{04BD4FC0-81B3-490F-88FF-363899EDD676}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A79E83C4-56F8-4579-8129-05B031302943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A79E83C4-56F8-4579-8129-05B031302943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A79E83C4-56F8-4579-8129-05B031302943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04BD4FC0-81B3-490F-88FF-363899EDD676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BD4FC0-81B3-490F-88FF-363899EDD676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BD4FC0-81B3-490F-88FF-363899EDD676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BD4FC0-81B3-490F-88FF-363899EDD676}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
