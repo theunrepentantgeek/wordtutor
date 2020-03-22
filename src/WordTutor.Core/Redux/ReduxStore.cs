@@ -13,12 +13,11 @@ namespace WordTutor.Core.Redux
         // Reference to our state reducer 
         private readonly ReducingMiddleware _reducer;
 
+        // Reference to subscription management
+        private readonly SubscriptionMiddleware _subscriptions;
+
         // Flag used to prevent recursive dispatching
         private bool _dispatching;
-
-        // Set of all our current subscriptions
-        private readonly HashSet<ReduxSubscription<T>> _subscriptions
-            = new HashSet<ReduxSubscription<T>>();
 
         // List of middleware introduced for processing
         private readonly List<IReduxMiddleware> _middleware
@@ -46,6 +45,8 @@ namespace WordTutor.Core.Redux
             {
                 throw new ArgumentNullException(nameof(initialStateFactory));
             }
+
+            _subscriptions = new SubscriptionMiddleware(this);
 
             _reducer = new ReducingMiddleware(
                 reducer ?? throw new ArgumentNullException(nameof(reducer)),
@@ -77,11 +78,6 @@ namespace WordTutor.Core.Redux
             finally
             {
                 _dispatching = false;
-            }
-
-            foreach (var subscription in _subscriptions.ToList())
-            {
-                subscription.Publish(State);
             }
         }
 
@@ -156,9 +152,13 @@ namespace WordTutor.Core.Redux
 
         private ImmutableQueue<IReduxMiddleware> CreateProcessingQueue()
         {
-            var queue = _middleware.Aggregate(
-                ImmutableQueue<IReduxMiddleware>.Empty,
-                (queue, middleware) => queue.Enqueue(middleware))
+            var queue = ImmutableQueue<IReduxMiddleware>.Empty;
+            if (_subscriptions.Count > 0)
+            {
+                queue = queue.Enqueue(_subscriptions);
+            }
+
+            queue = _middleware.Aggregate(queue, (q, m) => q.Enqueue(m))
                 .Enqueue(_reducer);
 
             return queue;
@@ -183,10 +183,44 @@ namespace WordTutor.Core.Redux
                 }
 
                 _middleware = _middleware.Dequeue(out var stage);
-                 stage.Dispatch(message, this);
+                stage.Dispatch(message, this);
             }
         }
 
+        private class SubscriptionMiddleware : IReduxMiddleware
+        {
+            private readonly IReduxStore<T> _store;
+
+            // Set of all our current subscriptions
+            private readonly HashSet<ReduxSubscription<T>> _subscriptions
+                = new HashSet<ReduxSubscription<T>>();
+
+            public SubscriptionMiddleware(IReduxStore<T> store)
+            {
+                _store = store;
+            }
+
+            public void Add(ReduxSubscription<T> subscription)
+                => _subscriptions.Add(subscription);
+
+            public void Remove(ReduxSubscription<T> subscription)
+                => _subscriptions.Remove(subscription);
+
+            public void Clear()
+                => _subscriptions.Clear();
+
+            public int Count => _subscriptions.Count;
+
+            public void Dispatch(IReduxMessage message, IReduxDispatcher next)
+            {
+                next.Dispatch(message);
+
+                foreach (var subscription in _subscriptions.ToList())
+                {
+                    subscription.Publish(_store.State);
+                }
+            }
+        }
 
         private class ReducingMiddleware : IReduxMiddleware
         {
