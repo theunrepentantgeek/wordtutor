@@ -54,6 +54,18 @@ namespace WordTutor.Core.Tests.ReduxTests
                 .Should().BeSameAs(dispatchedMessage);
         }
 
+        [Fact]
+        public void WithMiddlewareThatBlocksMessageProcessing_DispatchOfSingleMessage_StateIsNotUpdated()
+        {
+            var blockingMiddleware = new BlockingReduxMiddleware();
+            var initialState = _store.State;
+
+            _store.AddMiddleware(blockingMiddleware);
+            _store.Dispatch(new IncrementMessage(51));
+
+            _store.State.Should().Be(initialState);
+        }
+
         private int Incrementer(IReduxMessage message, int state) 
             => message is IncrementMessage inc ? state + inc.Increment : state;
 

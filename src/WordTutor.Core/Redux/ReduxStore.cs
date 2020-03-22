@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -10,8 +10,8 @@ namespace WordTutor.Core.Redux
     /// </summary>
     public partial class ReduxStore<T> : IReduxStore<T>
     {
-        // Reference to our state reducer
-        private readonly IReduxReducer<T> _reducer;
+        // Reference to our state reducer 
+        private readonly ReducingMiddleware _reducer;
 
         // Flag used to prevent recursive dispatching
         private bool _dispatching;
@@ -31,7 +31,7 @@ namespace WordTutor.Core.Redux
         /// <summary>
         /// Gets the current state of the application
         /// </summary>
-        public T State { get; private set; }
+        public T State => _reducer.State;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReduxStore{T}" class/>
@@ -47,10 +47,11 @@ namespace WordTutor.Core.Redux
                 throw new ArgumentNullException(nameof(initialStateFactory));
             }
 
-            _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
-            _processingQueue = new Cached<ImmutableQueue<IReduxMiddleware>>(CreateProcessingQueue);
+            _reducer = new ReducingMiddleware(
+                reducer ?? throw new ArgumentNullException(nameof(reducer)),
+                initialStateFactory.Create());
 
-            State = initialStateFactory.Create();
+            _processingQueue = new Cached<ImmutableQueue<IReduxMiddleware>>(CreateProcessingQueue);
         }
 
         /// <summary>
@@ -72,8 +73,6 @@ namespace WordTutor.Core.Redux
             {
                 var iterator = new ReduxMiddlewareIterator(_processingQueue.Value);
                 iterator.Dispatch(message ?? throw new ArgumentNullException(nameof(message)));
-
-                State = _reducer.Reduce(message, State);
             }
             finally
             {
@@ -159,7 +158,8 @@ namespace WordTutor.Core.Redux
         {
             var queue = _middleware.Aggregate(
                 ImmutableQueue<IReduxMiddleware>.Empty,
-                (queue, middleware) => queue.Enqueue(middleware));
+                (queue, middleware) => queue.Enqueue(middleware))
+                .Enqueue(_reducer);
 
             return queue;
         }
@@ -184,6 +184,29 @@ namespace WordTutor.Core.Redux
 
                 _middleware = _middleware.Dequeue(out var stage);
                  stage.Dispatch(message, this);
+            }
+        }
+
+
+        private class ReducingMiddleware : IReduxMiddleware
+        {
+            // Reference to our state reducer
+            private readonly IReduxReducer<T> _reducer;
+
+            /// <summary>
+            /// Gets the current state of the application
+            /// </summary>
+            public T State { get; private set; }
+
+            public ReducingMiddleware(IReduxReducer<T> reducer, T state)
+            {
+                _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+                State = state;
+            }
+
+            public void Dispatch(IReduxMessage message, IReduxDispatcher _)
+            {
+                State = _reducer.Reduce(message, State);
             }
         }
     }
