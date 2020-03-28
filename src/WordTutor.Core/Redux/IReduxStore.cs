@@ -16,6 +16,17 @@ namespace WordTutor.Core.Redux
         void Dispatch(IReduxMessage message);
 
         /// <summary>
+        /// Add middleware into the processing of the store
+        /// </summary>
+        /// <remarks>
+        /// Middleware is activated in the order added to the store.
+        /// </remarks>
+        /// <param name="middleware">
+        /// The middleware processor to be included in the pipeline of the store.
+        /// </param>
+        void AddMiddleware(IReduxMiddleware middleware);
+
+        /// <summary>
         /// Create a subscription to be notified of changes to our state
         /// </summary>
         /// <typeparam name="V">Type of value being monitored</typeparam>
