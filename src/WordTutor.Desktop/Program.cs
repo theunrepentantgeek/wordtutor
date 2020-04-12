@@ -24,6 +24,9 @@ namespace WordTutor
             var store = (ReduxStore<WordTutorApplication>)container.GetInstance<IReduxStore<WordTutorApplication>>();
             store.ClearSubscriptions();
 
+            var speechMiddleware = container.GetInstance<SpeechMiddleware>();
+            store.AddMiddleware(speechMiddleware);
+
             var factory = container.GetInstance<ViewFactory>();
             using var wordTutorModel = container.GetInstance<WordTutorViewModel>();
             var wordTutorWindow = (Window)factory.Create(wordTutorModel);
@@ -48,7 +51,7 @@ namespace WordTutor
                 IReduxStateFactory<WordTutorApplication>,
                 WordTutorApplicationStateFactory>();
 
-            // Register Reducers
+            // Register Middleware & Reducers
             container.RegisterSingleton<
                 IReduxReducer<WordTutorApplication>,
                 CompositeReduxReducer<WordTutorApplication>>();
@@ -56,6 +59,14 @@ namespace WordTutor
             {
                 container.Collection.Append(
                     typeof(IReduxReducer<WordTutorApplication>),
+                    type,
+                    Lifestyle.Singleton);
+            }
+
+            foreach(var type in container.GetTypesToRegister<IReduxMiddleware>(coreAssembly))
+            {
+                container.Collection.Append(
+                    typeof(IReduxMiddleware),
                     type,
                     Lifestyle.Singleton);
             }
