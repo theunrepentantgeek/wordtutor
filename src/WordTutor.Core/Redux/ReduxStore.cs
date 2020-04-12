@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -27,6 +27,13 @@ namespace WordTutor.Core.Redux
         // Immutable queue used to allow our iterator to cheaply take a copy for use
         private readonly Cached<ImmutableQueue<IReduxMiddleware>> _processingQueue;
 
+        // Queue of messages we need to dispatch
+        private readonly Queue<IReduxMessage> _messagesToDispatch
+            = new Queue<IReduxMessage>();
+
+        // Lock used to avoid race conditions
+        private readonly object _padlock = new object();
+
         /// <summary>
         /// Gets the current state of the application
         /// </summary>
@@ -52,7 +59,9 @@ namespace WordTutor.Core.Redux
                 reducer ?? throw new ArgumentNullException(nameof(reducer)),
                 initialStateFactory.Create());
 
-            _processingQueue = new Cached<ImmutableQueue<IReduxMiddleware>>(CreateProcessingQueue);
+            _processingQueue
+                = new Cached<ImmutableQueue<IReduxMiddleware>>(
+                    CreateProcessingQueue);
         }
 
         /// <summary>
@@ -61,23 +70,30 @@ namespace WordTutor.Core.Redux
         /// <param name="message">Message to process.</param>
         public void Dispatch(IReduxMessage message)
         {
-            if (_dispatching)
+            bool currentlyDispatching;
+            lock (_padlock)
             {
-                // TOCONSIDER: If this exception becomes a problem, 
-                // introduce a queue to serialize message processing instead.
-                throw new InvalidOperationException(
-                    "Calling Dispatch() while processing Dispatch() is not permitted.");
+                _messagesToDispatch.Enqueue(message ?? throw new ArgumentNullException(nameof(message)));
+                currentlyDispatching = _dispatching;
+                _dispatching = true;
             }
 
-            _dispatching = true;
-            try
+            if (!currentlyDispatching)
             {
-                var iterator = new ReduxMiddlewareIterator(_processingQueue.Value);
-                iterator.Dispatch(message ?? throw new ArgumentNullException(nameof(message)));
-            }
-            finally
-            {
-                _dispatching = false;
+                while (_dispatching)
+                {
+                    IReduxMessage messageToDispatch;
+                    lock (_padlock)
+                    {
+                        _dispatching = _messagesToDispatch.TryDequeue(out messageToDispatch!);
+                    }
+
+                    if (_dispatching)
+                    {
+                        var iterator = new ReduxMiddlewareIterator(_processingQueue.Value);
+                        iterator.Dispatch(messageToDispatch);
+                    }
+                }
             }
         }
 
