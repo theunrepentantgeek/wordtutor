@@ -15,7 +15,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
             property.PropertyType.IsImmutableType().Should().BeTrue(
-                $"property {property.Name} should be declared as an immutable type");
+                $"property {property.DeclaringType.Name}.{property.Name} should be declared as an immutable type");
         }
 
         [Theory]

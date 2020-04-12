@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace WordTutor.Core.Redux
@@ -7,22 +8,29 @@ namespace WordTutor.Core.Redux
     /// <summary>
     /// Central store for the state of the application
     /// </summary>
-    public class ReduxStore<T> : IReduxStore<T>
+    public partial class ReduxStore<T> : IReduxStore<T>
     {
-        // Reference to our state reducer
-        private readonly IReduxReducer<T> _reducer;
+        // Reference to our state reducer 
+        private readonly ReducingMiddleware _reducer;
+
+        // Reference to subscription management
+        private readonly SubscriptionMiddleware _subscriptions;
 
         // Flag used to prevent recursive dispatching
         private bool _dispatching;
 
-        // Set of all our current subscriptions
-        private readonly HashSet<ReduxSubscription<T>> _subscriptions
-            = new HashSet<ReduxSubscription<T>>();
+        // List of middleware introduced for processing
+        private readonly List<IReduxMiddleware> _middleware
+            = new List<IReduxMiddleware>();
+
+        // Queue of middleware used for processing, including internal middleware
+        // Immutable queue used to allow our iterator to cheaply take a copy for use
+        private readonly Cached<ImmutableQueue<IReduxMiddleware>> _processingQueue;
 
         /// <summary>
         /// Gets the current state of the application
         /// </summary>
-        public T State { get; private set; }
+        public T State => _reducer.State;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReduxStore{T}" class/>
@@ -38,9 +46,13 @@ namespace WordTutor.Core.Redux
                 throw new ArgumentNullException(nameof(initialStateFactory));
             }
 
-            _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+            _subscriptions = new SubscriptionMiddleware(this);
 
-            State = initialStateFactory.Create();
+            _reducer = new ReducingMiddleware(
+                reducer ?? throw new ArgumentNullException(nameof(reducer)),
+                initialStateFactory.Create());
+
+            _processingQueue = new Cached<ImmutableQueue<IReduxMiddleware>>(CreateProcessingQueue);
         }
 
         /// <summary>
@@ -60,18 +72,12 @@ namespace WordTutor.Core.Redux
             _dispatching = true;
             try
             {
-                State = _reducer.Reduce(
-                    message ?? throw new ArgumentNullException(nameof(message)),
-                    State);
+                var iterator = new ReduxMiddlewareIterator(_processingQueue.Value);
+                iterator.Dispatch(message ?? throw new ArgumentNullException(nameof(message)));
             }
             finally
             {
                 _dispatching = false;
-            }
-
-            foreach (var subscription in _subscriptions.ToList())
-            {
-                subscription.Publish(State);
             }
         }
 
@@ -86,7 +92,8 @@ namespace WordTutor.Core.Redux
         /// </param>
         public void AddMiddleware(IReduxMiddleware middleware)
         {
-            // Nothing
+            _middleware.Add(middleware);
+            _processingQueue.Clear();
         }
 
         /// <summary>
@@ -141,6 +148,100 @@ namespace WordTutor.Core.Redux
         private void ReleaseSubscription(ReduxSubscription<T> subscription)
         {
             _subscriptions.Remove(subscription);
+        }
+
+        private ImmutableQueue<IReduxMiddleware> CreateProcessingQueue()
+        {
+            var queue = ImmutableQueue<IReduxMiddleware>.Empty;
+            if (_subscriptions.Count > 0)
+            {
+                queue = queue.Enqueue(_subscriptions);
+            }
+
+            queue = _middleware.Aggregate(queue, (q, m) => q.Enqueue(m))
+                .Enqueue(_reducer);
+
+            return queue;
+        }
+
+        private class ReduxMiddlewareIterator : IReduxDispatcher
+        {
+            private ImmutableQueue<IReduxMiddleware> _middleware;
+
+            public ReduxMiddlewareIterator(
+                ImmutableQueue<IReduxMiddleware> middleware)
+            {
+                _middleware = middleware
+                    ?? throw new ArgumentNullException(nameof(middleware));
+            }
+
+            public void Dispatch(IReduxMessage message)
+            {
+                if (_middleware.IsEmpty)
+                {
+                    return;
+                }
+
+                _middleware = _middleware.Dequeue(out var stage);
+                stage.Dispatch(message, this);
+            }
+        }
+
+        private class SubscriptionMiddleware : IReduxMiddleware
+        {
+            private readonly IReduxStore<T> _store;
+
+            // Set of all our current subscriptions
+            private readonly HashSet<ReduxSubscription<T>> _subscriptions
+                = new HashSet<ReduxSubscription<T>>();
+
+            public SubscriptionMiddleware(IReduxStore<T> store)
+            {
+                _store = store;
+            }
+
+            public void Add(ReduxSubscription<T> subscription)
+                => _subscriptions.Add(subscription);
+
+            public void Remove(ReduxSubscription<T> subscription)
+                => _subscriptions.Remove(subscription);
+
+            public void Clear()
+                => _subscriptions.Clear();
+
+            public int Count => _subscriptions.Count;
+
+            public void Dispatch(IReduxMessage message, IReduxDispatcher next)
+            {
+                next.Dispatch(message);
+
+                foreach (var subscription in _subscriptions.ToList())
+                {
+                    subscription.Publish(_store.State);
+                }
+            }
+        }
+
+        private class ReducingMiddleware : IReduxMiddleware
+        {
+            // Reference to our state reducer
+            private readonly IReduxReducer<T> _reducer;
+
+            /// <summary>
+            /// Gets the current state of the application
+            /// </summary>
+            public T State { get; private set; }
+
+            public ReducingMiddleware(IReduxReducer<T> reducer, T state)
+            {
+                _reducer = reducer ?? throw new ArgumentNullException(nameof(reducer));
+                State = state;
+            }
+
+            public void Dispatch(IReduxMessage message, IReduxDispatcher _)
+            {
+                State = _reducer.Reduce(message, State);
+            }
         }
     }
 }
