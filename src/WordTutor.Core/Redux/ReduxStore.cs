@@ -174,8 +174,8 @@ namespace WordTutor.Core.Redux
                 queue = queue.Enqueue(_subscriptions);
             }
 
-            queue = _middleware.Aggregate(queue, (q, m) => q.Enqueue(m))
-                .Enqueue(_reducer);
+            queue = _middleware.Aggregate(queue, (q, m) => q.Enqueue(m));
+            queue = queue.Enqueue(_reducer);
 
             return queue;
         }

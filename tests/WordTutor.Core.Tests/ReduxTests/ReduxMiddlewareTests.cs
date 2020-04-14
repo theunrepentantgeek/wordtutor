@@ -66,7 +66,7 @@ namespace WordTutor.Core.Tests.ReduxTests
             _store.State.Should().Be(initialState);
         }
 
-        private int Incrementer(IReduxMessage message, int state) 
+        private int Incrementer(IReduxMessage message, int state)
             => message is IncrementMessage inc ? state + inc.Increment : state;
 
         private class IncrementMessage : IReduxMessage
