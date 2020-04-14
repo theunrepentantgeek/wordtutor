@@ -45,6 +45,8 @@ namespace WordTutor.Desktop
                 app => app.CurrentScreen as ModifyVocabularyWordScreen,
                 RefreshFromScreen);
 
+            SpeakCommand = new RoutedCommandSink<string>(
+                VoiceCommands.StartSpeaking, Speak, CanSpeak, this);
             SaveCommand = new RoutedCommandSink(
                 ItemCommands.Save, Save, CanSave);
             CloseCommand = new RoutedCommandSink(
@@ -88,6 +90,13 @@ namespace WordTutor.Desktop
 
         public ModifyVocabularyWordScreen? Screen
             => _store.State.CurrentScreen as ModifyVocabularyWordScreen;
+
+        public RoutedCommandSink<string> SpeakCommand { get; }
+
+        public bool CanSpeak(string text) => !string.IsNullOrWhiteSpace(text);
+
+        public void Speak(string text)
+            => _store.Dispatch(new SpeakMessage(text));
 
         public RoutedCommandSink SaveCommand { get; }
 
