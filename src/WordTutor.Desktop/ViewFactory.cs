@@ -59,6 +59,8 @@ namespace WordTutor.Desktop
             result.DataContext = viewModel;
             result.CommandBindings.AddRange(CreateCommandBindings(viewModel));
 
+            viewModel.PropertyChanged += (s, a) => CommandManager.InvalidateRequerySuggested();
+
             return result;
         }
 

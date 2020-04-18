@@ -9,12 +9,16 @@
              d:DesignWidth="800"
              FontFamily="Segoe UI"
              FontSize="18">
-    <Grid>
+    <Grid Grid.IsSharedSizeScope="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" 
+                              SharedSizeGroup="Button"/>
             <ColumnDefinition Width="*" 
                               MinWidth="240"
                               MaxWidth="480"/>
+            <ColumnDefinition Width="Auto" 
+                              SharedSizeGroup="Button"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -36,58 +40,83 @@
         </Grid.RowDefinitions>
 
         <Label Content="{Binding Caption}"
-               FontSize="36"
-               HorizontalAlignment="Center"
-               Grid.Row="1"
-               Grid.Column="1"/>
+            FontSize="36"
+            HorizontalAlignment="Center"
+            Grid.Row="1"
+            Grid.Column="2"/>
 
         <Label Content="Spelling"
-               HorizontalAlignment="Center"
-               Grid.Row="3"
-               Grid.Column="1"/>
+            HorizontalAlignment="Center"
+            Grid.Row="3"
+            Grid.Column="2"/>
 
         <TextBox Text="{Binding Spelling, Delay=250, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 TextAlignment="Center"
-                 Grid.Row="4"
-                 Grid.Column="1"/>
+            TextAlignment="Center"
+            Grid.Row="4"
+            Grid.Column="2"/>
+
+        <Button Content="u"
+            Grid.Row="4"
+            Grid.Column="3"
+            FontFamily="Wingdings 3"
+            Command="desktop:VoiceCommands.StartSpeaking"
+            CommandParameter="{Binding Spelling}"
+            Padding="5 0"/>
 
         <Label Content="Pronunciation"
-               HorizontalAlignment="Center"
-               Grid.Row="6"
-               Grid.Column="1"/>
+            HorizontalAlignment="Center"
+            Grid.Row="6"
+            Grid.Column="2"/>
 
         <TextBox Text="{Binding Pronunciation, Delay=250, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 TextAlignment="Center"
-                 Grid.Row="7"
-                 Grid.Column="1"/>
+            Grid.Row="7"
+            Grid.Column="2"
+            TextAlignment="Center"
+            HorizontalAlignment="Stretch"/>
+
+        <Button Content="u"
+            Grid.Row="7"
+            Grid.Column="3"
+            FontFamily="Wingdings 3"
+            Command="desktop:VoiceCommands.StartSpeaking"
+            CommandParameter="{Binding Pronunciation}"
+            Padding="5 0"/>
 
         <Label Content="Phrase"
-               HorizontalAlignment="Center"
-               Grid.Row="9"
-               Grid.Column="1"/>
+            Grid.Row="9"
+            Grid.Column="2"
+            HorizontalAlignment="Center"/>
 
         <TextBox Text="{Binding Phrase, Delay=250, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 TextAlignment="Center"
-                 Grid.Row="10"
-                 Grid.Column="1"/>
+            Grid.Row="10"
+            Grid.Column="2"
+            TextAlignment="Center"/>
+
+        <Button Content="u"
+            Grid.Row="10"
+            Grid.Column="3"
+            FontFamily="Wingdings 3"
+            Command="desktop:VoiceCommands.StartSpeaking"
+            CommandParameter="{Binding Phrase}"
+            Padding="5 0"/>
 
         <StackPanel Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                Grid.Row="12"
-                Grid.Column="1">
-            
+            Grid.Row="12"
+            Grid.Column="2"
+            HorizontalAlignment="Center">
+
             <Button Content="Save"
-                    Width="120"
-                    FontSize="18"
-                    Command="desktop:ItemCommands.Save"
-                    Margin="8">
+                Width="120"
+                FontSize="18"
+                Command="desktop:ItemCommands.Save"
+                Margin="8">
             </Button>
-            
+
             <Button Content="Cancel"
-                    Width="120"
-                    FontSize="18"
-                    Command="desktop:ItemCommands.Close"
-                    Margin="8">
+                Width="120"
+                FontSize="18"
+                Command="desktop:ItemCommands.Close"
+                Margin="8">
             </Button>
 
         </StackPanel>

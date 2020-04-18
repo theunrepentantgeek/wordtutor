@@ -13,7 +13,7 @@ namespace WordTutor.Core
         private readonly IReduxStore<WordTutorApplication> _reduxStore;
 
         public SpeechMiddleware(
-            ISpeechService speechServices, 
+            ISpeechService speechServices,
             IReduxStore<WordTutorApplication> reduxStore)
         {
             _speechServices = speechServices;
