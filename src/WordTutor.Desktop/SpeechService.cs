@@ -26,23 +26,23 @@ namespace WordTutor.Desktop
             Dispose(false);
         }
 
-        public async Task SayAsync(string content)
-        {
-            using var logger = _logger.Action($"Say {content}");
-            try
-            {
-                var speech = await _renderSpeechService.RenderSpeechAsync(content).ConfigureAwait(false);
+public async Task SayAsync(string content)
+{
+    using var logger = _logger.Action($"Say {content}");
+    try
+    {
+        var speech = await _renderSpeechService.RenderSpeechAsync(content).ConfigureAwait(false);
 
-                _player.Stop();
-                speech.Seek(0, SeekOrigin.Begin);
-                _player.Stream = speech;
-                _player.Play();
-            }
-            catch(RenderSpeechException ex)
-            {
-                logger.Failure(ex.Message);
-            }
-        }
+        _player.Stop();
+        speech.Seek(0, SeekOrigin.Begin);
+        _player.Stream = speech;
+        _player.Play();
+    }
+    catch(RenderSpeechException ex)
+    {
+        logger.Failure(ex.Message);
+    }
+}
 
         public void Dispose()
         {
