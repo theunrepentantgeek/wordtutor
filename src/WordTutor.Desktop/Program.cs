@@ -72,7 +72,9 @@ namespace WordTutor
             }
 
             // Register Services
-            container.RegisterSingleton<ISpeechService, AzureSpeechService>();
+            container.RegisterSingleton<IRenderSpeechService, AzureSpeechService>();
+            container.RegisterDecorator<IRenderSpeechService, CachingRenderSpeechService>(Lifestyle.Singleton);
+            container.RegisterSingleton<ISpeechService, SpeechService>();
 
             // Register ViewModels
             container.Collection.Register<ViewModelBase>(desktopAssembly);
