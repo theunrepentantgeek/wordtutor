@@ -113,22 +113,10 @@ namespace WordTutor.Core.Tests.ReduxTests
                 }
             }
 
-            [Fact]
-            public void RecursiveCall_ThrowsException()
+            [Fact(Skip ="Test is yet to be written")]
+            public void RecursiveCall_DispatchesMessagesInSequence()
             {
-                const string newState = "updated";
-                _reducer = new FakeReducer<string>(RecursiveDispatch);
-
-                var exception =
-                    Assert.Throws<InvalidOperationException>(
-                        () => Store.Dispatch(_message));
-                exception.Message.Should().Contain("Dispatch");
-
-                string RecursiveDispatch(IReduxMessage _, string __)
-                {
-                    Store.Dispatch(_message);
-                    return newState;
-                }
+                // TODO
             }
         }
 
