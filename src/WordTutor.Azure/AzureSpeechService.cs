@@ -2,24 +2,18 @@
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Media;
 using System.Threading.Tasks;
 using WordTutor.Core.Logging;
 using WordTutor.Core.Services;
 
 namespace WordTutor.Azure
 {
-    public class AzureSpeechService : ISpeechService
+    public sealed class AzureSpeechService : IRenderSpeechService
     {
         private readonly IConfigurationRoot _configurationRoot;
         private readonly ILogger _logger;
         private readonly SpeechConfig _configuration;
-
-        private readonly SoundPlayer _player = new SoundPlayer();
-        private readonly Dictionary<string, Stream> _cache 
-            = new Dictionary<string, Stream>();
 
         public AzureSpeechService(IConfigurationRoot configuration, ILogger logger)
         {
@@ -36,38 +30,7 @@ namespace WordTutor.Azure
             _configuration.SetSpeechSynthesisOutputFormat(SpeechSynthesisOutputFormat.Riff16Khz16BitMonoPcm);
         }
 
-        public async Task SayAsync(string content)
-        {
-            var speech = await GetSpeechStream(content);
-
-            _player.Stop();
-            if (speech is Stream)
-            {
-                speech.Seek(0, SeekOrigin.Begin);
-                _player.Stream = speech;
-                _player.Play();
-            }
-        }
-
-        private async Task<Stream> GetSpeechStream(string content)
-        {
-            if (_cache.TryGetValue(content, out var stream))
-            {
-                return stream;
-            }
-
-            stream = await RenderSpeech(content);
-            if (stream is Stream)
-            {
-                // Successfully rendered, so store the result
-                // (Don't want to cache failures)
-                _cache[content] = stream;
-            }
-
-            return stream;
-        }
-
-        private async Task<Stream> RenderSpeech(string content)
+        public async Task<Stream> RenderSpeechAsync(string content)
         {
             var audioStream = AudioOutputStream.CreatePullStream();
             var audioConfig = AudioConfig.FromStreamOutput(audioStream);
@@ -82,13 +45,13 @@ namespace WordTutor.Azure
                 return stream;
             }
 
-            _logger.Info($"Failed to say '{content}'.");
-            return null;
+            var details = SpeechSynthesisCancellationDetails.FromResult(result);
+            throw new RenderSpeechException(details.ErrorDetails);
         }
 
         public void Dispose()
         {
-            _player.Dispose();
+            // Nothing to clean up
         }
     }
 }
