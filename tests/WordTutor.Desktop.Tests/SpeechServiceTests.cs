@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +30,7 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new SpeechService(null!, _logger));
+                        () => new SpeechService(_render, null!));
                 exception.ParamName.Should().Be("renderSpeechService");
             }
         }

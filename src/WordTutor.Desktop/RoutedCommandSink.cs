@@ -63,7 +63,7 @@ namespace WordTutor.Desktop
         /// Execute the actual command.
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
             if (CanExecute(parameter))
             {
@@ -76,7 +76,7 @@ namespace WordTutor.Desktop
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
         /// <returns>True if this command is available, false otherwise.</returns>
-        protected override bool CanExecuteCore(object parameter)
+        protected override bool CanExecuteCore(object? parameter)
         {
             return _canExecute == null || _canExecute();
         }
@@ -151,7 +151,7 @@ namespace WordTutor.Desktop
         /// Execute the actual command.
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
             if (!CanExecute(parameter))
             {
@@ -169,7 +169,7 @@ namespace WordTutor.Desktop
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
         /// <returns>True if this command is available, false otherwise.</returns>
-        protected override bool CanExecuteCore(object parameter)
+        protected override bool CanExecuteCore(object? parameter)
         {
             return parameter is T actual && _canExecute(actual);
         }

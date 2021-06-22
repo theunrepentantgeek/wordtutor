@@ -43,7 +43,10 @@ namespace WordTutor.Desktop
             if (!_mapping.TryGetValue(modelType, out var viewModelType))
             {
                 viewModelType = FindViewModelType(modelType);
-                _mapping[modelType] = viewModelType;
+                if (viewModelType != null)
+                {
+                    _mapping[modelType] = viewModelType;
+                }
             }
 
             if (viewModelType == null)
@@ -55,7 +58,7 @@ namespace WordTutor.Desktop
             return (ViewModelBase)_container.GetInstance(viewModelType);
         }
 
-        public static Type FindViewModelType(Type modelType)
+        public static Type? FindViewModelType(Type modelType)
         {
             if (modelType is null)
             {

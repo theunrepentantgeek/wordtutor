@@ -27,7 +27,7 @@ namespace WordTutor.Desktop
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
         /// <returns>True if this command is available, false otherwise.</returns>
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             _lastCanExecute = CanExecuteCore(parameter);
             return _lastCanExecute;
@@ -40,7 +40,7 @@ namespace WordTutor.Desktop
             "Potential Code Quality Issues",
             "RECS0020:Delegate subtraction has unpredictable result",
             Justification = "This use is safe.")]
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add => _canExecuteChanged += value;
             remove => _canExecuteChanged -= value;
@@ -50,7 +50,7 @@ namespace WordTutor.Desktop
         /// Execute the actual command.
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
-        public abstract void Execute(object parameter);
+        public abstract void Execute(object? parameter);
 
         /// <summary>
         /// Create a command binding for use by our ViewModels
@@ -101,6 +101,6 @@ namespace WordTutor.Desktop
         /// </summary>
         /// <param name="parameter">Data to be used by the command. Pass null if no data required.</param>
         /// <returns>True if this command is available, false otherwise.</returns>
-        protected abstract bool CanExecuteCore(object parameter);
+        protected abstract bool CanExecuteCore(object? parameter);
     }
 }
