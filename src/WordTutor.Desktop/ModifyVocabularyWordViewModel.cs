@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using WordTutor.Core;
 using WordTutor.Core.Actions;
 using WordTutor.Core.Logging;
@@ -93,6 +94,10 @@ namespace WordTutor.Desktop
 
         public RoutedCommandSink<string> SpeakCommand { get; }
 
+        [SuppressMessage(
+            "Performance",
+            "CA1822:Mark members as static",
+            Justification = "Needs to be non-static for command binding")]
         public bool CanSpeak(string text) => !string.IsNullOrWhiteSpace(text);
 
         public void Speak(string text)
