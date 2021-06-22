@@ -15,8 +15,8 @@ using WordTutor.Desktop;
 namespace WordTutor
 {
     [SuppressMessage(
-        "Design", 
-        "CA1052:Static holder types should be Static or NotInheritable", 
+        "Design",
+        "CA1052:Static holder types should be Static or NotInheritable",
         Justification = "Must be non-static for the call to AddUserSecrets() in CreateContainer()")]
 
     public class Program

@@ -13,7 +13,7 @@ namespace WordTutor.Desktop
     /// Factory used to create a View based on the provided ViewModel
     /// </summary>
     /// <remarks>
-    /// Relies on a naming convention where the type name of the View is based on replacing the 
+    /// Relies on a naming convention where the type name of the View is based on replacing the
     /// suffix "ViewModel" from the type name of the ViewModel type with either "View" or "Window".
     /// Also assumes the View will be located in the same assembly as the ViewModel.
     /// </remarks>

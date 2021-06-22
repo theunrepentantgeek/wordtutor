@@ -10,8 +10,8 @@ namespace WordTutor.Desktop
     /// Factory used to create a ViewModel based on the provided model instance
     /// </summary>
     /// <remarks>
-    /// Relies on a naming convention where the type name of the ViewModel is based on replacing 
-    /// the suffix of the model type with the constant "ViewModel". 
+    /// Relies on a naming convention where the type name of the ViewModel is based on replacing
+    /// the suffix of the model type with the constant "ViewModel".
     /// </remarks>
     public class ViewModelFactory
     {
