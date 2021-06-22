@@ -20,7 +20,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
             property.PropertyType.IsImmutableType().Should().BeTrue(
-                $"property {property.DeclaringType.Name}.{property.Name} should be declared as an immutable type");
+                $"property {property.DeclaringType!.Name}.{property.Name} should be declared as an immutable type");
         }
 
         [Theory]
@@ -49,7 +49,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         public void SubTypesOfImmutableTypesMustBeImmutable(Type type)
         {
             type.IsImmutableType().Should().BeTrue(
-                $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType.Name}.");
+                $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType!.Name}.");
         }
 
         public static IEnumerable<object[]> FindSubclassesOfImmutableTypes()
@@ -81,7 +81,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         {
             wither.ReturnType.Should().Be(
                 wither.DeclaringType,
-                $"wither {wither.Name} of type {wither.DeclaringType.Name} "
+                $"wither {wither.Name} of type {wither.DeclaringType!.Name} "
                 + $"should return {wither.DeclaringType.Name}");
         }
 
@@ -94,7 +94,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         public void WitherParametersShouldIdentifyProperties(MethodInfo wither)
         {
             var properties = (
-                from p in wither.DeclaringType.GetProperties()
+                from p in wither.DeclaringType!.GetProperties()
                 select p.Name
             ).ToHashSet(StringComparer.OrdinalIgnoreCase);
             wither.GetParameters().Should().OnlyContain(
@@ -118,7 +118,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         {
             clearer.ReturnType.Should().Be(
                 clearer.DeclaringType,
-                $"clearer {clearer.Name} of type {clearer.DeclaringType.Name} "
+                $"clearer {clearer.Name} of type {clearer.DeclaringType!.Name} "
                 + $"should return {clearer.DeclaringType.Name}");
         }
 
@@ -131,7 +131,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         public void ClearersShouldHaveNamesIdentifyingTheClearedProperty(MethodInfo clearer)
         {
             var propertyName = clearer.Name.Substring("Clear".Length);
-            clearer.DeclaringType.GetProperties()
+            clearer.DeclaringType!.GetProperties()
                 .Should().Contain(
                     p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase),
                     $"no property {propertyName} was found on {clearer.DeclaringType.Name}");
