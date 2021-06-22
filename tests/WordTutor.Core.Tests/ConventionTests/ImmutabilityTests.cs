@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,6 +13,10 @@ namespace WordTutor.Core.Tests.ConventionTests
     {
         [Theory]
         [MemberData(nameof(FindPropertiesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
             property.PropertyType.IsImmutableType().Should().BeTrue(
@@ -20,6 +25,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindPropertiesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void PropertiesOfImmutableTypesMustNotBeWritable(PropertyInfo property)
         {
             property.CanWrite.Should().BeFalse(
@@ -33,6 +42,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindSubclassesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void SubTypesOfImmutableTypesMustBeImmutable(Type type)
         {
             type.IsImmutableType().Should().BeTrue(
@@ -60,6 +73,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindWithersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void WithersShouldReturnTheirDeclaringType(MethodInfo wither)
         {
             wither.ReturnType.Should().Be(
@@ -70,6 +87,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindWithersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void WitherParametersShouldIdentifyProperties(MethodInfo wither)
         {
             var properties = (
@@ -89,6 +110,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindClearersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void ClearersShouldReturnTheirDeclaringType(MethodInfo clearer)
         {
             clearer.ReturnType.Should().Be(
@@ -99,6 +124,10 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindClearersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void ClearersShouldHaveNamesIdentifyingTheClearedProperty(MethodInfo clearer)
         {
             var propertyName = clearer.Name.Substring("Clear".Length);
