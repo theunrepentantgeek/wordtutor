@@ -8,6 +8,11 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage(
     "Design",
+    "CA1001:Types that own disposable fields should be disposable",
+    Justification = "Tests don't need to worry about disposal")]
+
+[assembly: SuppressMessage(
+    "Design",
     "CA1034:Nested types should not be visible",
     Justification = "This project uses nested types to structure unit tests and share fixture setup.")]
 
