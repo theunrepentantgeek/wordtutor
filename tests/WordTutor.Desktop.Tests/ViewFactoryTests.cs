@@ -30,10 +30,6 @@ namespace WordTutor.Desktop.Tests
 
         [StaTheory]
         [MemberData(nameof(FindViewModelTypes))]
-        [SuppressMessage(
-            "Design",
-            "CA1062:Validate arguments of public methods",
-            Justification = "FindViewModelTypes() will never supply a null to this test.")]
         public void FindViewType_WhenGivenViewModelType_FindsSuitableViewType(Type viewModelType)
         {
             if (viewModelType is null)

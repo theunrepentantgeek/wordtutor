@@ -17,10 +17,6 @@ namespace WordTutor.Core.Tests
             [InlineData(typeof(StringBuilder), false)]
             [InlineData(typeof(IImmutableSet<VocabularyWord>), true)]
             [InlineData(typeof(IImmutableSet<StringBuilder>), false)]
-            [SuppressMessage(
-                "Design",
-                "CA1062:Validate arguments of public methods",
-                Justification = "Test methods don't need parameter validation")]
             public void GivenType_ReturnsExpectedResult(Type type, bool isImmutable)
             {
                 var modifier = isImmutable ? "" : "not ";

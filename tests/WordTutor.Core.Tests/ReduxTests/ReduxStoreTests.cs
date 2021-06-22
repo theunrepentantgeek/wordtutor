@@ -22,11 +22,7 @@ namespace WordTutor.Core.Tests.ReduxTests
 
         protected ReduxStore<string> Store => _store.Value;
 
-        [SuppressMessage(
-            "Globalization", 
-            "CA1303:Do not pass literals as localized parameters", 
-            Justification = "This project does not localize exception messages.")]
-        private ReduxStore<string> CreateStore()
+       private ReduxStore<string> CreateStore()
             => new ReduxStore<string>(
                 _reducer ?? throw new InvalidOperationException("_reducer has not been initialized"),
                 _initialStateFactory);
