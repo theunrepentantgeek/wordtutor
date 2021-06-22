@@ -36,7 +36,7 @@ namespace WordTutor.Desktop.Tests.Fakes
                 .LastOrDefault();
             result.Should().NotBeNull(
                 $"expect to have received a message of type '{typeof(M).Name}'");
-            return result;
+            return result!;
         }
 
         /// <summary>
