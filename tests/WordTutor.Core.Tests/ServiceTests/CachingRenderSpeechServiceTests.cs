@@ -29,7 +29,6 @@ namespace WordTutor.Core.Tests.ServiceTests
             private readonly FakeRenderSpeechService _fakeService;
             private readonly CachingRenderSpeechService _cachingService;
             private readonly string _helloWorld = "Hello World";
-            private readonly string _goodbyeWorld = "Goodbye World";
 
             public RenderSpeechAsync()
             {
