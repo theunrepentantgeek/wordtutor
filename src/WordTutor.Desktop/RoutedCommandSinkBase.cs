@@ -36,10 +36,6 @@ namespace WordTutor.Desktop
         /// <summary>
         /// Event triggered when our CanExecute value changes
         /// </summary>
-        [SuppressMessage(
-            "Potential Code Quality Issues",
-            "RECS0020:Delegate subtraction has unpredictable result",
-            Justification = "This use is safe.")]
         public event EventHandler? CanExecuteChanged
         {
             add => _canExecuteChanged += value;

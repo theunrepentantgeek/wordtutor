@@ -24,10 +24,6 @@ namespace WordTutor.Desktop.Tests.Fakes
         public void Dispatch(IReduxMessage message) =>
             _messages.Add(message);
 
-        [SuppressMessage(
-            "Naming",
-            "CA1715:Identifiers should have correct prefix",
-            Justification = "Prefer to use 'M' instead of 'T' since our type represents a message")]
         public M AssertReceived<M>()
             where M : IReduxMessage
         {
@@ -50,10 +46,6 @@ namespace WordTutor.Desktop.Tests.Fakes
             _messages.Clear();
         }
 
-        [SuppressMessage(
-            "Naming",
-            "CA1715:Identifiers should have correct prefix",
-            Justification = "Prefer to use 'M' instead of 'T' since our type represents a message")]
         public void AssertDidNotReceive<M>()
             where M : IReduxMessage
         {
