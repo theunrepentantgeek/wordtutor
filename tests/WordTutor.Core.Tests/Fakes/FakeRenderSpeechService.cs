@@ -10,7 +10,7 @@ namespace WordTutor.Core.Tests.Fakes
     public sealed class FakeRenderSpeechService : IRenderSpeechService
     {
         private readonly Dictionary<string, int> _callCounts = new Dictionary<string, int>();
-        private readonly Dictionary<string, TaskCompletionSource<Stream>> _sources 
+        private readonly Dictionary<string, TaskCompletionSource<Stream>> _sources
             = new Dictionary<string, TaskCompletionSource<Stream>>();
 
         public async Task<Stream> RenderSpeechAsync(string content)
@@ -45,7 +45,6 @@ namespace WordTutor.Core.Tests.Fakes
 
         private void Dispose(bool includeManaged)
         {
-
         }
     }
 }

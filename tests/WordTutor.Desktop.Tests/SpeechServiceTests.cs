@@ -13,8 +13,8 @@ namespace WordTutor.Desktop.Tests
     {
         public class Constructor : SpeechServiceTests
         {
-            private IRenderSpeechService _render = new FakeRenderSpeechService();
-            private ILogger _logger = new FakeLogger();
+            private readonly IRenderSpeechService _render = new FakeRenderSpeechService();
+            private readonly ILogger _logger = new FakeLogger();
 
             [Fact]
             public void GivenNullRenderSpeechService_ThrowsException()
@@ -30,7 +30,7 @@ namespace WordTutor.Desktop.Tests
             {
                 var exception =
                     Assert.Throws<ArgumentNullException>(
-                        () => new SpeechService(null!, _logger));
+                        () => new SpeechService(_render, null!));
                 exception.ParamName.Should().Be("renderSpeechService");
             }
         }

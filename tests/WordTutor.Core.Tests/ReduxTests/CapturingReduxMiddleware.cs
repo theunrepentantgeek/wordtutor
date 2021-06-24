@@ -1,4 +1,5 @@
-﻿using WordTutor.Core.Redux;
+﻿using System;
+using WordTutor.Core.Redux;
 
 namespace WordTutor.Core.Tests.ReduxTests
 {
@@ -6,10 +7,15 @@ namespace WordTutor.Core.Tests.ReduxTests
     {
         public IReduxMessage? LastCapturedMessage { get; private set; }
 
-        public void Dispatch(IReduxMessage message, IReduxDispatcher next)
+        public void Dispatch(IReduxMessage message, IReduxDispatcher nextDispatcher)
         {
-            LastCapturedMessage = message;
-            next.Dispatch(message);
+            if (nextDispatcher is null)
+            {
+                throw new ArgumentNullException(nameof(nextDispatcher));
+            }
+
+            LastCapturedMessage = message ?? throw new ArgumentNullException(nameof(message));
+            nextDispatcher.Dispatch(message);
         }
     }
 }

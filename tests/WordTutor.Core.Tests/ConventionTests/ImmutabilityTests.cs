@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,14 +13,22 @@ namespace WordTutor.Core.Tests.ConventionTests
     {
         [Theory]
         [MemberData(nameof(FindPropertiesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void PropertiesOfImmutableTypesShouldHaveImmutableTypes(PropertyInfo property)
         {
             property.PropertyType.IsImmutableType().Should().BeTrue(
-                $"property {property.DeclaringType.Name}.{property.Name} should be declared as an immutable type");
+                $"property {property.DeclaringType!.Name}.{property.Name} should be declared as an immutable type");
         }
 
         [Theory]
         [MemberData(nameof(FindPropertiesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void PropertiesOfImmutableTypesMustNotBeWritable(PropertyInfo property)
         {
             property.CanWrite.Should().BeFalse(
@@ -33,10 +42,14 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindSubclassesOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void SubTypesOfImmutableTypesMustBeImmutable(Type type)
         {
             type.IsImmutableType().Should().BeTrue(
-                $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType.Name}.");
+                $"Type {type.Name} should be marked [Immutable] because it descends from immutable type {type.BaseType!.Name}.");
         }
 
         public static IEnumerable<object[]> FindSubclassesOfImmutableTypes()
@@ -60,20 +73,28 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindWithersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void WithersShouldReturnTheirDeclaringType(MethodInfo wither)
         {
             wither.ReturnType.Should().Be(
                 wither.DeclaringType,
-                $"wither {wither.Name} of type {wither.DeclaringType.Name} "
+                $"wither {wither.Name} of type {wither.DeclaringType!.Name} "
                 + $"should return {wither.DeclaringType.Name}");
         }
 
         [Theory]
         [MemberData(nameof(FindWithersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void WitherParametersShouldIdentifyProperties(MethodInfo wither)
         {
             var properties = (
-                from p in wither.DeclaringType.GetProperties()
+                from p in wither.DeclaringType!.GetProperties()
                 select p.Name
             ).ToHashSet(StringComparer.OrdinalIgnoreCase);
             wither.GetParameters().Should().OnlyContain(
@@ -89,20 +110,28 @@ namespace WordTutor.Core.Tests.ConventionTests
 
         [Theory]
         [MemberData(nameof(FindClearersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void ClearersShouldReturnTheirDeclaringType(MethodInfo clearer)
         {
             clearer.ReturnType.Should().Be(
                 clearer.DeclaringType,
-                $"clearer {clearer.Name} of type {clearer.DeclaringType.Name} "
+                $"clearer {clearer.Name} of type {clearer.DeclaringType!.Name} "
                 + $"should return {clearer.DeclaringType.Name}");
         }
 
         [Theory]
         [MemberData(nameof(FindClearersOfImmutableTypes))]
+        [SuppressMessage(
+            "Design",
+            "CA1062:Validate arguments of public methods",
+            Justification = "Test methods don't need parameter validation")]
         public void ClearersShouldHaveNamesIdentifyingTheClearedProperty(MethodInfo clearer)
         {
             var propertyName = clearer.Name.Substring("Clear".Length);
-            clearer.DeclaringType.GetProperties()
+            clearer.DeclaringType!.GetProperties()
                 .Should().Contain(
                     p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase),
                     $"no property {propertyName} was found on {clearer.DeclaringType.Name}");
