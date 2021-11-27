@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,11 @@ namespace WordTutor.Core.Tests.Fakes
 
         public void Dispose() => Dispose(true);
 
-        private void Dispose(bool includeManaged)
+        [SuppressMessage(
+            "Performance",
+            "CA1822:Mark members as static",
+            Justification = "Fake has nothing to dispose")]
+        private void Dispose(bool _)
         {
         }
     }
