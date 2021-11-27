@@ -90,7 +90,6 @@ namespace WordTutor.Desktop
     /// If your commands need a parameter, check out <see cref="RoutedCommandSink"/>.
     /// Use the <see cref="RoutedCommandSinkBase.CreateBinding"/> method to create bindings for your WPF views.
     /// </remarks>
-
     public sealed class RoutedCommandSink<T> : RoutedCommandSinkBase
     {
         // Reference to the action we perform
