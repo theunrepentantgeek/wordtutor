@@ -102,7 +102,7 @@ namespace WordTutor.Core.Tests.ConventionTests
         [MemberData(nameof(FindClearersOfImmutableTypes))]
         public void ClearersShouldHaveNamesIdentifyingTheClearedProperty(MethodInfo clearer)
         {
-            var propertyName = clearer.Name.Substring("Clear".Length);
+            var propertyName = clearer.Name["Clear".Length..];
             clearer.DeclaringType!.GetProperties()
                 .Should().Contain(
                     p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase),
