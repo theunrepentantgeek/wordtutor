@@ -3,6 +3,7 @@ using SimpleInjector;
 using SimpleInjector.Diagnostics;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using WordTutor.Azure;
@@ -64,7 +65,7 @@ namespace WordTutor
                     Lifestyle.Singleton);
             }
 
-            foreach(var type in container.GetTypesToRegister<IReduxMiddleware>(coreAssembly))
+            foreach (var type in container.GetTypesToRegister<IReduxMiddleware>(coreAssembly))
             {
                 container.Collection.Append(
                     typeof(IReduxMiddleware),
@@ -78,24 +79,43 @@ namespace WordTutor
             container.RegisterSingleton<ISpeechService, SpeechService>();
 
             // Register ViewModels
-            container.Collection.Register<ViewModelBase>(desktopAssembly);
+            container.RegisterSingleton<ViewModelFactory>();
+            container.Collection.Register(typeof(ViewModelBase), desktopAssembly);
+            container.RegisterSingleton<WordTutorViewModel>();
+
+            var viewModels =
+                from type in desktopAssembly.GetExportedTypes()
+                where type.IsAssignableTo(typeof(ViewModelBase))
+                where type != typeof(ViewModelBase) && type != typeof(WordTutorViewModel)
+                select type;
+
+            foreach (var viewModel in viewModels)
+            {
+                container.Register(viewModel);
+            }
 
             // Register Views
+            container.Register<ViewFactory>();
             container.Collection.Register(typeof(UserControl), desktopAssembly);
             container.Collection.Register(typeof(Window), desktopAssembly);
+
+            var views =
+                from type in desktopAssembly.GetExportedTypes()
+                where type.IsAssignableTo(typeof(UserControl)) || type.IsAssignableTo(typeof(Window))
+                select type;
+
+            foreach (var view in views)
+            {
+                container.Register(view);
+            }
+
+            // Register converters
+            container.Register<ViewModelToViewValueConverter>();
 
             // Register Configuration
             var builder = new ConfigurationBuilder();
             builder.AddUserSecrets<Program>();
             container.RegisterInstance<IConfigurationRoot>(builder.Build());
-
-            // Suppress Warnings
-            var registration = container.GetRegistration(typeof(WordTutorViewModel))!.Registration;
-            registration.SuppressDiagnosticWarning(
-                DiagnosticType.DisposableTransientComponent,
-                "WordTutorViewModel is disposed in Main()");
-
-            container.Verify();
 
             return container;
         }
