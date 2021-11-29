@@ -31,7 +31,7 @@ namespace WordTutor.Desktop.Tests
                 var exception =
                     Assert.Throws<ArgumentNullException>(
                         () => new SpeechService(_render, null!));
-                exception.ParamName.Should().Be("renderSpeechService");
+                exception.ParamName.Should().Be("logger");
             }
         }
     }
